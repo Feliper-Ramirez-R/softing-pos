@@ -1,0 +1,56 @@
+<div class="login-body" [ngClass]="{'layout-dark': dark, 'layout-light': !dark}">
+    <div class="login-content">
+        <div class="night-switch">
+            <p-button styleClass="dark-switch" icon="pi pi-circle-on" (click)="dark = true"></p-button>
+            <p-button styleClass="light-switch" icon="pi pi-circle-off" (click)="dark = false"></p-button>
+        </div>
+        <div class="login-panel">
+            <div class="login-panel-content">
+                <div class="logo">
+                    <!-- <img src="assets/layout/images/logo-mirage@2x.png" alt="mirage-layout" /> -->
+                    <img style="border-radius: 50%;" src="assets/icons/icon-512x512.png" alt="mirage-layout" />
+                </div>
+                <h2>Verificar datos</h2>
+                <p>Ingresa tu información</p>
+                <form [formGroup]="form" class="forms">
+                    <div class="login-input-wrapper">
+                        <label >Email</label>
+                        <input formControlName="email" pInputText placeholder="Escribe tu email..."
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted &&  form.get('email')?.hasError('required') ||  submitted &&  form.get('email')?.hasError('email') }" />
+                        <i class="pi pi-user"></i>
+                    </div>
+
+                    <div class="login-input-wrapper">
+                        <label >Cedúla</label>           
+                            <input formControlName="cedula" pInputText placeholder="Escribe tu cedula..."
+                                [ngClass]="{'ng-invalid ng-dirty' : submitted &&  form.get('cedula')?.hasError('required') }" />
+                            <i class="pi pi-id-card"></i>
+                    </div>
+
+                    <div class="buttons">
+                        <button pButton type="button" (click)="validarDatos()" label="Enviar"></button>
+                        <a routerLink="/auth/login" class="secondary-button">Volver al login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="desert"></div>
+    </div>
+</div>
+
+
+
+<p-dialog header="Verificación" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="content">
+
+        <p class="m-0">
+         {{mensaje_del_dialog}}
+        </p>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Aceptar" icon="pi pi-check" class="p-button-text" routerLink="/auth/reset-password"></button>
+    </ng-template>
+</p-dialog>

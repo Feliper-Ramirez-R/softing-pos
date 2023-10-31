@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'softing-pos-app'`, () => {
+  it(`should have as title 'edusoft'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('softing-pos-app');
+    expect(app.title).toEqual('edusoft');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('softing-pos-app app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('edusoft app is running!');
   });
 });

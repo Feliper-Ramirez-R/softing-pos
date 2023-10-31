@@ -1,0 +1,54 @@
+<div class="login-body" [ngClass]="{'layout-dark': dark, 'layout-light': !dark}">
+    <div class="login-content">
+        <!-- <p-button icon="pi pi-arrow-left" (click)="atras()" styleClass="p-button-rounded p-button-secondary"></p-button> -->
+        <div class="night-switch">
+            <p-button styleClass="dark-switch" icon="pi pi-circle-on" (click)="dark = true"></p-button>
+            <p-button styleClass="light-switch" icon="pi pi-circle-off" (click)="dark = false"></p-button>
+        </div>
+        <div class="login-panel">
+            <div class="login-panel-content">
+                <div class="logo">
+                    <!-- <img src="assets/layout/images/logo-mirage@2x.png" alt="mirage-layout" /> -->
+                    <img style="border-radius: 50%;" src="assets/images/edu.png" />
+                </div>
+               <!--  <h2>Inicio de sesión Tracking express</h2> -->
+                <p>Bienvenido, inicia sesión</p>
+                <form [formGroup]="form" class="forms">
+                    <div class="login-input-wrapper">
+                        <label for="username">Usuario</label>
+                        <input id="username" formControlName="email" pInputText placeholder="Escribe tu email..."
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted &&  form.get('email')?.hasError('required') ||  submitted &&  form.get('email')?.hasError('email') }" />
+                        <i class="pi pi-user"></i>
+                    </div>
+
+                    <div class="login-input-wrapper">
+                        <label >Contraseña</label>
+                        <p-password  placeholder="Escribe tu contraseña" formControlName="password" [inputStyle]="form.get('email')?.value == ''?form.get('password')?.disable():form.get('password')?.enable()"
+                            minlength="6" [toggleMask]="true"
+                            styleClass="w-full"
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted &&  form.get('password')?.hasError('required') ||form.get('password')?.touched && form.get('password')?.hasError('minLength(6)')}"
+                            [feedback]="false"></p-password>
+                        <small class="ng-dirty ng-invalid"
+                            *ngIf="form.get('password')?.dirty &&  password?.errors?.['minlength']">La contraseña debe
+                            tener mínimo 6 caracteres.</small>
+                    </div>
+
+                    <!--  <div class="col-12">
+                        <p-checkbox [(ngModel)]="checked" label="Remember me" value="SaveInfo" binary="true"></p-checkbox>
+                    </div> -->
+
+                    <div class="buttons">
+                        <button pButton type="button" (click)="login()" label="Iniciar sesión"></button>
+                        <!-- <a routerLink="/auth/verifyuser" class="secondary-button">¿Olvidaste tu contraseña?</a> -->
+                    </div>
+                    <div class="buttons mt-5">
+                        <!-- ¿No tienes cuenta? <a routerLink="/auth/register" class="secondary-button">Regístrate</a> -->
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+
+        <div class="desert"></div>
+    </div>
+</div>

@@ -1,0 +1,513 @@
+
+
+<!-- <app-config *ngIf="btnConfig" ></app-config> -->
+<div class="layout-topbar">
+    <div class="layout-topbar-wrapper">
+        <div class="layout-topbar-left">
+            <div class="layout-topbar-logo-wrapper">
+                <a href="#" class="layout-topbar-logo">
+                    <img style="border-radius: 50%;" src="assets/images/edu.png" />
+                    <span class="app-name">pos</span>
+                </a>
+            </div>
+
+            <a href="#" class="sidebar-menu-button" (click)="appMain.onMenuButtonClick($event)">
+                <i class="pi pi-bars"></i>
+            </a>
+
+           <!--  <a href="#" class="megamenu-mobile-button" (click)="appMain.onMegaMenuMobileButtonClick($event)">
+                <i class="pi pi-align-right megamenu-icon"></i>
+            </a> -->
+
+            <a href="#" class="topbar-menu-mobile-button" (click)="appMain.onTopbarMobileMenuButtonClick($event)">
+                <i class="pi pi-ellipsis-v"></i>
+            </a>
+
+            <!-- <div class="layout-megamenu-wrapper">
+                <a class="layout-megamenu-button" href="#" (click)="appMain.onMegaMenuButtonClick($event)">
+                    <i class="pi pi-comment"></i>
+                    Mega Menu
+                </a>
+                <ul class="layout-megamenu" [ngClass]="{'layout-megamenu-active fadeInDown': appMain.megaMenuActive}"
+                    (click)="appMain.onMegaMenuClick($event)">
+                    <li [ngClass]="{'active-topmenuitem': activeItem === 1}" (click)="mobileMegaMenuItemClick(1)">
+                        <a href="#">JavaServer Faces <i class="pi pi-angle-down"></i></a>
+                        <ul>
+                            <li class="active-row ">
+                                <i class="pi pi-circle-on"></i>
+                                <span>
+                                <h5>PrimeFaces</h5>
+                                <span>UI Components for JSF</span>
+                            </span>
+                            </li>
+                            <li>
+                                <i class="pi pi-circle-on"></i>
+                                <span>
+                                <h5>Premium Templates</h5>
+                                <span>UI Components for JSF</span>
+                            </span>
+                            </li>
+                            <li>
+                                <i class="pi pi-circle-on"></i>
+                                <span>
+                                <h5>Extensions</h5>
+                                <span>UI Components for JSF</span>
+                            </span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li [ngClass]="{'active-topmenuitem': activeItem === 2}" (click)="mobileMegaMenuItemClick(2)">
+                        <a href="#">Angular <i class="pi pi-angle-down"></i></a>
+                        <ul>
+                            <li>
+                                <i class="pi pi-circle-on"></i>
+                                <span>
+                                <h5>PrimeNG</h5>
+                                <span>UI Components for Angular</span>
+                            </span>
+
+                            </li>
+                            <li>
+                                <i class="pi pi-circle-on"></i>
+                                <span>
+                                <h5>Premium Templates</h5>
+                                <span>UI Components for Angular</span>
+                            </span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li [ngClass]="{'active-topmenuitem': activeItem === 3}" (click)="mobileMegaMenuItemClick(3)">
+                        <a href="#">React <i class="pi pi-angle-down"></i></a>
+                        <ul>
+                            <li>
+                                <i class="pi pi-circle-on"></i>
+                                <span>
+                                <h5>PrimeReact</h5>
+                                <span>UI Components for React</span>
+                            </span>
+                            </li>
+                            <li class="active-row">
+                                <i class="pi pi-circle-on"></i>
+                                <span>
+                                <h5>Premium Templates</h5>
+                                <span>UI Components for React</span>
+                            </span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div> -->
+        </div>
+        
+        <div class="layout-topbar-right fadeInDown">
+            <ul class="layout-topbar-actions">
+                <!-- <li #search class="search-item topbar-item" [ngClass]="{'active-topmenuitem': appMain.activeTopbarItem === search}">
+                    <a href="#" class="topbar-search-mobile-button" (click)="appMain.onTopbarItemClick($event,search)">
+                        <i class="topbar-icon pi pi-search"></i>
+                    </a>
+                    <ul class="search-item-submenu fadeInDown" (click)="appMain.topbarItemClick = true">
+                        <li>
+                            <span class="md-inputfield search-input-wrapper">
+                                <input pInputText placeholder="Search..."/>
+                                <i class="pi pi-search"></i>
+                            </span>
+                        </li>
+                    </ul>
+                </li> -->
+                <!-- <li #calendar class="topbar-item" [ngClass]="{'active-topmenuitem': appMain.activeTopbarItem === calendar}">
+                    <a href="#" (click)="appMain.onTopbarItemClick($event,calendar)">
+                        <i class="topbar-icon pi pi-calendar"></i>
+                    </a>
+                    <ul class="fadeInDown" (click)="appMain.topbarItemClick = true">
+                        <li class="layout-submenu-header">
+                            <h1>Calendar</h1>
+                        </li>
+                        <li class="calendar">
+                            <p-calendar [inline]="true"></p-calendar>
+                        </li>
+                    </ul>
+                </li> -->
+
+                <!-- <li #message class="topbar-item" [ngClass]="{'active-topmenuitem': appMain.activeTopbarItem === message}">
+                    <a href="#" (click)="appMain.onTopbarItemClick($event,message)">
+                        <i class="topbar-icon pi pi-inbox"></i>
+                    </a>
+                    <ul class="fadeInDown">
+                        <li class="layout-submenu-header">
+                            <h1>Messages</h1>
+                            <span>Today, you have new 4 messages</span>
+                        </li>
+                        <li class="layout-submenu-item">
+                            <img src="assets/layout/images/topbar/avatar-cayla.png" alt="mirage-layout" width="35" />
+                            <div class="menu-text">
+                                <p>Override the digital divide</p>
+                                <span>Cayla Brister</span>
+                            </div>
+                            <i class="pi pi-angle-right"></i>
+                        </li>
+                        <li class="layout-submenu-item">
+                            <img src="assets/layout/images/topbar/avatar-gabie.png" alt="mirage-layout" width="35" />
+                            <div class="menu-text">
+                                <p>Nanotechnology immersion</p>
+                                <span>Gabie Sheber</span>
+                            </div>
+                            <i class="pi pi-angle-right"></i>
+                        </li>
+                        <li class="layout-submenu-item">
+                            <img src="assets/layout/images/topbar/avatar-gaspar.png" alt="mirage-layout" width="35" />
+                            <div class="menu-text">
+                                <p>User generated content</p>
+                                <span>Gaspar Antunes</span>
+                            </div>
+                            <i class="pi pi-angle-right"></i>
+                        </li>
+                        <li class="layout-submenu-item">
+                            <img src="assets/layout/images/topbar/avatar-tatiana.png" alt="mirage-layout" width="35" />
+                            <div class="menu-text">
+                                <p>The holistic world view</p>
+                                <span>Tatiana Gagelman</span>
+                            </div>
+                            <i class="pi pi-angle-right"></i>
+                        </li>
+                    </ul>
+                </li> -->
+
+                <!-- <li #gift class="topbar-item" [ngClass]="{'active-topmenuitem': appMain.activeTopbarItem === gift}">
+                    <a href="#" (click)="appMain.onTopbarItemClick($event,gift)">
+                        <i class="topbar-icon pi pi-envelope"></i>
+                    </a>
+                    <ul class="fadeInDown">
+                        <li class="layout-submenu-header">
+                            <h1>Deals</h1>
+                        </li>
+
+                        <li class="deals">
+                            <ul>
+                                <li>
+                                    <img src="assets/layout/images/topbar/deal-icon-sapphire.png" alt="mirage-layout" width="35" />
+                                    <div class="menu-text">
+                                        <p>Sapphire</p>
+                                        <span>Angular</span>
+                                    </div>
+                                    <i class="pi pi-angle-right"></i>
+                                </li>
+                                <li>
+                                    <img src="assets/layout/images/topbar/deal-icon-roma.png" alt="mirage-layout" width="35" />
+                                    <div class="menu-text">
+                                        <p>Roma</p>
+                                        <span>Minimalism</span>
+                                    </div>
+                                    <i class="pi pi-angle-right"></i>
+                                </li>
+                                <li>
+                                    <img src="assets/layout/images/topbar/deal-icon-babylon.png" alt="mirage-layout" width="35" />
+                                    <div class="menu-text">
+                                        <p>Babylon</p>
+                                        <span>Powerful</span>
+                                    </div>
+                                    <i class="pi pi-angle-right"></i>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>
+                                    <img src="assets/layout/images/topbar/deal-icon-harmony.png" alt="mirage-layout" width="35" />
+                                    <div class="menu-text">
+                                        <p>Harmony</p>
+                                        <span>USWDS</span>
+                                    </div>
+                                    <i class="pi pi-angle-right"></i>
+                                </li>
+                                <li>
+                                    <img src="assets/layout/images/topbar/deal-icon-prestige.png" alt="mirage-layout" width="35" />
+                                    <div class="menu-text">
+                                        <p>Prestige</p>
+                                        <span>Elegancy</span>
+                                    </div>
+                                    <i class="pi pi-angle-right"></i>
+                                </li>
+                                <li>
+                                    <img src="assets/layout/images/topbar/deal-icon-ultima.png" alt="mirage-layout" width="35" />
+                                    <div class="menu-text">
+                                        <p>Ultima</p>
+                                        <span>Material</span>
+                                    </div>
+                                    <i class="pi pi-angle-right"></i>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li> -->
+               
+                <li #profile class="topbar-item profile-item" [ngClass]="{'active-topmenuitem': appMain.activeTopbarItem === profile}">
+                    <a href="#" (click)="appMain.onTopbarItemClick($event,profile)">
+                    <span class="profile-image-wrapper">
+                        <img style="border-radius: 50%;" src="assets/images/edu.png"  />
+                    </span>
+                        <span class="profile-info-wrapper">
+                        <h3>{{user.user.name | titlecase}}</h3>
+                        <span>{{user.user.role_name | titlecase}}</span>
+                    </span>
+                    </a>
+                    <ul class="profile-item-submenu fadeInDown">
+                        <li class="profile-submenu-header">
+                            <div class="performance">
+                                <span>{{user.user.email}}</span>
+                                <img  src="assets/layout/images/topbar/asset-bars.svg" />
+                            </div>
+                            <div class="profile">
+                                <img style="border-radius: 50%;" src="assets/images/edu.png" 
+                                                width="40" />
+                                <h1>{{user.user.name | titlecase}}</h1>
+                                <span>{{user.user.role_name | titlecase}}</span>
+                            </div>
+                        </li>
+                       <!--  <li class="layout-submenu-item">
+                            <i class="pi pi-list icon icon-1"></i>
+                            <div class="menu-text">
+                                <p>Tasks</p>
+                                <span>3 open issues</span>
+                            </div>
+                            <i class="pi pi-angle-right"></i>
+                        </li> -->
+                       <!--  <li class="layout-submenu-item">
+                            <i class="pi pi-shopping-cart icon icon-2"></i>
+                            <div class="menu-text">
+                                <p>Payments</p>
+                                <span>24 new</span>
+                            </div>
+                            <i class="pi pi-angle-right"></i>
+                        </li> -->
+                        <li (click)="onConfigButtonClick($event)" class="layout-submenu-item">
+                            <i class="pi pi-cog icon icon-3"></i>
+                            <div class="menu-text">
+                                <p>Configuraciones</p>
+                                <span>Temas</span>
+                            </div>
+                            <i class="pi pi-angle-right"></i>
+                        </li>
+                        <li class="layout-submenu-footer">
+                            <button (click)="logout()" class="signout-button">Cerrar sesión</button>
+                            
+                           <!--  <button class="buy-mirage-button">Configuraciones</button> -->
+                        </li>
+                    </ul>
+                </li>
+               <!--  <li>
+                    <a href="#" class="layout-rightpanel-button" (click)="appMain.onRightPanelButtonClick($event)">
+                        <i class="pi pi-arrow-left"></i>
+                    </a>
+                </li> -->
+            </ul>
+   
+            <!-- vista en un celular -->
+            <ul class="profile-mobile-wrapper">
+                <li #mobileProfile class="topbar-item profile-item" [ngClass]="{'active-topmenuitem': appMain.activeTopbarItem === mobileProfile}">
+                    <a href="#" (click)="appMain.onTopbarItemClick($event,mobileProfile)">
+                    <span class="profile-image-wrapper">
+                        <img style="border-radius: 50%;" src="assets/images/edu.png" />
+                    </span>
+                        <span class="profile-info-wrapper">
+                        <h3>{{user.user.name | titlecase}}</h3>
+                        <span>{{user.user.role_name | titlecase}}</span>
+                    </span>
+                    </a>
+                    <ul class="fadeInDown">
+                        <li class="profile-submenu-header">
+                            <div class="performance">
+                                <span>{{user.user.email}}</span>
+                                <img src="assets/layout/images/topbar/asset-bars.svg"  />
+                            </div>
+                            <div class="profile">
+                                <img style="border-radius: 50%;" src="assets/images/edu.png" width="45" />
+                                <h1>{{user.user.name | titlecase}}</h1>
+                                <span>{{user.user.role_name | titlecase}}</span>
+                            </div>
+                        </li>
+                        <!-- <li>
+                            <i class="pi pi-list icon icon-1"></i>
+                            <div class="menu-text">
+                                <p>Tasks</p>
+                                <span>3 open issues</span>
+                            </div>
+                            <i class="pi pi-angle-right"></i>
+                        </li>
+                        <li>
+                            <i class="pi pi-shopping-cart icon icon-2"></i>
+                            <div class="menu-text">
+                                <p>Payments</p>
+                                <span>24 new</span>
+                            </div>
+                            <i class="pi pi-angle-right"></i>
+                        </li> -->
+                        <li (click)="onConfigButtonClick($event)" >
+                            <i class="pi pi-cog icon icon-3"></i>
+                            <div class="menu-text">
+                                <p>Configuraciones</p>
+                                <span>Temas</span>
+                            </div>
+                            <i class="pi pi-angle-right"></i>
+                        </li>
+                        <li class="layout-submenu-footer">
+                            <button (click)="logout()"  class="signout-button">Cerrar sesión</button>
+                           <!--  <button class="buy-mirage-button">Buy Mirage</button> -->
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Aca empieza el boton de configuraciones -->
+
+
+<!-- <a href="#" class="layout-config-button" (click)="onConfigButtonClick($event)">
+    <i class="pi pi-cog"></i>
+</a> -->
+<!-- <a href="#" class="layout-config-button" (click)="onConfigButtonClick($event)">
+    <i class="pi pi-cog"></i>
+</a> -->
+<div id="layout-config" class="layout-config" [ngClass]="{'layout-config-exit-done': !appMain.configActive,
+'layout-config-enter-done': appMain.configActive}" [@children]="appMain.configActive ? 'visibleAnimated' : 'hiddenAnimated'">
+    <div class="layout-config-content">
+        <a href="#" class="layout-config-close" (click)="onConfigCloseClick($event)">
+            <i class="pi pi-times"></i>
+        </a>
+        <p-tabView id="config-form-tabs">
+            <p-tabPanel header="Light or Dark">
+                <h1>Light or Dark</h1>
+                <p>Mirage offers all dark dashboard &amp; theme design for dark lovers.</p>
+                <div class="grid justify-content-center align-items-center">
+                    <div class="col col-fixed">
+                        <a href="#" class="layout-config-option layout-config-option-image" (click)="changeLayout($event, false)">
+                            <img src="assets/layout/images/configurator/choice-light.png" alt="mirage-layout" style="width:100%"/>
+                            <span class="layout-config-option-text">Light</span>
+                            <i class="pi pi-check" *ngIf="!app.darkMode"></i>
+                        </a>
+                    </div>
+                    <div class="col col-fixed md:col-offset-1">
+                        <a href="#" class="layout-config-option layout-config-option-image" (click)="changeLayout($event, true)">
+                            <img src="assets/layout/images/configurator/choice-dark.png" alt="mirage-layout" style="width:100%"/>
+                            <span class="layout-config-option-text">Dark</span>
+                            <i class="pi pi-check" *ngIf="app.darkMode"></i>
+                        </a>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Menu">
+                <div class="layout-config-subtitle">Mode</div>
+                <div class="grid">
+                    <div class="col col-fixed">
+                        <a href="#" class="layout-config-option layout-config-option-image"
+                           (click)="changeMenuToHorizontal($event,true)">
+                            <img src="assets/layout/images/configurator/menu/horizontal.png" alt="mirage-layout" style="width:100%"/>
+                            <span class="layout-config-option-text">Horizontal</span>
+                            <i class="pi pi-check" *ngIf="app.horizontalMenu"></i>
+                        </a>
+                    </div>
+                    <div class="col col-fixed">
+                        <a href="#" class="layout-config-option layout-config-option-image"
+                           (click)="changeMenuToHorizontal($event,false)">
+                            <img src="assets/layout/images/configurator/menu/overlay.png" alt="mirage-layout" style="width:100%"/>
+                            <span class="layout-config-option-text">Overlay</span>
+                            <i class="pi pi-check" *ngIf="!app.horizontalMenu"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="layout-config-subtitle">Color</div>
+                <div class="grid">
+                    <div class="col col-fixed" *ngFor="let menuColor of menuColors">
+                        <a href="#" class="layout-config-option layout-config-option-image"
+                           (click)="changeMenuColor($event,menuColor.name)">
+                            <img src="assets/layout/images/configurator/menu/{{menuColor.name}}.png" alt="{{menuColor.name}}"/>
+                            <span class="layout-config-option-text">{{menuColor.name}}</span>
+                            <i class="pi pi-check" *ngIf="menuColor.name === app.menuColorMode"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="layout-config-subtitle">Theme</div>
+                <div class="grid">
+                    <div class="col col-fixed" *ngFor="let menuTheme of selectedColorOptions">
+                        <a href="#" class="layout-config-option layout-config-option-image layout-config-option-theme"
+                           (click)="changeMenuTheme($event,menuTheme.file)">
+                            <img src="assets/layout/images/configurator/menu/theme/{{menuTheme.image}}" />
+                            <i class="pi pi-check" *ngIf="app.menuColorMode === 'custom' && 'layout-menu-'+menuTheme.file === app.menuColor"></i>
+                            <i class="pi pi-check" *ngIf="app.menuColorMode !== 'custom' && menuTheme.file === app.layoutColor"></i>
+                        </a>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Components">
+                <div class="grid">
+                    <div class="col-12 lg:col-6">
+                        <div class="layout-config-subtitle">Input Style</div>
+                        <div class="formgroup-inline">
+                            <div class="field-radiobutton">
+                                <p-radioButton name="inputStyle" value="outlined" [(ngModel)]="app.inputStyle" inputId="inputStyle1"></p-radioButton>
+                                <label for="inputStyle1">Outlined</label>
+                            </div>
+                            <div class="field-radiobutton">
+                                <p-radioButton name="inputStyle" value="filled" [(ngModel)]="app.inputStyle" inputId="inputStyle2"></p-radioButton>
+                                <label for="inputStyle2">Filled</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 lg:col-6">
+                        <div class="layout-config-subtitle">Ripple Effect</div>
+                        <p-inputSwitch [ngModel]="app.ripple" (onChange)="appMain.onRippleChange($event)"></p-inputSwitch>
+                    </div>
+                </div>
+                
+                <div class="layout-config-subtitle">Component Themes</div>
+                <div class="grid">
+                    <div class="col col-fixed" *ngFor="let componentTheme of componentThemes">
+                        <a href="#" class="layout-config-option layout-config-option-image layout-config-option-theme"
+                           (click)="changeComponentTheme($event,componentTheme.file)">
+                            <img src="assets/layout/images/configurator/theme/{{componentTheme.image}}"/>
+                            <i class="pi pi-check" *ngIf="componentTheme.file === app.themeColor"></i>
+                        </a>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>

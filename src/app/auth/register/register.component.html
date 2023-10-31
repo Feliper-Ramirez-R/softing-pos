@@ -1,0 +1,78 @@
+<div class="login-body" [ngClass]="{'layout-dark': dark, 'layout-light': !dark}">
+    <div class="login-content">
+        <div class="night-switch">
+         <!--    <p-button styleClass="dark-switch" icon="pi pi-circle-on" (click)="dark = true"></p-button>
+            <p-button styleClass="light-switch" icon="pi pi-circle-off" (click)="dark = false"></p-button> -->
+        </div>
+        <div class="login-panel">
+            <div class="login-panel-content">
+                <div class="logo">
+                    <!-- <img src="assets/layout/images/logo-mirage@2x.png" alt="mirage-layout" /> -->
+                    <img style="border-radius: 50%;" src="assets/images/edu.png" alt="mirage-layout" />
+                </div>
+               <!--  <h2>Inicio de sesión Tracking express</h2> -->
+                <p>Bienvenido, regístrate para ver mas</p>
+                <form [formGroup]="form" class="forms">
+                    <div class="login-input-wrapper">
+                        <label for="username">Email</label>
+                        <input id="username" formControlName="email" pInputText placeholder="Escribe tu email..."
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted &&  form.get('email')?.hasError('required') ||  submitted &&  form.get('email')?.hasError('email') }" />
+                        <i class="pi pi-user"></i>
+                    </div>
+
+                    <div class="login-input-wrapper">
+                        <label for="username">Nombre</label>
+                        <input id="nombre" formControlName="nombre" pInputText placeholder="Escribe tu nombre..."
+                        [ngClass]="{'ng-invalid ng-dirty' : submitted &&  form.get('nombre')?.hasError('required') ||form.get('nombre')?.touched && form.get('nombre')?.hasError('minLength(10)')}"
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted &&  form.get('nombre')?.hasError('required') }" />
+                        <i class="pi pi-user"></i>
+                        <small class="ng-dirty ng-invalid"
+                            *ngIf="form.get('nombre')?.dirty &&  nombre?.errors?.['minlength']">El nombre debe
+                            tener mínimo 10 caracteres.</small>
+                    </div>
+
+                    <div class="login-input-wrapper">
+                        <label for="username">Cédula</label>
+                        <input id="cedula" formControlName="cedula" pInputText placeholder="Escribe tu cédula..."
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted &&  form.get('cedula')?.hasError('required') }" />
+                        <i class="pi pi-id-card"></i>
+                    </div>
+
+					<div class="login-input-wrapper">
+                        <label >Nueva contraseña</label>
+                        <p-password  placeholder="Escribe tu contraseña" formControlName="password" [inputStyle]="form.get('email')?.value == ''?form.get('password')?.disable():form.get('password')?.enable()"
+                            minlength="6" [toggleMask]="true"
+                            styleClass="w-full"
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted &&  form.get('password')?.hasError('required') ||form.get('password')?.touched && form.get('password')?.hasError('minLength(6)')}"
+                            [feedback]="false"></p-password>
+                        <small class="ng-dirty ng-invalid"
+                            *ngIf="form.get('password')?.dirty &&  password?.errors?.['minlength']">La contraseña debe
+                            tener mínimo 6 caracteres.</small>
+                    </div>
+
+                    <div class="login-input-wrapper">
+                        <label >Confirmar contraseña</label><!--  [inputStyle]="form.get('password')?.value == ''?form.get('password2')?.disable():form.get('password2')?.enable()" -->
+                        <p-password  placeholder="Confirma tu contraseña" formControlName="password2"
+                            minlength="6" [toggleMask]="true"
+                            styleClass="w-full"
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted &&  form.get('password2')?.hasError('required') ||form.get('password2')?.touched && form.get('password2')?.hasError('minLength(6)')}"
+                            [feedback]="false"></p-password>
+                            <!-- <small class="ng-dirty ng-invalid"
+                            *ngIf="form.get('password2')?.dirty &&  password?.errors?.['minlength']">La contraseña debe
+                            tener minimo 6 caracteres.</small><br> -->
+                        <small class="ng-dirty ng-invalid" style="color: red!important;"
+                            *ngIf="form.get('password2')?.dirty && form.get('password')?.value != form.get('password2')?.value ">Las contraseñas no
+                            coinciden.</small>
+                    </div>
+
+                    <div class="buttons">
+                        <button pButton type="button"  (click)="register()" label="Registrarse"></button>
+                        <a routerLink="/auth/login" class="secondary-button">Ir al login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="desert"></div>
+    </div>
+</div>
