@@ -43,6 +43,12 @@ import { AccordionModule } from 'primeng/accordion';
 /* Componentes */
 import { HomeComponent } from './home/home.component';
 import { UsuariosComponent } from './admin/usuarios/usuarios.component';
+import { RolesComponent } from './admin/roles/roles.component';
+import { ProductosComponent } from './admin/productos/productos.component';
+import { AlmacenesComponent } from './admin/almacenes/almacenes.component';
+import { MarcasComponent } from './admin/marcas/marcas.component';
+import { ModelosComponent } from './admin/modelos/modelos.component';
+import { CategotiasComponent } from './admin/categotias/categotias.component';
 
 
 
@@ -50,7 +56,13 @@ import { UsuariosComponent } from './admin/usuarios/usuarios.component';
 @NgModule({
   declarations: [
     HomeComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    RolesComponent,
+    ProductosComponent,
+    AlmacenesComponent,
+    MarcasComponent,
+    ModelosComponent,
+    CategotiasComponent
   ],
   imports: [
     PagesRoutingModule,

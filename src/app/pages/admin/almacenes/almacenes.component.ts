@@ -1,36 +1,37 @@
 import { Component } from '@angular/core';
-import { UsuariosService } from './usuarios.service';
+import { AlmacenesService } from './almacenes.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-usuarios',
-  templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.scss']
+  selector: 'app-almacenes',
+  templateUrl: './almacenes.component.html',
+  styleUrls: ['./almacenes.component.scss']
 })
-export class UsuariosComponent {
+export class AlmacenesComponent {
 
   datosDB: any[] = [];
   item: any = {};
 
-  perfiles: any[] = [];
-  perfil: any = {};
-
-  value: string = '';
-  stateOptions: any[] = [{ label: 'Habilitado', value: 'on' }, { label: 'Inhabilitado', value: 'off' }];
+  admins: any[] = [];
+  admin: any = {};
 
   itemEditDialog: boolean = false;
   itemDeleteDialog: boolean = false;
   submitted: boolean = false;
   crear: boolean = false;
 
-  constructor(private usuarioService: UsuariosService,
+  
+  value: string = '';
+  stateOptions: any[] = [{ label: 'Habilitado', value: 'on' }, { label: 'Inhabilitado', value: 'off' }];
+
+  constructor(private almacenService: AlmacenesService,
     private user: AuthService,
     private messageService: MessageService) { }
 
 
     ngOnInit() {
-      this.getUsuarios();
+      this.getAlmacenes();
     }
   
     onGlobalFilter(table: any, event: Event) {
@@ -46,12 +47,13 @@ export class UsuariosComponent {
     }
     openEdit(item: any) {
       if(item.enabled == 1){this.value = 'on'}else{this.value = 'off'}
-      console.log(item);
-      this.perfil = { id: item.role_id, name: item.role_name }
+      this.admin = {id:item.admin_id,name:item.admin_name}
+      console.log(this.admin);
+      
       this.crear = false
       this.item = { ...item };
       this.itemEditDialog = true;
-      console.log(this.perfil);
+      console.log(item);
     }
   
     deleteAlert(item: any) {
@@ -62,7 +64,7 @@ export class UsuariosComponent {
     openNew() {
       this.crear = true;
       this.item = {};
-      this.perfil = {}
+      this.admin = {};
       this.submitted = false;
       this.itemEditDialog = true;
     }
@@ -73,14 +75,14 @@ export class UsuariosComponent {
   
       this.itemDeleteDialog = false;
   
-      const valid: any = await this.usuarioService.deleteItem(this.item.id);
+      const valid: any = await this.almacenService.deleteItem(this.item.id);
       console.log(valid);
   
       if (!valid.error) {
   
         if (valid.status == 200) {
           this.item = {};
-          this.getUsuarios();
+          this.getAlmacenes();
           this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
         } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
       } else {
@@ -94,25 +96,17 @@ export class UsuariosComponent {
     async editItem() {
       this.submitted = true;
   
-      //validar email..... Utiliza el método test() para verificar si el email cumple con la expresión regular
-      const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  
-      if (!this.item.name || this.item.name.length < 10 || !this.item.dni || !this.item.email || !this.perfil.id) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
-  
-      if (!regex.test(this.item.email)) {
-        this.messageService.add({ severity: 'error', summary: 'Ups!', detail: `El email ${this.item.email} no es válido.`, life: 5000 }); return
-      }
+      if (!this.item.name || !this.item.code || !this.admin.id ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
   
       let dataPost = {
   
         name: this.item.name,
-        dni: String(this.item.dni),
-        role_id: this.perfil.id,
-        email: this.item.email,
+        code: this.item.code,
+        admin_id: this.admin.id,
         enabled:this.value == 'off'?false:true
       }
       console.log(dataPost)
-      const valid: any = await this.usuarioService.editItem(dataPost, this.item.id);
+      const valid: any = await this.almacenService.editItem(dataPost, this.item.id);
       console.log(valid);
   
       if (!valid.error) {
@@ -120,7 +114,7 @@ export class UsuariosComponent {
         if (valid.status == 201) {
           this.item = {};
           this.itemEditDialog = false;
-          this.getUsuarios();
+          this.getAlmacenes();
           this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
         } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
       } else {
@@ -131,35 +125,27 @@ export class UsuariosComponent {
   
   
     async saveItem() {
-      console.log(this.item, 'crear');
+    
       this.submitted = true;
   
-      //validar email..... Utiliza el método test() para verificar si el email cumple con la expresión regular
-      const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  
-      if (!this.item.name || this.item.name.length < 10 || !this.item.dni || !this.item.email || !this.perfil.id) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
-  
-      if (!regex.test(this.item.email)) {
-        this.messageService.add({ severity: 'error', summary: 'Ups!', detail: `El email ${this.item.email} no es válido.`, life: 5000 }); return
-      }
+      if (!this.item.name || !this.item.code || !this.admin.id ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
   
       let dataPost = {
   
         name: this.item.name,
-        dni: String(this.item.dni),
-        role_id: this.perfil.id,
-        email: this.item.email,
-  
+        code: this.item.code,
+        admin_id: this.admin.id,
+        enabled: true
       }
       console.log(dataPost);
-      const valid: any = await this.usuarioService.saveItem(dataPost);
+      const valid: any = await this.almacenService.saveItem(dataPost);
       console.log(valid);
   
       if (!valid.error) {
   
         if (valid.status == 201) {
           this.hideDialog();
-          this.getUsuarios();
+          this.getAlmacenes();
           this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
         } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
       } else {
@@ -168,14 +154,14 @@ export class UsuariosComponent {
       }
     }
   
-    async getUsuarios() {
+    async getAlmacenes() {
   
-      const valid: any = await this.usuarioService.getUsuarios();
+      const valid: any = await this.almacenService.getAlmacenes();
       console.log(valid);
   
       if (!valid.error) {
-        this.datosDB = valid.users;
-        this.perfiles = valid.roles
+        this.datosDB = valid.data;
+        this.admins = valid.users;
         if (valid.status == 200) {
   
         } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
@@ -184,6 +170,5 @@ export class UsuariosComponent {
         else { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ocurrió un error!', life: 5000 }); }
       }
     }
-
 
 }

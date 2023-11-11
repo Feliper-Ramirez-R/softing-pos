@@ -14,20 +14,20 @@
 
                 <ng-template pTemplate="right">
                     <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary"
-                        (click)="getUsuarios()"></button>
+                        (click)="getModelos()"></button>
                 </ng-template>
             </p-toolbar>
 
 
 
             <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
-                [globalFilterFields]="['name','email','role_name']" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['name']" [rows]="10" [paginator]="true"
                 [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" 
                 selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Usuarios</h5>
+                        <h5 class="m-0">Modelos</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
@@ -38,18 +38,12 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
-                        <th pSortableColumn="role_name">Perfil <p-sortIcon field="role_name"></p-sortIcon></th>
-
                         <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-item>
                     <tr>
                         <td style="min-width: 10rem;">{{item.name | titlecase}}</td>
-                        <td>{{item.email }}</td>
-                        <td>{{item.role_name }}</td>
-
                         <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil"
@@ -65,54 +59,14 @@
         </div>
 
         <p-dialog [(visible)]="itemEditDialog" [style]="{ width: '450px' }"
-            header="{{ crear ? 'Nuevo usuario' : 'Actualizar usuario' }}" [modal]="true" class="p-fluid">
+            header="{{ crear ? 'Nuevo modelo' : 'Actualizar modelo' }}" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="field">
                     <label for="name">Nombre</label>
                     <input type="text" pInputText id="name" [(ngModel)]="item.name" required autofocus
-                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.name ||item.name && item.name.length <10 }" />
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.name ||item.name && item.name.length <10 ">El nombre debe tener mínimo 10 caracteres.</small>
+                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.name }" />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.name ">El nombre es requerido.</small>
                 </div>
-
-                <div class="field">
-                    <label for="email">Email</label>
-                    <input type="email" pInputText id="name" [(ngModel)]="item.email" required autofocus
-                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.email }"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.email">El campo es requerido.</small>
-                </div>
-
-                <div class="formgrid grid">
-                    <div class="field col-6">
-                        <label for="dni">Cédula</label>
-                        <input type="number" id="dni" pInputText [(ngModel)]="item.dni" autofocus
-                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.dni }">
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.dni">El campo es requerido.</small>
-                    </div>
-
-                    <div class="field col-6">
-                        <label for="">Rol</label>
-
-                        <p-dropdown [options]="perfiles" [(ngModel)]="perfil" optionLabel="name"appendTo="body"[readonly]="!crear"
-                            placeholder="Seleccione" emptyMessage="No hay resultados"
-                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !perfil.id }">
-                            <ng-template pTemplate="selectedItem">
-                                <span *ngIf="perfil">{{ perfil.name }}</span>
-                            </ng-template>
-
-                            <ng-template let-perfile pTemplate="item">
-                                <span>{{ perfile.name }}</span>
-                            </ng-template>
-                        </p-dropdown>
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !perfil.id">El campo es
-                            requerido.</small>
-                    </div>
-                    <div *ngIf="!crear" class="field col-6">
-                        <label class="mb-2">Habilitar / Inhabilitar</label><br>
-                        <p-selectButton styleClass="field" [options]="stateOptions" [(ngModel)]="value" optionLabel="label" optionValue="value"></p-selectButton>
-                    </div>
-
-                </div>
-
             </ng-template>
 
             <ng-template pTemplate="footer">
@@ -123,10 +77,10 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="itemDeleteDialog" header="Eliminar un usuario" [modal]="true" [style]="{ width: '450px' }">
+        <p-dialog [(visible)]="itemDeleteDialog" header="Eliminar un modelo" [modal]="true" [style]="{ width: '450px' }">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="item">Esta seguro que quieres eliminar el usuario <b>{{ item.name }}</b>?</span>
+                <span *ngIf="item">Esta seguro que quieres eliminar el modelo <b>{{ item.name }}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"

@@ -14,22 +14,25 @@ export class AppMenuComponent implements OnInit {
                 private user:AuthService) { }
 
     ngOnInit() {
-        if(this.user.user.role == 1){
+        if(this.user.user.role_id == 1){
             this.model = [
                 { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['home'] },
                 {
                     label: 'Administrador', icon: 'pi pi-fw pi-desktop', routerLink: ['/usuarios'],
                     items: [
                         { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/pages/usuarios'] },
-                        { label: 'Programas', icon: 'pi pi-fw pi-desktop', routerLink: ['/pages/programas'] },
-                        { label: 'Grupos', icon: 'pi pi-fw pi-sitemap', routerLink: ['/pages/grupos'] },
-                        { label: 'Materias', icon: 'pi pi-fw pi-book', routerLink: ['/pages/materias'] },
+                        { label: 'Roles', icon: 'pi pi-fw pi-sitemap', routerLink: ['/pages/roles'] },
+                        { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/pages/productos'] },
+                        { label: 'Almacenes', icon: 'pi pi-fw pi-th-large', routerLink: ['/pages/almacenes'] },
+                        { label: 'Marcas', icon: 'pi pi-fw pi-star', routerLink: ['/pages/marcas'] },
+                        { label: 'Modelos', icon: 'pi pi-fw pi-compass', routerLink: ['/pages/modelos'] },
+                        { label: 'Categorías', icon: 'pi pi-fw pi-table', routerLink: ['/pages/categorias'] },
     
                     ]
                 },
             ];
         }
-     else if(this.user.user.role == 2)
+     else if(this.user.user.role_id == 2)
       {
         this.model = [
             { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['home'] },
@@ -45,7 +48,7 @@ export class AppMenuComponent implements OnInit {
             },
            
         ];
-      }else if(this.user.user.role == 4)
+      }else if(this.user.user.role_id == 4)
       {
         this.model = [
            
@@ -53,14 +56,14 @@ export class AppMenuComponent implements OnInit {
 
 
         ];
-      }else if(this.user.user.role == 5)
+      }else if(this.user.user.role_id == 5)
       {
         this.model = [
            
 
 
 
-            
+
         ];
       }
 

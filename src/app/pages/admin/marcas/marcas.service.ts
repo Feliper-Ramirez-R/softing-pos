@@ -6,9 +6,9 @@ import { rutas } from 'src/env/rutas';
 @Injectable({
   providedIn: 'root'
 })
-export class UsuariosService {
+export class MarcasService {
 
-  prefix:string = 'users'
+  prefix:string = 'brands'
 
   constructor(private user: AuthService, private http: HttpClient) { }
 
@@ -71,7 +71,7 @@ export class UsuariosService {
     });
   }
 
-  async getUsuarios() {
+  async getMarcas() {
 
     return new Promise(resolve => {
       const headers = new HttpHeaders({
@@ -89,5 +89,4 @@ export class UsuariosService {
       });
     });
   }
-
 }

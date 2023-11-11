@@ -7,7 +7,7 @@ const rutas = {
    
    
     /* Desarrollo */
-     ruta:  'https://edusoft-server-development.up.railway.app/api/',
+     ruta:  'https://server-softing-pos.onrender.com/api/',
    
 }
 
