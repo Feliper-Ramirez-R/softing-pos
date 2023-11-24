@@ -1,0 +1,148 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <!-- <div class="my-2">
+                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary mr-2"
+                            (click)="openNew()"></button>
+                    </div> -->
+                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
+                            placeholder="Selecciona un rango" [readonlyInput]="true"
+                            (onClose)="getEntradasRango()">
+                           <!--  <ng-template pTemplate="footer">
+                                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                                  ></button>
+                                <button pButton pRipple label="{{'Guardar'}}" icon="pi pi-check" class="p-button-text"
+                                    (click)="getEntradasRango()"></button>
+                            </ng-template> -->
+                        </p-calendar>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary"
+                        (click)="getEntradas()"></button>
+                </ng-template>
+            </p-toolbar>
+
+
+
+            <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['code','product_name','description','sotck','status_id']" [rows]="10"
+                [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
+                [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Entradas</h5>
+                        
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th> -->
+                        <th pSortableColumn="product_name">Nombre <p-sortIcon field="product_name"></p-sortIcon></th>
+                        <th pSortableColumn="store_origin">Origen <p-sortIcon field="store_origin"></p-sortIcon></th>
+                        <th pSortableColumn="store_destination">Destino <p-sortIcon
+                                field="store_destination"></p-sortIcon></th>
+                        <th pSortableColumn="product_quantity">Cantidad <p-sortIcon
+                                field="product_quantity"></p-sortIcon></th>
+                        <th pSortableColumn="byUser_name">Usuario <p-sortIcon field="byUser_name"></p-sortIcon></th>
+                        <th pSortableColumn="created_at">Fecha <p-sortIcon field="created_at"></p-sortIcon></th>
+                        <th pSortableColumn="status_id">Estado <p-sortIcon field="status_id"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <!--  <td>
+                            <p-tableCheckbox [value]="item"></p-tableCheckbox>
+                        </td> -->
+                        <td>{{item.product_name | titlecase}}</td>
+                        <td>{{item.store_origin | titlecase}}</td>
+                        <td>{{item.store_destination | titlecase}}</td>
+                        <td>{{item.product_quantity }}</td>
+                        <td>{{item.byUser_name | titlecase}}</td>
+                        <td>{{item.created_at | date:'YYYY-MM-dd'}}</td>
+                        <td>
+                            <p-tag severity="{{
+                                item.status_id == 1?'warning':
+                                item.status_id == 2?'success':
+                                ''}}" value="{{item.status_name}}">
+                            </p-tag>
+                        </td>
+
+                        <td>
+                            <div *ngIf="item.status_id == 1" class="flex">
+                                <button pButton pRipple icon="pi pi-check" pTooltip="Aceptar entrada"
+                                    tooltipPosition="top" class="p-button-rounded  mr-2"
+                                    (click)="openRecibir(item)"></button>
+                            </div>
+
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <p-dialog [(visible)]="itemCreateDialog" [style]="{ width: '450px' }" header="Crear salida de almacén" [modal]="true"
+    class="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field col-12 md:col-6">
+            <label for="codigo">Código</label>
+            <input type="text" pInputText [(ngModel)]="item.codigo" required autofocus
+                [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.codigo}" />
+            <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.codigo">El campo es requerido</small>
+        </div>
+
+        <div class=" field col-12 md:col-4 ">
+            <label for="">Almacén a trasladar</label>
+
+            <p-dropdown [options]="bodegas" [(ngModel)]="bodega" optionLabel="name" appendTo="body"
+                placeholder="Seleccione" emptyMessage="No hay resultados"
+                [ngClass]="{ 'ng-invalid ng-dirty': submitted && !bodega.id }">
+                <ng-template pTemplate="selectedItem">
+                    <span *ngIf="bodega">{{ bodega.name }}</span>
+                </ng-template>
+
+                <ng-template let-bodega pTemplate="item">
+                    <span>{{ bodega.name }}</span>
+                </ng-template>
+            </p-dropdown>
+            <small class="ng-dirty ng-invalid" *ngIf="submitted && !bodega.id">El campo es
+                requerido.</small>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+            (click)="itemCreateDialog = false"></button>
+        <button pButton pRipple label="Enviar" icon="pi pi-check" class="p-button-text" (click)=" saveItem()"></button>
+    </ng-template>
+</p-dialog> -->
+
+
+
+<p-dialog [(visible)]="aceptarDialog" header="Aceptar entrada" [modal]="true" [style]="{ width: '450px' }">
+    <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="item">Deseas aceptar la entrada a tu almacen?</span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+            (click)="aceptarDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si" (click)="aceptarEntrada()"></button>
+    </ng-template>
+</p-dialog>

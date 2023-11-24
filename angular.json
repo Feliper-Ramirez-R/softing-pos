@@ -17,6 +17,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "pdfmake/build/pdfmake",
+              "ngx-barcode",
+              "ngx-google-places-autocomplete"
+            ],
             "outputPath": "dist/softing-pos-app",
             "index": "src/index.html",
             "main": "src/main.ts",

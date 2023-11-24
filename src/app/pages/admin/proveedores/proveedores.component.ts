@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ProveedoresService } from './proveedores.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { ProductosService } from './productos.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-productos',
-  templateUrl: './productos.component.html',
-  styleUrls: ['./productos.component.scss']
+  selector: 'app-proveedores',
+  templateUrl: './proveedores.component.html',
+  styleUrls: ['./proveedores.component.scss']
 })
-export class ProductosComponent {
+export class ProveedoresComponent {
 
   datosDB: any[] = [];
   item: any = {};
@@ -18,13 +18,16 @@ export class ProductosComponent {
   submitted: boolean = false;
   crear: boolean = false;
 
-  constructor(private productService: ProductosService,
+  value: string = '';
+  stateOptions: any[] = [{ label: 'Habilitado', value: 'on' }, { label: 'Inhabilitado', value: 'off' }];
+
+  constructor(private proveedoresService: ProveedoresService,
     private user: AuthService,
     private messageService: MessageService) { }
 
 
     ngOnInit() {
-      this.getProductos();
+      this.getProveedores();
     }
   
     onGlobalFilter(table: any, event: Event) {
@@ -39,7 +42,7 @@ export class ProductosComponent {
       this.submitted = false;
     }
     openEdit(item: any) {
-     
+      if(item.enabled == 1){this.value = 'on'}else{this.value = 'off'}
       this.crear = false
       this.item = { ...item };
       this.itemEditDialog = true;
@@ -64,14 +67,14 @@ export class ProductosComponent {
   
       this.itemDeleteDialog = false;
   
-      const valid: any = await this.productService.deleteItem(this.item.id);
+      const valid: any = await this.proveedoresService.deleteItem(this.item.id);
       console.log(valid);
   
       if (!valid.error) {
   
         if (valid.status == 200) {
           this.item = {};
-          this.getProductos();
+          this.getProveedores();
           this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
         } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
       } else {
@@ -85,23 +88,18 @@ export class ProductosComponent {
     async editItem() {
       this.submitted = true;
   
-      //validar email..... Utiliza el método test() para verificar si el email cumple con la expresión regular
-      const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      if (!this.item.name || !this.item.dni || !this.item.address) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
   
-      if (!this.item.name || this.item.name.length < 10 || !this.item.dni || !this.item.email) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
-  
-      if (!regex.test(this.item.email)) {
-        this.messageService.add({ severity: 'error', summary: 'Ups!', detail: `El email ${this.item.email} no es válido.`, life: 5000 }); return
-      }
   
       let dataPost = {
-  
         name: this.item.name,
-        dni: String(this.item.dni),
-        email: this.item.email,
+        dni:String(this.item.dni),
+        address:this.item.address,
+        enabled:this.value == 'off'?false:true
       }
+
       console.log(dataPost)
-      const valid: any = await this.productService.editItem(dataPost, this.item.id);
+      const valid: any = await this.proveedoresService.editItem(dataPost, this.item.id);
       console.log(valid);
   
       if (!valid.error) {
@@ -109,7 +107,7 @@ export class ProductosComponent {
         if (valid.status == 201) {
           this.item = {};
           this.itemEditDialog = false;
-          this.getProductos();
+          this.getProveedores();
           this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
         } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
       } else {
@@ -123,34 +121,23 @@ export class ProductosComponent {
       console.log(this.item, 'crear');
       this.submitted = true;
   
-      // if (!this.item.name || this.item.name.length < 10 || !this.item.dni || !this.item.email ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
-  
+      if (!this.item.name || !this.item.dni || !this.item.address) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
   
       let dataPost = {
-  
-        name: "string",
-        code: "string",
-        description: "string",
-        cost: 0,
-        price: 0,
-        brand_id: 0,
-        model_id: 0,
-        color_id: 0,
-        size_id: 0,
-        category_i: 0,
-        provider_id: 0,
-        url_file: "string",
-        enabled: true
+        name: this.item.name,
+        dni:String(this.item.dni),
+        address:this.item.address,
+        enabled:true
       }
       console.log(dataPost);
-      const valid: any = await this.productService.saveItem(dataPost);
+      const valid: any = await this.proveedoresService.saveItem(dataPost);
       console.log(valid);
   
       if (!valid.error) {
   
         if (valid.status == 201) {
           this.hideDialog();
-          this.getProductos();
+          this.getProveedores();
           this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
         } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
       } else {
@@ -159,9 +146,9 @@ export class ProductosComponent {
       }
     }
   
-    async getProductos() {
+    async getProveedores() {
   
-      const valid: any = await this.productService.getProductos();
+      const valid: any = await this.proveedoresService.getProveedores();
       console.log(valid);
   
       if (!valid.error) {

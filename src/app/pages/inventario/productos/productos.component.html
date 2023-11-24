@@ -1,0 +1,303 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary mr-2"
+                            (click)="openNew()"></button>
+                        <!-- <button pButton pRipple label=" Borrar" icon="pi pi-trash" class="p-button-danger"
+                            (click)="alertSelectedItems()"
+                            [disabled]="!selectedItems || !selectedItems.length"></button> -->
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary"
+                        (click)="getProductos()"></button>
+                </ng-template>
+            </p-toolbar>
+
+
+
+            <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['barcode','name','description','category_name','color_name','model_name','size_name','unit_measurement_name','cost','price','provider_name']"
+                [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
+                [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Productos</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th> -->
+                        <th pSortableColumn="barcode">Código</th>
+                        <th pSortableColumn="barcode">Marca</th>
+                        <th pSortableColumn="name">Nombre</th>
+                        <th pSortableColumn="description">Descripción</th>
+                        <th pSortableColumn="category_name">Categoría</th>
+                        <th pSortableColumn="color_name">Color</th>
+                        <th pSortableColumn="model_name">Modelo</th>
+                        <th pSortableColumn="size_name">Talla</th>
+                        <th pSortableColumn="unit_measurement_name">Empaque</th>
+                        <th pSortableColumn="cost">Costo</th>
+                        <th pSortableColumn="price">Precio</th>
+                        <th pSortableColumn="provider_name">Proveedor</th>
+
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <!--  <td>
+                            <p-tableCheckbox [value]="item"></p-tableCheckbox>
+                        </td> -->
+                        <td>{{item.code }}</td>
+                        <td>{{item.brand_name }}</td>
+                        <td style="min-width: 10rem;">{{item.name | titlecase}}</td>
+                        <td>{{item.description }}</td>
+                        <td>{{item.category_name }}</td>
+                        <td>{{item.color_name }}</td>
+                        <td>{{item.model_name }}</td>
+                        <td>{{item.size_name }}</td>
+                        <td>{{item.unit_measurement_name }}</td>
+                        <td>${{item.cost | number }}</td>
+                        <td>${{item.price | number }}</td>
+                        <td>{{item.provider_name }}</td>
+                        <td>
+                            <p-overlayPanel #op>
+                                <ng-template pTemplate="content">
+                                    <div class="flex">
+                                        <button pButton pRipple icon="pi pi-pencil" pTooltip="Actualizar"
+                                            tooltipPosition="top" class="p-button-rounded p-button-success mr-2"
+                                            (click)="openEdit(item)"></button>
+    
+                                        <button pButton pRipple icon="pi pi-trash"
+                                            class="p-button-rounded p-button-danger mr-2" pTooltip="Eliminar"
+                                            tooltipPosition="top" (click)="deleteAlert(item)"></button>
+                                    </div>
+
+                                </ng-template>
+                            </p-overlayPanel>
+                            <button pButton pRipple type="button" icon="pi pi-ellipsis-v" pTooltip="Opciones"
+                                tooltipPosition="top" class="p-button-rounded p-button-outlined z-3 ml-auto sm:ml-0"
+                                (click)="op.toggle($event)"></button>
+
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="itemEditDialog" [style]="{ width: '80%' }"
+            header="{{ crear ? 'Nuevo producto' : 'Actualizar producto' }}" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="p-fluid p-formgrid grid">
+
+                    <div class="field col-12 md:col-4">
+                        <label for="name">Nombre</label>
+                        <input type="text" pInputText id="name" [(ngModel)]="item.name" required autofocus
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.name }" />
+                        <small class="ng-dirty ng-invalid"
+                            *ngIf="submitted && !item.name">El campo es
+                            requerido.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label for="description">Descripción</label>
+                        <input type="text" pInputText [(ngModel)]="item.description" required autofocus
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.description}" />
+                        <small class="ng-dirty ng-invalid"
+                            *ngIf="submitted && !item.description">El campo es
+                            requerido.</small>
+                    </div>
+
+                    <div class=" field col-12 md:col-4 ">
+                        <label for="">Marca</label>
+
+                        <p-dropdown [options]="marcas" [(ngModel)]="marca" optionLabel="name" appendTo="body"
+                            placeholder="Seleccione" emptyMessage="No hay resultados"
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !marca.id }">
+                            <ng-template pTemplate="selectedItem">
+                                <span *ngIf="marca">{{ marca.name }}</span>
+                            </ng-template>
+
+                            <ng-template let-marca pTemplate="item">
+                                <span>{{ marca.name }}</span>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !marca.id">El campo es
+                            requerido.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label for="">Categoría</label>
+
+                        <p-dropdown [options]="categorias" [(ngModel)]="categoria" optionLabel="name" appendTo="body"
+                            placeholder="Seleccione" emptyMessage="No hay resultados"
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !categoria.id }">
+                            <ng-template pTemplate="selectedItem">
+                                <span *ngIf="categoria">{{ categoria.name }}</span>
+                            </ng-template>
+
+                            <ng-template let-categoria pTemplate="item">
+                                <span>{{ categoria.name }}</span>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !categoria.id">El campo es
+                            requerido.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label for="">Color</label>
+
+                        <p-dropdown [options]="colores" [(ngModel)]="color" optionLabel="name" appendTo="body"
+                            placeholder="Seleccione" emptyMessage="No hay resultados"
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !color.id }">
+                            <ng-template pTemplate="selectedItem">
+                                <span *ngIf="color">{{ color.name }}</span>
+                            </ng-template>
+
+                            <ng-template let-color pTemplate="item">
+                                <span>{{ color.name }}</span>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !color.id">El campo es
+                            requerido.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label for="">Modelo</label>
+
+                        <p-dropdown [options]="modelos" [(ngModel)]="modelo" optionLabel="name" appendTo="body"
+                            placeholder="Seleccione" emptyMessage="No hay resultados"
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !modelo.id }">
+                            <ng-template pTemplate="selectedItem">
+                                <span *ngIf="modelo">{{ modelo.name }}</span>
+                            </ng-template>
+
+                            <ng-template let-modelo pTemplate="item">
+                                <span>{{ modelo.name }}</span>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !modelo.id">El campo es
+                            requerido.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label for="">Proveedor</label>
+
+                        <p-dropdown [options]="proveedores" [(ngModel)]="proveedor" optionLabel="name" appendTo="body"
+                            placeholder="Seleccione" emptyMessage="No hay resultados"
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !proveedor.id }">
+                            <ng-template pTemplate="selectedItem">
+                                <span *ngIf="proveedor">{{ proveedor.name }}</span>
+                            </ng-template>
+
+                            <ng-template let-proveedor pTemplate="item">
+                                <span>{{ proveedor.name }}</span>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !proveedor.id">El campo es
+                            requerido.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label for="">Talla</label>
+
+                        <p-dropdown [options]="tallas" [(ngModel)]="talla" optionLabel="name" appendTo="body"
+                            placeholder="Seleccione" emptyMessage="No hay resultados"
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !talla.id }">
+                            <ng-template pTemplate="selectedItem">
+                                <span *ngIf="talla">{{ talla.name }}</span>
+                            </ng-template>
+
+                            <ng-template let-talla pTemplate="item">
+                                <span>{{ talla.name }}</span>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !talla.id">El campo es
+                            requerido.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label for="">Unidad de medida</label>
+
+                        <p-dropdown [options]="unidades_medidas" [(ngModel)]="unidad_medida" optionLabel="name"
+                            appendTo="body" placeholder="Seleccione" emptyMessage="No hay resultados"
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !unidad_medida.id }">
+                            <ng-template pTemplate="selectedItem">
+                                <span *ngIf="unidad_medida">{{ unidad_medida.name }}</span>
+                            </ng-template>
+
+                            <ng-template let-unidad_medida pTemplate="item">
+                                <span>{{ unidad_medida.name }}</span>
+                            </ng-template>
+                        </p-dropdown>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !unidad_medida.id">El campo es
+                            requerido.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label for="cost">Costo</label>
+                        <p-inputNumber id="cost" [(ngModel)]="item.cost" 
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.cost }"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.cost">El item es requerido.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label for="price">Precio de venta</label>
+                        <p-inputNumber id="price" [(ngModel)]="item.price" 
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.price }"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.price">El item es requerido.</small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label for="price_min">Precio minimo</label>
+                        <p-inputNumber id="price" [(ngModel)]="item.price_min" 
+                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.price_min }"></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.price_min">El item es requerido.</small>
+                    </div>
+
+                </div>
+
+
+
+
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="{{ crear ? 'Guardar' : 'Actualizar' }}" icon="pi pi-check"
+                    class="p-button-text" (click)="crear ? saveItem() : editItem()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="itemDeleteDialog" header="Eliminar un producto" [modal]="true"
+            [style]="{ width: '450px' }">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="item">Esta seguro que quieres eliminar el producto <b>{{ item.name }}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="itemDeleteDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si"
+                    (click)="deleteItem()"></button>
+            </ng-template>
+        </p-dialog>
+
+    </div>
+</div>

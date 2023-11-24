@@ -4,11 +4,16 @@ import { AuthGuard } from '../guards/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { UsuariosComponent } from './admin/usuarios/usuarios.component';
 import { RolesComponent } from './admin/roles/roles.component';
-import { ProductosComponent } from './admin/productos/productos.component';
+import { ProductosComponent } from './inventario/productos/productos.component';
 import { AlmacenesComponent } from './admin/almacenes/almacenes.component';
 import { MarcasComponent } from './admin/marcas/marcas.component';
 import { ModelosComponent } from './admin/modelos/modelos.component';
 import { CategotiasComponent } from './admin/categotias/categotias.component';
+import { ProveedoresComponent } from './admin/proveedores/proveedores.component';
+import { RecepcionComponent } from './inventario/recepcion/recepcion.component';
+import { InventarioComponent } from './inventario/inventario/inventario.component';
+import { SalidasComponent } from './inventario/salidas/salidas.component';
+import { EntradasComponent } from './inventario/entradas/entradas.component';
 
 
 
@@ -58,6 +63,31 @@ const routes: Routes = [
         {
             path:'categorias',
             component: CategotiasComponent,
+            canActivate:[AuthGuard]
+        }, 
+        {
+            path:'proveedores',
+            component: ProveedoresComponent,
+            canActivate:[AuthGuard]
+        }, 
+        {
+            path:'recepcion',
+            component: RecepcionComponent,
+            canActivate:[AuthGuard]
+        }, 
+        {
+            path:'inventario',
+            component: InventarioComponent,
+            canActivate:[AuthGuard]
+        }, 
+        {
+            path:'salidas',
+            component: SalidasComponent,
+            canActivate:[AuthGuard]
+        }, 
+        {
+            path:'entradas',
+            component: EntradasComponent,
             canActivate:[AuthGuard]
         }, 
         

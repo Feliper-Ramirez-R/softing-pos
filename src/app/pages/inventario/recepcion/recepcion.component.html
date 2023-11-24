@@ -1,0 +1,156 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <!--  <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary mr-2"
+                            (click)="openNew()"></button> -->
+                        <!-- <button pButton pRipple label=" Borrar" icon="pi pi-trash" class="p-button-danger"
+                            (click)="alertSelectedItems()"
+                            [disabled]="!selectedItems || !selectedItems.length"></button> -->
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary"
+                        (click)="getProductos()"></button>
+                </ng-template>
+            </p-toolbar>
+
+
+
+            <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['barcode','name','description','category_name','color_name','model_name','size_name','unit_measurement_name']"
+                [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
+                [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Productos</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th> -->
+                        <th pSortableColumn="barcode">Código</th>
+                        <th pSortableColumn="barcode">Marca</th>
+                        <th pSortableColumn="name">Nombre</th>
+                        <th pSortableColumn="description">Descripción</th>
+                        <th pSortableColumn="category_name">Categoría</th>
+                        <th pSortableColumn="color_name">Color</th>
+                        <th pSortableColumn="model_name">Modelo</th>
+                        <th pSortableColumn="size_name">Talla</th>
+                        <th pSortableColumn="unit_measurement_name">Empaque</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <!--  <td>
+                            <p-tableCheckbox [value]="item"></p-tableCheckbox>
+                        </td> -->
+                        <td>{{item.code }}</td>
+                        <td>{{item.brand_name }}</td>
+                        <td style="min-width: 10rem;">{{item.name | titlecase}}</td>
+                        <td>{{item.description }}</td>
+                        <td>{{item.category_name }}</td>
+                        <td>{{item.color_name }}</td>
+                        <td>{{item.model_name }}</td>
+                        <td>{{item.size_name }}</td>
+                        <td>{{item.unit_measurement_name }}</td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-database" pTooltip="Ingresar inventario" tooltipPosition="top"
+                                    class="p-button-rounded p-button-success mr-2" (click)="openRecibir(item)"></button>
+    
+                                <button pButton pRipple icon="pi pi-print" class="p-button-rounded p-button-primary"
+                                    pTooltip="Imprimir códigos" tooltipPosition="top"
+                                    (click)="alertImprimir(item)"></button>
+                            </div>
+
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="imprimirDialog" header="Imprimir códigos" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12">
+                <label for="dni">Cantidad de códigos</label>
+                <input type="number" pInputText [(ngModel)]="cantidad_codigos" autofocus
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && cantidad_codigos==0 }">
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && cantidad_codigos==0">Ingresa una
+                    cantidad.</small>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancelar"
+            (click)="imprimirDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Imprimir"
+            (click)="generarPdfEtiquetas()"></button>
+    </ng-template>
+</p-dialog>
+
+
+<p-dialog [(visible)]="inventarioDialog" header="Ingresar inventario" [modal]="true" [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+        <div class="p-fluid p-formgrid grid">
+
+            <div class=" field col-12">
+                <label for="">Seleccione donde vas a recibir</label>
+
+                <p-dropdown [options]="bodegas" [(ngModel)]="bodega" optionLabel="name" appendTo="body"
+                    placeholder="Seleccione" emptyMessage="No hay resultados"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && !bodega.id }">
+                    <ng-template pTemplate="selectedItem">
+                        <span *ngIf="bodega">{{ bodega.name | titlecase }}</span>
+                    </ng-template>
+
+                    <ng-template let-bodega pTemplate="item">
+                        <span>{{ bodega.name | titlecase }}</span>
+                    </ng-template>
+                </p-dropdown>
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !bodega.id">El campo es
+                    requerido.</small>
+            </div>
+
+            <div class="field col-12">
+                <label for="dni">Cantidad a ingresar</label>
+                <input type="number" pInputText [(ngModel)]="item.cantidad" 
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.cantidad}">
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.cantidad">Ingresa una
+                    cantidad.</small>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancelar"
+            (click)="inventarioDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Ingresar"
+            (click)="ingresarInventario()"></button>
+    </ng-template>
+</p-dialog>
+
+
+
+
+<ngx-barcode [ngStyle]="{'display': 'none'}" id="codigo" *ngFor="let bcValue of values" [bc-element-type]="elementType"
+    [bc-value]="bcValue" [bc-format]="format" [bc-line-color]="lineColor" [bc-width]="width" [bc-height]="height"
+    [bc-display-value]="displayValue" [bc-font-options]="fontOptions" [bc-font]="font" [bc-text-align]="textAlign"
+    [bc-text-position]="textPosition" [bc-text-margin]="textMargin" [bc-font-size]="fontSize"
+    [bc-background]="background" [bc-margin]="margin" [bc-margin-top]="marginTop" [bc-margin-bottom]="marginBottom"
+    [bc-margin-left]="marginLeft" [bc-margin-right]="marginRight"></ngx-barcode>

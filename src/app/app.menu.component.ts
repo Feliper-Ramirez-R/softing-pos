@@ -22,12 +22,27 @@ export class AppMenuComponent implements OnInit {
                     items: [
                         { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/pages/usuarios'] },
                         { label: 'Roles', icon: 'pi pi-fw pi-sitemap', routerLink: ['/pages/roles'] },
-                        { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/pages/productos'] },
                         { label: 'Almacenes', icon: 'pi pi-fw pi-th-large', routerLink: ['/pages/almacenes'] },
                         { label: 'Marcas', icon: 'pi pi-fw pi-star', routerLink: ['/pages/marcas'] },
                         { label: 'Modelos', icon: 'pi pi-fw pi-compass', routerLink: ['/pages/modelos'] },
                         { label: 'Categorías', icon: 'pi pi-fw pi-table', routerLink: ['/pages/categorias'] },
+                        { label: 'Proveedores', icon: 'pi pi-fw pi-user-plus', routerLink: ['/pages/proveedores'] },
     
+                    ]
+                },
+                {
+                    label: 'Inventarios', icon: 'pi pi-fw pi-box', routerLink: ['/inventario'],
+                    items: [
+                        { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/pages/productos'] },
+                        { label: 'Inventario', icon: 'pi pi-fw pi-book', routerLink: ['/pages/inventario'] },
+                        {
+                            label: 'Movimientos', icon: 'pi pi-fw pi-clone',
+                            items: [
+                                { label: 'Recepción', icon: 'pi pi-fw pi-check-square', routerLink: ['/pages/recepcion'] },
+                                { label: 'Salidas', icon: 'pi pi-fw pi-arrow-circle-up', routerLink: ['/pages/salidas'] },
+                                { label: 'Entradas', icon: 'pi pi-fw pi-arrow-circle-down', routerLink: ['/pages/entradas'] },
+                            ]
+                        },
                     ]
                 },
             ];
@@ -39,34 +54,71 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Administrador', icon: 'pi pi-fw pi-desktop', routerLink: ['/usuarios'],
                 items: [
-                    { label: 'Usuarios', icon: 'pi pi-fw pi-users', routerLink: ['/pages/usuarios'] },
-                    { label: 'Programas', icon: 'pi pi-fw pi-desktop', routerLink: ['/pages/programas'] },
-                    { label: 'Grupos', icon: 'pi pi-fw pi-sitemap', routerLink: ['/pages/grupos'] },
-                    { label: 'Materias', icon: 'pi pi-fw pi-book', routerLink: ['/pages/materias'] },
+                    { label: 'Marcas', icon: 'pi pi-fw pi-star', routerLink: ['/pages/marcas'] },
+                    { label: 'Modelos', icon: 'pi pi-fw pi-compass', routerLink: ['/pages/modelos'] },
+                    { label: 'Categorías', icon: 'pi pi-fw pi-table', routerLink: ['/pages/categorias'] },
+                    { label: 'Proveedores', icon: 'pi pi-fw pi-user-plus', routerLink: ['/pages/proveedores'] },
 
                 ]
             },
-           
+            {
+                label: 'Inventarios', icon: 'pi pi-fw pi-box', routerLink: ['/usuarios'],
+                items: [
+                    { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/pages/productos'] },
+                    { label: 'Inventario', icon: 'pi pi-fw pi-book', routerLink: ['/pages/inventario'] },
+                    {
+                        label: 'Movimientos', icon: 'pi pi-fw pi-clone',
+                        items: [
+                            { label: 'Recepción', icon: 'pi pi-fw pi-check-square', routerLink: ['/pages/recepcion'] },
+                            { label: 'Salidas', icon: 'pi pi-fw pi-arrow-circle-up', routerLink: ['/pages/salidas'] },
+                            { label: 'Entradas', icon: 'pi pi-fw pi-arrow-circle-down', routerLink: ['/pages/entradas'] },
+                        ]
+                    },
+                ]
+            },
         ];
-      }else if(this.user.user.role_id == 4)
+      }else if(this.user.user.role_id == 3)
       {
         this.model = [
-           
-
-
-
-        ];
-      }else if(this.user.user.role_id == 5)
-      {
-        this.model = [
-           
-
-
-
-
+            { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['home'] },
+            {
+                label: 'Inventarios', icon: 'pi pi-fw pi-box', routerLink: ['/usuarios'],
+                items: [
+                    { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/pages/productos'] },
+                    { label: 'Inventario', icon: 'pi pi-fw pi-book', routerLink: ['/pages/inventario'] },
+                    {
+                        label: 'Movimientos', icon: 'pi pi-fw pi-clone',
+                        items: [
+                            { label: 'Recepción', icon: 'pi pi-fw pi-check-square', routerLink: ['/pages/recepcion'] },
+                            { label: 'Salidas', icon: 'pi pi-fw pi-arrow-circle-up', routerLink: ['/pages/salidas'] },
+                            { label: 'Entradas', icon: 'pi pi-fw pi-arrow-circle-down', routerLink: ['/pages/entradas'] },
+                        ]
+                    },
+                ]
+            },
         ];
       }
-
+      else if(this.user.user.role_id == 4)
+      {
+        this.model = [
+            { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['home'] },
+            {
+                label: 'Inventarios', icon: 'pi pi-fw pi-box', routerLink: ['/usuarios'],
+                items: [
+                    { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/pages/productos'] },
+                    { label: 'Inventario', icon: 'pi pi-fw pi-book', routerLink: ['/pages/inventario'] },
+                    {
+                        label: 'Movimientos', icon: 'pi pi-fw pi-clone',
+                        items: [
+                            { label: 'Salidas', icon: 'pi pi-fw pi-arrow-circle-up', routerLink: ['/pages/salidas'] },
+                            { label: 'Entradas', icon: 'pi pi-fw pi-arrow-circle-down', routerLink: ['/pages/entradas'] },
+                        ]
+                    },
+                ]
+            },
+        ];
+      }
+     
     }
 
     onMenuClick() {

@@ -20,11 +20,10 @@
 
 
 
-            <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
-                [globalFilterFields]="['name']" [rows]="10" [paginator]="true"
-                [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
-                currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" 
-                selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name']"
+                [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
+                [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Marcas</h5>
@@ -46,10 +45,10 @@
                         <td style="min-width: 10rem;">{{item.name | titlecase}}</td>
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil"
+                                <button pButton pRipple icon="pi pi-pencil" pTooltip="Actualizar" tooltipPosition="top"
                                     class="p-button-rounded p-button-success mr-2" (click)="openEdit(item)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                    (click)="deleteAlert(item)"></button>
+                                    pTooltip="Eliminar" tooltipPosition="top" (click)="deleteAlert(item)"></button>
                             </div>
                         </td>
                     </tr>
@@ -85,7 +84,7 @@
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
                     (click)="itemDeleteDialog = false"></button>
-                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si"
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si"
                     (click)="deleteItem()"></button>
             </ng-template>
         </p-dialog>

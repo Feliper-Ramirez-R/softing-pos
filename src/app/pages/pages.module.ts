@@ -39,16 +39,29 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { AccordionModule } from 'primeng/accordion';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { TagModule } from 'primeng/tag';
+
+/* barcode */
+import { NgxBarcodeModule } from 'ngx-barcode';
 
 /* Componentes */
 import { HomeComponent } from './home/home.component';
 import { UsuariosComponent } from './admin/usuarios/usuarios.component';
 import { RolesComponent } from './admin/roles/roles.component';
-import { ProductosComponent } from './admin/productos/productos.component';
+import { ProductosComponent } from './inventario/productos/productos.component';
 import { AlmacenesComponent } from './admin/almacenes/almacenes.component';
 import { MarcasComponent } from './admin/marcas/marcas.component';
 import { ModelosComponent } from './admin/modelos/modelos.component';
 import { CategotiasComponent } from './admin/categotias/categotias.component';
+import { ProveedoresComponent } from './admin/proveedores/proveedores.component';
+import { RecepcionComponent } from './inventario/recepcion/recepcion.component';
+import { InventarioComponent } from './inventario/inventario/inventario.component';
+import { SalidasComponent } from './inventario/salidas/salidas.component';
+import { EntradasComponent } from './inventario/entradas/entradas.component';
+import { CalendarModule } from 'primeng/calendar';
+
+
 
 
 
@@ -62,7 +75,12 @@ import { CategotiasComponent } from './admin/categotias/categotias.component';
     AlmacenesComponent,
     MarcasComponent,
     ModelosComponent,
-    CategotiasComponent
+    CategotiasComponent,
+    ProveedoresComponent,
+    RecepcionComponent,
+    InventarioComponent,
+    SalidasComponent,
+    EntradasComponent,
   ],
   imports: [
     PagesRoutingModule,
@@ -102,8 +120,11 @@ import { CategotiasComponent } from './admin/categotias/categotias.component';
     InputSwitchModule,
     DividerModule,
     CheckboxModule,
-    AccordionModule,
-    
+    AccordionModule, 
+    NgxBarcodeModule,
+    AutoCompleteModule,
+    TagModule,
+    CalendarModule
   ]
 })
 export class PagesModule { }
