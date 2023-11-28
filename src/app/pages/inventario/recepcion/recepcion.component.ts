@@ -51,7 +51,7 @@ export class RecepcionComponent {
   bodegas: any[] = [];
   bodega: any = {};
 
-  cantidad_codigos: number = 1
+  cantidad_codigos: number = 1;
 
   imprimirDialog: boolean = false;
   inventarioDialog: boolean = false;
@@ -59,7 +59,7 @@ export class RecepcionComponent {
 
   constructor(private recepcionService: RecepcionService,
     private user: AuthService,
-    private messageService: MessageService,
+    private messageService: MessageService
   ) { }
 
 
