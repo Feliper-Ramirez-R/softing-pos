@@ -26,6 +26,7 @@
     "@fullcalendar/interaction": "^6.0.3",
     "@fullcalendar/timegrid": "^6.0.3",
     "chart.js": "^3.3.2",
+    "ngx-barcode": "^0.3.0",
     "ngx-socket-io": "^4.4.0",
     "ngx-spinner": "^15.0.1",
     "pdfmake": "^0.2.7",

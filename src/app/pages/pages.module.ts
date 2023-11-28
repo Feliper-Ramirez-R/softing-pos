@@ -43,7 +43,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TagModule } from 'primeng/tag';
 
 /* barcode */
-// import { NgxBarcodeModule } from 'ngx-barcode';
+import { NgxBarcodeModule } from 'ngx-barcode';
 
 /* Componentes */
 import { HomeComponent } from './home/home.component';
@@ -121,7 +121,7 @@ import { CalendarModule } from 'primeng/calendar';
     DividerModule,
     CheckboxModule,
     AccordionModule, 
-    // NgxBarcodeModule,
+    NgxBarcodeModule,
     AutoCompleteModule,
     TagModule,
     CalendarModule
