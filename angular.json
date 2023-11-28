@@ -19,8 +19,7 @@
           "options": {
             "allowedCommonJsDependencies": [
               "pdfmake/build/pdfmake",
-              "ngx-barcode",
-              "ngx-google-places-autocomplete"
+              "ngx-barcode"
             ],
             "outputPath": "dist/softing-pos-app",
             "index": "src/index.html",
