@@ -1,0 +1,122 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (keydown.enter)="leerProducto()"
+                                placeholder="Ingresa codigo..." autofocus [(ngModel)]="item.codigo"
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <!--  <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
+                            placeholder="Selecciona un rango" [readonlyInput]="true"
+                            (onClose)="getEntradasRango()">
+                        </p-calendar>
+                    <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary ml-2"
+                        (click)="getSalidas()"></button> -->
+                </ng-template>
+            </p-toolbar>
+        </div>
+    </div>
+
+
+
+
+    <div *ngIf="datosDB.length>0" class="col-12 lg:col-6 md:col-6">
+        <div class="card widget-store-items">
+            <div class="store-cards-container">
+                <div class="grid store-cards">
+                    <div *ngFor=" let produc of datosDB" class="col-6 ">
+                        <div class="store-card">
+                            <div class="store-card-icons">
+                                <div class="grid grid-nogutter">
+                                    <div class="col-4">
+                                        <i (click)="editar(produc)" class="pi pi-pencil"></i>
+                                    </div>
+                                    <div class="col-4">
+                                        <i (click)="confirm($event,produc)" class="pi pi-trash"></i>
+                                    </div>
+                                </div>
+                                <!-- <div class="store-card-image">
+                                    <img src="assets/layout/images/dashboard/asset-image-seed.jpg" alt="mirage-layout" />
+                                </div> -->
+                            </div>
+                            <div class="store-card-content">
+                                <h5>{{produc.code}}</h5>
+                                <span>{{produc.description}}</span><br>
+                                <span>{{produc.product_name}}</span><br>
+                                <span *ngIf="!produc.descuento">{{produc.price | number}}</span><br>
+                                <span *ngIf="produc.descuento"><input pInputText type="number"
+                                        (keydown.enter)="editar2(produc)" [(ngModel)]="produc.price"
+                                        class="w-full sm:w-auto" /></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-effect"></div>
+        </div>
+    </div>
+    <p-confirmPopup></p-confirmPopup>
+
+    <div *ngIf="datosDB.length>0" class="col-12 lg:col-6 md:col-6">
+        <div class="card widget-support-request">
+            <div class="grid grid-nogutter">
+                <div class="col-6 title">
+                    <h5>A E Importaciones</h5>
+                </div>
+                <div class="col-6 support-info">
+                    <p>📅 {{fecha}} <br>
+                        ⏰ {{hora}}</p>
+                    <span class="highlighted">Factura N° 177</span>
+                </div>
+            </div>
+            <div class="card widget-tasks">
+                <ul class="checkboxes">
+                    <li class="checkbox-row">
+                        <div class="grid">
+                            <div class="col-6 checkbox">
+                                <p>Descripción</p>
+                            </div>
+                            <div class="col-3 checkbox">
+                               <span class="ml-5"> Cantidad</span>
+                            </div>
+                            <div class="col-3 checkbox-row-info">
+                                <span class="mr-5">Precio</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <ul *ngFor=" let produc of datosDB" class="checkboxes">
+                    <li class="checkbox-row">
+                        <div class="grid">
+                            <div class="col-7 checkbox">
+                                <p>{{produc.product_name}}</p>
+                            </div>
+                            <div class="col-2 checkbox">
+                                <span >1</span>
+                            </div>
+                            <div class="col-3 checkbox-row-info">
+                                <span class="time">${{produc.price | number}}</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="resolution-button-bar">
+                <button type="button" label="Facturar" icon="pi pi-star" pButton></button>
+                <button type="button" label="${{total | number}}" pButton class="p-button-secondary p-button-text"></button>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</div>

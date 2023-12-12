@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { ModelosService } from './modelos.service';
+import { ReferenciasService } from './referencias.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-modelos',
-  templateUrl: './modelos.component.html',
-  styleUrls: ['./modelos.component.scss']
+  selector: 'app-referencias',
+  templateUrl: './referencias.component.html',
+  styleUrls: ['./referencias.component.scss']
 })
-export class ModelosComponent {
+export class ReferenciasComponent {
 
   datosDB: any[] = [];
   item: any = {};
@@ -18,7 +18,7 @@ export class ModelosComponent {
   submitted: boolean = false;
   crear: boolean = false;
 
-  constructor(private modelosService: ModelosService,
+  constructor(private referenciasService: ReferenciasService,
     private user: AuthService,
     private messageService: MessageService) { }
 
@@ -63,7 +63,7 @@ export class ModelosComponent {
   
       this.itemDeleteDialog = false;
   
-      const valid: any = await this.modelosService.deleteItem(this.item.id);
+      const valid: any = await this.referenciasService.deleteItem(this.item.id);
       console.log(valid);
   
       if (!valid.error) {
@@ -91,7 +91,7 @@ export class ModelosComponent {
         name: this.item.name,
       }
       console.log(dataPost)
-      const valid: any = await this.modelosService.editItem(dataPost, this.item.id);
+      const valid: any = await this.referenciasService.editItem(dataPost, this.item.id);
       console.log(valid);
   
       if (!valid.error) {
@@ -119,7 +119,7 @@ export class ModelosComponent {
         name: this.item.name,
       }
       console.log(dataPost);
-      const valid: any = await this.modelosService.saveItem(dataPost);
+      const valid: any = await this.referenciasService.saveItem(dataPost);
       console.log(valid);
   
       if (!valid.error) {
@@ -137,7 +137,7 @@ export class ModelosComponent {
   
     async getModelos() {
   
-      const valid: any = await this.modelosService.getModelos();
+      const valid: any = await this.referenciasService.getModelos();
       console.log(valid);
   
       if (!valid.error) {

@@ -88,8 +88,14 @@ export class ProveedoresComponent {
     async editItem() {
       this.submitted = true;
   
-      if (!this.item.name || !this.item.dni || !this.item.address) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
+      if (!this.item.name || !this.item.dni || !this.item.address || !this.item.phone_number || !this.item.email ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
   
+       //validar email..... Utiliza el método test() para verificar si el email cumple con la expresión regular
+       const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+       if (!regex.test(this.item.email)) {
+        this.messageService.add({ severity: 'error', summary: 'Ups!', detail: `El email ${this.item.email} no es válido.`, life: 5000 }); return
+      }
   
       let dataPost = {
         name: this.item.name,
@@ -121,7 +127,14 @@ export class ProveedoresComponent {
       console.log(this.item, 'crear');
       this.submitted = true;
   
-      if (!this.item.name || !this.item.dni || !this.item.address) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
+      if (!this.item.name || !this.item.dni || !this.item.address || !this.item.phone_number || !this.item.email ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
+  
+       //validar email..... Utiliza el método test() para verificar si el email cumple con la expresión regular
+       const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+       if (!regex.test(this.item.email)) {
+        this.messageService.add({ severity: 'error', summary: 'Ups!', detail: `El email ${this.item.email} no es válido.`, life: 5000 }); return
+      }
   
       let dataPost = {
         name: this.item.name,

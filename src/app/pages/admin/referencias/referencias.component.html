@@ -26,7 +26,7 @@
                 [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Modelos</h5>
+                        <h5 class="m-0">Referencias</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
@@ -58,7 +58,7 @@
         </div>
 
         <p-dialog [(visible)]="itemEditDialog" [style]="{ width: '450px' }"
-            header="{{ crear ? 'Nuevo modelo' : 'Actualizar modelo' }}" [modal]="true" class="p-fluid">
+            header="{{ crear ? 'Nueva referencia' : 'Actualizar referencia' }}" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="field">
                     <label for="name">Nombre</label>
@@ -80,7 +80,7 @@
             [style]="{ width: '450px' }">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="item">Esta seguro que quieres eliminar el modelo <b>{{ item.name }}</b>?</span>
+                <span *ngIf="item">Esta seguro que quieres eliminar la referencia <b>{{ item.name }}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"

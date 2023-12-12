@@ -52,7 +52,6 @@ import { RolesComponent } from './admin/roles/roles.component';
 import { ProductosComponent } from './inventario/productos/productos.component';
 import { AlmacenesComponent } from './admin/almacenes/almacenes.component';
 import { MarcasComponent } from './admin/marcas/marcas.component';
-import { ModelosComponent } from './admin/modelos/modelos.component';
 import { CategotiasComponent } from './admin/categotias/categotias.component';
 import { ProveedoresComponent } from './admin/proveedores/proveedores.component';
 import { RecepcionComponent } from './inventario/recepcion/recepcion.component';
@@ -60,6 +59,8 @@ import { InventarioComponent } from './inventario/inventario/inventario.componen
 import { SalidasComponent } from './inventario/salidas/salidas.component';
 import { EntradasComponent } from './inventario/entradas/entradas.component';
 import { CalendarModule } from 'primeng/calendar';
+import { ReferenciasComponent } from './admin/referencias/referencias.component';
+import { VentasComponent } from './ventas/ventas/ventas.component';
 
 
 
@@ -74,13 +75,14 @@ import { CalendarModule } from 'primeng/calendar';
     ProductosComponent,
     AlmacenesComponent,
     MarcasComponent,
-    ModelosComponent,
     CategotiasComponent,
     ProveedoresComponent,
     RecepcionComponent,
     InventarioComponent,
     SalidasComponent,
     EntradasComponent,
+    ReferenciasComponent,
+    VentasComponent,
   ],
   imports: [
     PagesRoutingModule,

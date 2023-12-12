@@ -38,7 +38,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="dni">Cédula <p-sortIcon field="dni"></p-sortIcon></th>
+                        <th pSortableColumn="dni">Nit <p-sortIcon field="dni"></p-sortIcon></th>
                         <th pSortableColumn="address">Dirección <p-sortIcon field="address"></p-sortIcon></th>
                         <th></th>
                     </tr>
@@ -52,8 +52,8 @@
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil" pTooltip="Actualizar" tooltipPosition="top"
                                     class="p-button-rounded p-button-success mr-2" (click)="openEdit(item)"></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
-                                    pTooltip="Eliminar" tooltipPosition="top" (click)="deleteAlert(item)"></button>
+                               <!--  <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                                    pTooltip="Eliminar" tooltipPosition="top" (click)="deleteAlert(item)"></button> -->
                             </div>
                         </td>
                     </tr>
@@ -72,7 +72,7 @@
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.name ">El Campo es requerido.</small>
                 </div>
                 <div class="field">
-                    <label for="dni">Cédula</label>
+                    <label for="dni">Nit</label>
                     <input type="text" pInputText id="dni" [(ngModel)]="item.dni" required autofocus
                         [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.dni }" />
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.dni ">El Campo es requerido.</small>
@@ -82,6 +82,20 @@
                     <input type="text" pInputText id="address" [(ngModel)]="item.address" required autofocus
                         [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.address }" />
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.address ">El Campo es
+                        requerido.</small>
+                </div>
+                <div class="field">
+                    <label for="phone_number">Teléfono</label>
+                    <input type="text" pInputText id="phone_number" [(ngModel)]="item.phone_number" required autofocus
+                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.phone_number }" />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.phone_number ">El Campo es
+                        requerido.</small>
+                </div>
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="text" pInputText id="email" [(ngModel)]="item.email" required autofocus
+                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.email }" />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.email ">El Campo es
                         requerido.</small>
                 </div>
                 <div *ngIf="!crear" class="field col-6">

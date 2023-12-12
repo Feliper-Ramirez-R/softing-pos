@@ -6,7 +6,7 @@ import { rutas } from 'src/env/rutas';
 @Injectable({
   providedIn: 'root'
 })
-export class ModelosService {
+export class ReferenciasService {
 
   prefix:string = 'models'
 
