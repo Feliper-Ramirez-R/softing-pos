@@ -21,7 +21,7 @@
 
 
             <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
-                [globalFilterFields]="['name','dni','address']" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['name','dni','address','email','number_phone']" [rows]="10" [paginator]="true"
                 [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
                 [rowHover]="true" dataKey="id">
@@ -39,7 +39,9 @@
                     <tr>
                         <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
                         <th pSortableColumn="dni">Nit <p-sortIcon field="dni"></p-sortIcon></th>
+                        <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
                         <th pSortableColumn="address">Dirección <p-sortIcon field="address"></p-sortIcon></th>
+                        <th pSortableColumn="number_phone">Telefono <p-sortIcon field="number_phone"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -47,7 +49,9 @@
                     <tr>
                         <td style="min-width: 10rem;">{{item.name | titlecase}}</td>
                         <td>{{item.dni }}</td>
+                        <td>{{item.email }}</td>
                         <td>{{item.address }}</td>
+                        <td>{{item.number_phone }}</td>
                         <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil" pTooltip="Actualizar" tooltipPosition="top"
