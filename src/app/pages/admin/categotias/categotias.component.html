@@ -58,7 +58,7 @@
         </div>
 
         <p-dialog [(visible)]="itemEditDialog" [style]="{ width: '450px' }"
-            header="{{ crear ? 'Nuevo categoria' : 'Actualizar categoria' }}" [modal]="true" class="p-fluid">
+            header="{{ crear ? 'Nueva categoría' : 'Actualizar categoría' }}" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="field">
                     <label for="name">Nombre</label>
@@ -76,11 +76,11 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="itemDeleteDialog" header="Eliminar una categoria" [modal]="true"
+        <p-dialog [(visible)]="itemDeleteDialog" header="Eliminar una categoría" [modal]="true"
             [style]="{ width: '450px' }">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="item">Esta seguro que quieres eliminar la categoria <b>{{ item.name }}</b>?</span>
+                <span *ngIf="item">Esta seguro que quieres eliminar la categoría <b>{{ item.name }}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"

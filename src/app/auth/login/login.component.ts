@@ -33,7 +33,7 @@ export class LoginComponent {
 
   async login() {
     this.submitted = true;
-    if (this.form.get('email')?.hasError('email')) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ingresa un email valido!', life: 5000 }); return }
+    if (this.form.get('email')?.hasError('email')) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ingresa un email válido!', life: 5000 }); return }
     if (this.form.invalid) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos!', life: 5000 }); return }
    
 

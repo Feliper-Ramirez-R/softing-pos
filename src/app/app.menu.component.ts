@@ -14,6 +14,7 @@ export class AppMenuComponent implements OnInit {
                 private user:AuthService) { }
 
     ngOnInit() {
+        /* Super_admin */
         if(this.user.user.role_id == 1){
             this.model = [
                 { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['home'] },
@@ -41,6 +42,7 @@ export class AppMenuComponent implements OnInit {
                                 { label: 'Recepción', icon: 'pi pi-fw pi-check-square', routerLink: ['/pages/recepcion'] },
                                 { label: 'Salidas', icon: 'pi pi-fw pi-arrow-circle-up', routerLink: ['/pages/salidas'] },
                                 { label: 'Entradas', icon: 'pi pi-fw pi-arrow-circle-down', routerLink: ['/pages/entradas'] },
+                                { label: 'Ajustes', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/pages/ajustes'] },
                             ]
                         },
                     ]
@@ -54,6 +56,8 @@ export class AppMenuComponent implements OnInit {
                             label: 'P.D.V', icon: 'pi pi-fw pi-clone',
                             items: [
                                 { label: 'Facturar', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/ventas'] },
+                                { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
+                                { label: 'Cambios', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/pages/cambios'] },
                                
                             ]
                         },
@@ -61,6 +65,15 @@ export class AppMenuComponent implements OnInit {
                 },
             ];
         }
+
+
+
+
+
+
+
+
+        /* Admin */
      else if(this.user.user.role_id == 2)
       {
         this.model = [
@@ -86,6 +99,7 @@ export class AppMenuComponent implements OnInit {
                             { label: 'Recepción', icon: 'pi pi-fw pi-check-square', routerLink: ['/pages/recepcion'] },
                             { label: 'Salidas', icon: 'pi pi-fw pi-arrow-circle-up', routerLink: ['/pages/salidas'] },
                             { label: 'Entradas', icon: 'pi pi-fw pi-arrow-circle-down', routerLink: ['/pages/entradas'] },
+                            { label: 'Ajustes', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/pages/ajustes'] }
                         ]
                     },
                 ]
@@ -99,12 +113,20 @@ export class AppMenuComponent implements OnInit {
                         label: 'P.D.V', icon: 'pi pi-fw pi-clone',
                         items: [
                             { label: 'Facturar', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/ventas'] },
+                            { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
+                            { label: 'Cambios', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/pages/cambios'] },
                            
                         ]
                     },
                 ]
             },
         ];
+
+
+
+
+
+        /* receptor bodega a */
       }else if(this.user.user.role_id == 3)
       {
         this.model = [
@@ -133,6 +155,7 @@ export class AppMenuComponent implements OnInit {
                         label: 'P.D.V', icon: 'pi pi-fw pi-clone',
                         items: [
                             { label: 'Facturar', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/ventas'] },
+                            { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                            
                         ]
                     },
@@ -140,6 +163,15 @@ export class AppMenuComponent implements OnInit {
             },
         ];
       }
+
+
+
+
+
+
+
+
+      /* vendedor punto de venta */
       else if(this.user.user.role_id == 4)
       {
         this.model = [
@@ -167,6 +199,8 @@ export class AppMenuComponent implements OnInit {
                         label: 'P.D.V', icon: 'pi pi-fw pi-clone',
                         items: [
                             { label: 'Facturar', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/ventas'] },
+                            { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
+                            { label: 'Cambios', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/pages/cambios'] },
                            
                         ]
                     },

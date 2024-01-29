@@ -1,0 +1,23 @@
+::ng-deep {
+    .p-selectbutton .p-button.p-highlight {
+      background: #51749E;
+      background-color: #51749E;
+    }
+    .p-selectbutton .p-button {
+      background: white;
+      background-color: white;
+      color:#51749E ;
+    }
+    .p-selectbutton .p-button:hover {
+      background: #ECEFF4!important;
+      color:#51749E!important ;
+    }
+  
+    .p-selectbutton .p-button.p-highlight:hover {
+      background: #486992!important;
+      color: white!important;
+    }
+    .p-selectbutton {
+      height: 28px;
+    }
+  }

@@ -71,9 +71,9 @@
                                 <button pButton pRipple icon="pi pi-database" pTooltip="Ingresar inventario" tooltipPosition="top"
                                     class="p-button-rounded p-button-success mr-2" (click)="openRecibir(item)"></button>
     
-                                <button pButton pRipple icon="pi pi-print" class="p-button-rounded p-button-primary"
+                                <!-- <button pButton pRipple icon="pi pi-print" class="p-button-rounded p-button-primary"
                                     pTooltip="Imprimir códigos" tooltipPosition="top"
-                                    (click)="alertImprimir(item)"></button>
+                                    (click)="alertImprimir(item)"></button> -->
                             </div>
 
                         </td>
@@ -150,7 +150,7 @@
 
 <ngx-barcode [ngStyle]="{'display': 'none'}" id="codigo" *ngFor="let bcValue of values" [bc-element-type]="elementType"
     [bc-value]="bcValue" [bc-format]="format" [bc-line-color]="lineColor" [bc-width]="width" [bc-height]="height"
-    [bc-display-value]="displayValue" [bc-font-options]="fontOptions" [bc-font]="font" [bc-text-align]="textAlign"
+    [bc-display-value]="displayValue" [bc-font-options]="fontOptions" [bc-text-align]="textAlign"
     [bc-text-position]="textPosition" [bc-text-margin]="textMargin" [bc-font-size]="fontSize"
-    [bc-background]="background" [bc-margin]="margin" [bc-margin-top]="marginTop" [bc-margin-bottom]="marginBottom"
-    [bc-margin-left]="marginLeft" [bc-margin-right]="marginRight"></ngx-barcode>
+    [bc-background]="background"
+    ></ngx-barcode>

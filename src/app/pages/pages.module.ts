@@ -41,6 +41,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { AccordionModule } from 'primeng/accordion';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TagModule } from 'primeng/tag';
+import { FieldsetModule } from 'primeng/fieldset';
 
 /* barcode */
 import { NgxBarcodeModule } from 'ngx-barcode';
@@ -61,6 +62,9 @@ import { EntradasComponent } from './inventario/entradas/entradas.component';
 import { CalendarModule } from 'primeng/calendar';
 import { ReferenciasComponent } from './admin/referencias/referencias.component';
 import { VentasComponent } from './ventas/ventas/ventas.component';
+import { HistoricoVentasComponent } from './ventas/historico-ventas/historico-ventas.component';
+import { AjustesComponent } from './inventario/ajustes/ajustes.component';
+import { CambiosComponent } from './ventas/cambios/cambios.component';
 
 
 
@@ -83,6 +87,9 @@ import { VentasComponent } from './ventas/ventas/ventas.component';
     EntradasComponent,
     ReferenciasComponent,
     VentasComponent,
+    HistoricoVentasComponent,
+    AjustesComponent,
+    CambiosComponent,
   ],
   imports: [
     PagesRoutingModule,
@@ -126,7 +133,8 @@ import { VentasComponent } from './ventas/ventas/ventas.component';
     NgxBarcodeModule,
     AutoCompleteModule,
     TagModule,
-    CalendarModule
+    CalendarModule,
+    FieldsetModule
   ]
 })
 export class PagesModule { }

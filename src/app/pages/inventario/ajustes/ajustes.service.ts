@@ -3,24 +3,25 @@ import { Injectable } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { rutas } from 'src/env/rutas';
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class VentasService {
+export class AjustesService {
 
-  prefix:string = 'sales'
+  prefix:string = ''
 
   constructor(private user: AuthService, private http: HttpClient) { }
 
 
-  async leerProducto(dataPost:any) {
+  async getAjustes() {
 
     return new Promise(resolve => {
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + this.user.token,
       });
 
-      this.http.post(rutas.ruta + this.prefix+'/readProduct',dataPost, { headers }).subscribe({
+      this.http.get(rutas.ruta + this.prefix+'/', { headers }).subscribe({
         next: (answer: any) => {
           resolve(answer);
         },
@@ -33,14 +34,14 @@ export class VentasService {
   }
 
 
-  async enviarFactura(dataPost:any) {
+  async ajustarInventario(dataPost:any) {
 
     return new Promise(resolve => {
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + this.user.token,
       });
 
-      this.http.post(rutas.ruta + this.prefix,dataPost, { headers }).subscribe({
+      this.http.post(rutas.ruta + this.prefix+'/',dataPost, { headers }).subscribe({
         next: (answer: any) => {
           resolve(answer);
         },
@@ -51,5 +52,6 @@ export class VentasService {
       });
     });
   }
+
 
 }

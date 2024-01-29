@@ -48,7 +48,7 @@
                         <th pSortableColumn="color_name">Color</th>
                         <th pSortableColumn="model_name">Modelo</th>
                         <th pSortableColumn="size_name">Talla</th>
-                        <th pSortableColumn="unit_measurement_name">Empaque</th>
+                        <th pSortableColumn="unit_measurement_name">U.M</th>
                         <th pSortableColumn="cost">Costo</th>
                         <th pSortableColumn="price">Precio</th>
                         <th pSortableColumn="provider_name">Proveedor</th>
@@ -219,19 +219,9 @@
 
                     <div class="field col-12 md:col-4">
                         <label for="">Talla</label>
-
-                        <p-dropdown [options]="tallas" [(ngModel)]="talla" optionLabel="name" appendTo="body"
-                            placeholder="Seleccione" emptyMessage="No hay resultados"
-                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !talla.id }">
-                            <ng-template pTemplate="selectedItem">
-                                <span *ngIf="talla">{{ talla.name }}</span>
-                            </ng-template>
-
-                            <ng-template let-talla pTemplate="item">
-                                <span>{{ talla.name }}</span>
-                            </ng-template>
-                        </p-dropdown>
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !talla.id">El campo es
+                        <input type="text" pInputText id="name" [(ngModel)]="item.talla" required autofocus
+                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.name }" />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.talla">El campo es
                             requerido.</small>
                     </div>
 

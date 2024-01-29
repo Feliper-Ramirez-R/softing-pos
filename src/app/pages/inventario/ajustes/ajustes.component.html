@@ -1,11 +1,14 @@
+
 <div class="grid">
     <div class="col-12">
         <div class="card px-6 py-6">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary mr-2"
-                            (click)="openNew()"></button>
+                        <button pButton pRipple label="Salida inventario" icon="pi pi-plus" class="p-button-primary mr-2"
+                            (click)="abrirModal('Salida')"></button>
+                        <button pButton pRipple label="Entrada inventario" icon="pi pi-plus" class="p-button-help "
+                            (click)="abrirModal('Entrada')"></button>
                         <!-- <button pButton pRipple label=" Borrar" icon="pi pi-trash" class="p-button-danger"
                             (click)="alertSelectedItems()"
                             [disabled]="!selectedItems || !selectedItems.length"></button> -->
@@ -14,7 +17,7 @@
 
                 <ng-template pTemplate="right">
                     <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary"
-                        (click)="getMarcas()"></button>
+                        (click)="getAjustes()"></button>
                 </ng-template>
             </p-toolbar>
 
@@ -26,8 +29,8 @@
                 [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Marcas</h5>
-                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                        <h5 class="m-0">Ajustes</h5>
+                        <span *ngIf="datosDB.length > 0" class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
                                 class="w-full sm:w-auto" />
@@ -43,50 +46,61 @@
                 <ng-template pTemplate="body" let-item>
                     <tr>
                         <td style="min-width: 10rem;">{{item.name | titlecase}}</td>
-                        <td>
+                        <!-- <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil" pTooltip="Actualizar" tooltipPosition="top"
                                     class="p-button-rounded p-button-success mr-2" (click)="openEdit(item)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
                                     pTooltip="Eliminar" tooltipPosition="top" (click)="deleteAlert(item)"></button>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                 </ng-template>
 
             </p-table>
-        </div>
+        </div>  
+    </div>
+</div>
 
-        <p-dialog [(visible)]="itemEditDialog" [style]="{ width: '450px' }"
-            header="{{ crear ? 'Nueva marca' : 'Actualizar marca' }}" [modal]="true" class="p-fluid">
+
+
+
+
+
+
+
+<p-dialog [(visible)]="ajustar_dialog" [style]="{ width: '450px' }"
+            header="{{tipo_ajuste}} de inventario" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
-                <div class="field">
-                    <label for="name">Nombre</label>
-                    <input type="text" pInputText id="name" [(ngModel)]="item.name" required autofocus
-                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.name }" />
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.name ">El nombre es requerido.</small>
-                </div>
+
+                    <div class="p-fluid p-formgrid grid">
+
+                        <div class="field col-12 md:col-12">
+                            <label>Almacén</label>
+                            <p-dropdown [options]="almacenes" [(ngModel)]="almacen" optionLabel="name" appendTo="body"
+                                placeholder="Seleccione" emptyMessage="No hay resultados"
+                                [ngClass]="{ 'ng-invalid ng-dirty': submitted && !almacen.id }">
+                            
+                                <ng-template let-almacen pTemplate="item">
+                                    <span>{{ almacen.name }}</span>
+                                </ng-template>
+                            </p-dropdown>
+                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !almacen.id">Selecciona el almacén.</small>
+                        </div>
+    
+                        <div class="field col-12 ">
+                            <label>Código</label>
+                            <input type="text" pInputText [(ngModel)]="item.code" [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.code }">
+                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.code">Ingresa un código.</small>
+                        </div>
+                    </div>
+              
             </ng-template>
 
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
-                    (click)="hideDialog()"></button>
-                <button pButton pRipple label="{{ crear ? 'Guardar' : 'Actualizar' }}" icon="pi pi-check"
-                    class="p-button-text" (click)="crear ? saveItem() : editItem()"></button>
+                    (click)="ajustar_dialog = false"></button>
+                <button pButton pRipple label="Facturar" icon="pi pi-check"
+                    class="p-button-text" (click)="ajustarInventario()"></button>
             </ng-template>
         </p-dialog>
-
-        <p-dialog [(visible)]="itemDeleteDialog" header="Eliminar una marca" [modal]="true" [style]="{ width: '450px' }">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="item">Esta seguro que quieres eliminar la marca <b>{{ item.name }}</b>?</span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
-                    (click)="itemDeleteDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si"
-                    (click)="deleteItem()"></button>
-            </ng-template>
-        </p-dialog>
-    </div>
-</div>

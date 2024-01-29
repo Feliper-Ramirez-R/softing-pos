@@ -101,6 +101,8 @@ export class ProveedoresComponent {
         name: this.item.name,
         dni:String(this.item.dni),
         address:this.item.address,
+        email:this.item.email,
+        number_phone:this.item.phone_number,
         enabled:this.value == 'off'?false:true
       }
 
@@ -140,6 +142,8 @@ export class ProveedoresComponent {
         name: this.item.name,
         dni:String(this.item.dni),
         address:this.item.address,
+        email:this.item.email,
+        number_phone:this.item.phone_number,
         enabled:true
       }
       console.log(dataPost);

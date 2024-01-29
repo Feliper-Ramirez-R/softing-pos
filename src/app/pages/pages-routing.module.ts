@@ -15,6 +15,9 @@ import { SalidasComponent } from './inventario/salidas/salidas.component';
 import { EntradasComponent } from './inventario/entradas/entradas.component';
 import { ReferenciasComponent } from './admin/referencias/referencias.component';
 import { VentasComponent } from './ventas/ventas/ventas.component';
+import { HistoricoVentasComponent } from './ventas/historico-ventas/historico-ventas.component';
+import { AjustesComponent } from './inventario/ajustes/ajustes.component';
+import { CambiosComponent } from './ventas/cambios/cambios.component';
 
 
 
@@ -93,8 +96,23 @@ const routes: Routes = [
             canActivate:[AuthGuard]
         }, 
         {
+            path:'ajustes',
+            component: AjustesComponent,
+            canActivate:[AuthGuard]
+        }, 
+        {
             path:'ventas',
             component: VentasComponent,
+            canActivate:[AuthGuard]
+        }, 
+        {
+            path:'historicoVentas',
+            component: HistoricoVentasComponent,
+            canActivate:[AuthGuard]
+        }, 
+        {
+            path:'cambios',
+            component: CambiosComponent,
             canActivate:[AuthGuard]
         }, 
         

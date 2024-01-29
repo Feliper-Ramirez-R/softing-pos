@@ -12,29 +12,29 @@ import { Columns, Img, PdfMakeWrapper, QR, Table, Txt } from 'pdfmake-wrapper';
 export class RecepcionComponent {
 
   elementType: any = 'img';
-  value = 'fdgdfg';
+  value = '';
   format: any = 'CODE128';
   lineColor = '#000000';
   width = 2;
   height = 100;
   displayValue = true;
   fontOptions = '';
-  font = 'monospace';
+  // font = 'monospace';
   textAlign = 'center';
   textPosition = 'bottom';
   textMargin = 2;
   fontSize = 20;
   background = '#ffffff';
-  margin = 10;
+ /*  margin = 10;
   marginTop = 10;
   marginBottom = 10;
   marginLeft = 10;
-  marginRight = 10;
+  marginRight = 10; */
 
   get values(): string[] {
     return this.value.split('\n');
   }
-  codeList: string[] = [
+ /*  codeList: string[] = [
     '', 'CODE128',
     'CODE128A', 'CODE128B', 'CODE128C',
     'UPC', 'EAN8', 'EAN5', 'EAN2',
@@ -43,7 +43,7 @@ export class RecepcionComponent {
     'MSI', 'MSI10', 'MSI11', 'MSI1010', 'MSI1110',
     'pharmacode',
     'codabar'
-  ];
+  ]; */
 
   datosDB: any[] = [];
   item: any = {};
@@ -94,13 +94,14 @@ export class RecepcionComponent {
 
     const pdf = new PdfMakeWrapper();
 
-    for (let tam = 0; tam <= this.cantidad_codigos - 1; tam++) {
+    // for (let tam = 0; tam <= this.cantidad_codigos - 1; tam++) {
 
       var imagenEanCodigo: any = document.getElementById('codigo')?.getElementsByTagName("img")[0].currentSrc;
 
-      pdf.add(new Columns([await new Img(imagenEanCodigo).build()]).columnGap(1).end);
+      // pdf.add(new Columns([await new Img(imagenEanCodigo).build()]).columnGap(1).end);
+      pdf.add(new Columns([await new Img(imagenEanCodigo).build(),await new Img(imagenEanCodigo).build()]).columnGap(1).end);
 
-    }
+    // }
 
     pdf.pageBreakBefore(
       (currentNode, followingNodesOnPage, nodesOnNextPage, previousNodesOnPage) => {
@@ -108,9 +109,9 @@ export class RecepcionComponent {
       }
     );
 
-    pdf.pageMargins([8, 8, 8, 8]);
+    pdf.pageMargins([3, 3, 3, 3]);
     pdf.pageSize({
-      width: 250,
+      width: 500,
       height: 150
 
     });

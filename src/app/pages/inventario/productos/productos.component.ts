@@ -32,8 +32,8 @@ export class ProductosComponent {
   proveedores: any[] = [];
   proveedor: any = {};
 
-  tallas: any[] = [];
-  talla: any = {};
+/*   tallas: any[] = [];
+  talla: any = {}; */
 
   unidades_medidas: any[] = [];
   unidad_medida: any = {};
@@ -79,7 +79,7 @@ export class ProductosComponent {
     this.color = { id: item.color_id, name: item.color_name }
     this.modelo = { id: item.model_id, name: item.model_name }
     this.proveedor = { id: item.provider_id, name: item.provider_name }
-    this.talla = { id: item.size_id, name: item.size_name }
+    // this.talla = { id: item.size_id, name: item.size_name }
     this.unidad_medida = { id: item.unit_measurement_id, name: item.unit_measurement_name }
     this.crear = false
     this.item = { ...item };
@@ -99,7 +99,7 @@ export class ProductosComponent {
     this.color = {};
     this.modelo = {};
     this.proveedor = {};
-    this.talla = {};
+    // this.talla = {};
     this.unidad_medida = {};
     this.item = {};
     this.submitted = false;
@@ -134,7 +134,7 @@ export class ProductosComponent {
     this.submitted = true;
 
     if (!this.item.name  || !this.item.description || !this.item.cost || !this.item.price || !this.marca.id  || !this.modelo.id
-      || !this.color.id || !this.talla.id || !this.categoria.id || !this.proveedor.id || !this.unidad_medida.id
+      || !this.color.id || !this.item.talla || !this.categoria.id || !this.proveedor.id || !this.unidad_medida.id
    ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
 
    if(this.item.price_min > this.item.price){this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'El precio mínimo no puede ser mayor al precio de venta', life: 5000 }); return}
@@ -149,7 +149,7 @@ export class ProductosComponent {
       brand_id:this.marca.brand_id ,
       model_id: this.modelo.model_id,
       color_id:this.color. color_id,
-      size_id:this.talla.size_id ,
+      size_id:this.item.talla ,
       category_id:this.categoria.category_id ,
       provider_id:this.proveedor.provider_id ,
       unit_measurement_id:this.unidad_medida.unit_measurement_id,
@@ -181,7 +181,7 @@ export class ProductosComponent {
     this.submitted = true;
 
      if (!this.item.name  || !this.item.description || !this.item.cost || !this.item.price || !this.marca.id  || !this.modelo.id
-         || !this.color.id || !this.talla.id || !this.categoria.id || !this.proveedor.id || !this.unidad_medida.id
+         || !this.color.id || !this.item.talla || !this.categoria.id || !this.proveedor.id || !this.unidad_medida.id
       ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
 
       if(this.item.price_min > this.item.price){this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'El precio mínimo no puede ser mayor al precio de venta', life: 5000 }); return}
@@ -196,7 +196,7 @@ export class ProductosComponent {
       brand_id:this.marca.id ,
       model_id: this.modelo.id,
       color_id:this.color.id,
-      size_id:this.talla.id ,
+      size_id:this.item.talla,
       category_id:this.categoria.id ,
       provider_id:this.proveedor.id ,
       unit_measurement_id:this.unidad_medida.id,
@@ -233,7 +233,7 @@ export class ProductosComponent {
       this.colores = valid.colors;
       this.modelos = valid.models;
       this.proveedores = valid.providers;
-      this.tallas = valid.sizes;
+      // this.tallas = valid.sizes;
       this.unidades_medidas = valid.unitsMeasurements
       if (valid.status == 200) {
 
