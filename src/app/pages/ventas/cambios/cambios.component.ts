@@ -17,13 +17,13 @@ export class CambiosComponent {
   cambio_dialog:boolean = false;
 
   constructor(private cambiosService: CambiosService,
-    private user: AuthService,
+    protected user: AuthService,
     private messageService: MessageService
   ) { }
 
 
   ngOnInit() {
-    // this.getCambios();
+     this.getCambios();
   }
 
   onGlobalFilter(table: any, event: Event) {
@@ -58,12 +58,14 @@ export class CambiosComponent {
 
     this.submitted = true;
 
-    if(!this.item.codigo_entrada || !this.item.codigo_salida || !this.item.observacion){return}
+    if(!this.item.codigo_entrada || !this.item.codigo_salida || !this.item.factura){return}
 
     let dataPost = {
-      store_id:this.item.store,
-      code:this.item.codigo_entrada,
-      code2:this.item.codigo_salida,
+      billNumber:this.item.factura,
+      store_id:this.user.user.store_id,
+      byUser:this.user.user.id,
+      code_in:this.item.codigo_entrada,
+      code_out:this.item.codigo_salida,
     }
 
     const valid: any = await this.cambiosService.hacerCambio(dataPost);
@@ -71,8 +73,9 @@ export class CambiosComponent {
 
     if (!valid.error) {
      
-      if (valid.status == 200) {
-
+      if (valid.status == 201) {
+        this.cambio_dialog = true;
+        this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }

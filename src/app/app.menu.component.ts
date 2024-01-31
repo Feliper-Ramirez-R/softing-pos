@@ -63,6 +63,9 @@ export class AppMenuComponent implements OnInit {
                         },
                     ]
                 },
+                {
+                    label: 'Reportes', icon: 'pi pi-fw pi-file', routerLink: ['/pages/reportes']
+                },
             ];
         }
 
@@ -119,6 +122,9 @@ export class AppMenuComponent implements OnInit {
                         ]
                     },
                 ]
+            },
+            {
+                label: 'Reportes', icon: 'pi pi-fw pi-file', routerLink: ['/pages/reportes']
             },
         ];
 

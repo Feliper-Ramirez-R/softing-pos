@@ -18,6 +18,7 @@ import { VentasComponent } from './ventas/ventas/ventas.component';
 import { HistoricoVentasComponent } from './ventas/historico-ventas/historico-ventas.component';
 import { AjustesComponent } from './inventario/ajustes/ajustes.component';
 import { CambiosComponent } from './ventas/cambios/cambios.component';
+import { ReportesComponent } from './reportes/reportes.component';
 
 
 
@@ -113,6 +114,11 @@ const routes: Routes = [
         {
             path:'cambios',
             component: CambiosComponent,
+            canActivate:[AuthGuard]
+        }, 
+        {
+            path:'reportes',
+            component: ReportesComponent,
             canActivate:[AuthGuard]
         }, 
         
