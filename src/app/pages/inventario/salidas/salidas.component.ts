@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { SalidasService } from './salidas.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
+import { CalendarService } from 'src/app/services/calendar.service';
 
 @Component({
   selector: 'app-salidas',
@@ -9,7 +10,7 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./salidas.component.scss']
 })
 export class SalidasComponent {
-
+ 
   datosDB: any[] = [];
   item: any = {};
 
@@ -24,12 +25,15 @@ export class SalidasComponent {
   constructor(private salidaService: SalidasService,
     private user: AuthService,
     private messageService: MessageService,
+    private calendarService:CalendarService
   ) { }
 
 
   ngOnInit() {
+    this.calendarService.calendarioEnEspanol();
     this.getSalidas();
   }
+
 
   openNew() {
     this.item = {};
@@ -73,10 +77,7 @@ export class SalidasComponent {
 
   }
 
-
   async getSalidas() {
-
-
 
     const valid: any = await this.salidaService.getSalidas();
     console.log(valid);

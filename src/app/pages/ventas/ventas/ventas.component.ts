@@ -5,6 +5,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { Columns, Img, ITable, PdfMakeWrapper, QR, Table, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import { CalendarService } from 'src/app/services/calendar.service';
 
 @Component({
   selector: 'app-ventas',
@@ -25,7 +26,7 @@ export class VentasComponent {
   stateOptions: any[] = [{ label: 'No', value: 'off' }, { label: 'Si', value: 'on' }];
   value_impri_fac: string | undefined;
 
-  infoQR:string = '';
+  infoQR: string = '';
 
   // producto_actual: any = {};
 
@@ -40,12 +41,13 @@ export class VentasComponent {
   constructor(private ventasService: VentasService,
     private user: AuthService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private calendarService: CalendarService
   ) { }
 
 
   ngOnInit() {
-
+    this.calendarService.calendarioEnEspanol();
   }
 
   openFacturar() {
@@ -140,7 +142,7 @@ export class VentasComponent {
 
   async enviarFactura() {
 
-    
+
     this.submitted = true;
 
     if (!this.metodo_pago.id || !this.value_impri_fac) { return }
@@ -151,11 +153,11 @@ export class VentasComponent {
       byUser: this.user.user.id,
       list: this.datosDB,
       payment_way: this.metodo_pago.id,
-      customer_name:this.item.nombre_cliente,
-      customer_dni:String(this.item.cedula_cliente),
-      customer_phone:String(this.item.telefono_cliente),
-      change:this.cambio,
-      cash:this.efectivo
+      customer_name: this.item.nombre_cliente,
+      customer_dni: String(this.item.cedula_cliente),
+      customer_phone: String(this.item.telefono_cliente),
+      change: this.cambio,
+      cash: this.efectivo
     }
 
     console.log(dataPost);
@@ -165,7 +167,7 @@ export class VentasComponent {
     console.log(valid);
 
     if (!valid.error) {
-      if(this.value_impri_fac == 'on'){ await this.pdf()}
+      if (this.value_impri_fac == 'on') { await this.pdf() }
       if (valid.status == 201) {
         this.datosDB = [];
         this.facturarDialog = false;
@@ -211,7 +213,7 @@ export class VentasComponent {
       new Txt(["Nit: ", "900435377-3"]).alignment("center").fontSize(8).end
     );
     pdf.add(
-      new Txt(["Tel: ","3115628545"]).alignment("center").fontSize(8).end
+      new Txt(["Tel: ", "3115628545"]).alignment("center").fontSize(8).end
     );
     pdf.add(
       new Txt(["Fecha elaboración: ", this.fecha])
@@ -220,22 +222,22 @@ export class VentasComponent {
     );
     pdf.add(pdf.ln(1));
     pdf.add(
-      new Txt("Factura venta N°: " + this.facNumero?.toString().padStart(4,'0'))
+      new Txt("Factura venta N°: " + this.facNumero?.toString().padStart(4, '0'))
         .alignment("center")
         .fontSize(10).end
     );
-     
+
     pdf.add(pdf.ln(2));
 
     pdf.add(this.generarTabla());
 
-      pdf.add(pdf.ln(1));
+    pdf.add(pdf.ln(1));
 
     pdf.add(
-      new Txt(["Total a pagar: ",this.formatearMoneda("es-CO", "COP", 0, this.total)]).alignment("right").fontSize(8).margin([0, 5, 20, 5]).end
+      new Txt(["Total a pagar: ", this.formatearMoneda("es-CO", "COP", 0, this.total)]).alignment("right").fontSize(8).margin([0, 5, 20, 5]).end
     );
     pdf.add(
-      new Txt(["Forma de pago: ",this.metodo_pago.name]).alignment("right").fontSize(8).margin([0, 0, 20, 5]).end
+      new Txt(["Forma de pago: ", this.metodo_pago.name]).alignment("right").fontSize(8).margin([0, 0, 20, 5]).end
     );
 
     pdf.add(pdf.ln(1));
@@ -244,10 +246,10 @@ export class VentasComponent {
     });
 
     pdf.add(
-      new Txt(["Efectivo: ",this.formatearMoneda("es-CO", "COP", 0, this.efectivo)]).alignment("right").fontSize(8).margin([0, 5, 20, 5]).end
+      new Txt(["Efectivo: ", this.formatearMoneda("es-CO", "COP", 0, this.efectivo)]).alignment("right").fontSize(8).margin([0, 5, 20, 5]).end
     );
     pdf.add(
-      new Txt(["Cambio: ",this.formatearMoneda("es-CO", "COP", 0, this.cambio)]).alignment("right").fontSize(8).margin([0, 0, 20, 5]).end
+      new Txt(["Cambio: ", this.formatearMoneda("es-CO", "COP", 0, this.cambio)]).alignment("right").fontSize(8).margin([0, 0, 20, 5]).end
     );
 
     pdf.add({
@@ -257,18 +259,18 @@ export class VentasComponent {
     pdf.add(pdf.ln(1));
 
     pdf.add(
-      new Columns(["Cliente: ",this.item.nombre_cliente])
+      new Columns(["Cliente: ", this.item.nombre_cliente])
         .fontSize(8)
         .end
     );
     pdf.add(
-      new Columns(["Cédula: ",this.item.cedula_cliente])
+      new Columns(["Cédula: ", this.item.cedula_cliente])
         .fontSize(8)
         .margin([0, 3, 0, 3])
         .end
     );
     pdf.add(
-      new Columns(["Teléfono: ",this.item.telefono_cliente])
+      new Columns(["Teléfono: ", this.item.telefono_cliente])
         .fontSize(8)
         .end
     );
@@ -291,12 +293,12 @@ export class VentasComponent {
     );
 
     pdf.add(
-      new Columns(["Facturó:",  this.user.user.name])
-      .margin([0, 3, 0, 3])
+      new Columns(["Facturó:", this.user.user.name])
+        .margin([0, 3, 0, 3])
         .fontSize(8)
         .end
     );
-   
+
 
     pdf.add(pdf.ln(1));
 
@@ -310,7 +312,7 @@ export class VentasComponent {
       new Txt(["Softing-post creado por Softing-dev"]).alignment("left").fontSize(8).margin([0, 0, 0, 5]).end
     );
     pdf.add(pdf.ln(1));
-    pdf.add(await new Img('assets/images/logo.png').fit([30,30]).alignment("center").build());
+    pdf.add(await new Img('assets/images/logo.png').fit([30, 30]).alignment("center").build());
 
     pdf.create().open();
 
@@ -333,8 +335,8 @@ export class VentasComponent {
       .alignment('left')
       .widths([40, 50, 20, 40])
       .heights(rowIndex => { return rowIndex === 0 ? 15 : 10 })
-      
-       .fontSize(8)
+
+      .fontSize(8)
       .end
   }
 

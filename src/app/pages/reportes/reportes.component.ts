@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import { CalendarService } from 'src/app/services/calendar.service';
 
 
 const EXCEL_TYPE =
@@ -34,11 +35,13 @@ export class ReportesComponent {
 
   constructor(private reportesService: ReportesService,
     protected user: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private calendarService:CalendarService
   ) { }
 
 
   ngOnInit() {
+    this.calendarService.calendarioEnEspanol();
      this.getAlmacenes();
  }
 
