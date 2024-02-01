@@ -5,7 +5,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Salida inventario" icon="pi pi-plus" class="p-button-primary mr-2"
+                        <button pButton pRipple label="Salida inventario" icon="pi pi-minus" class="p-button-primary mr-2"
                             (click)="abrirModal('Salida')"></button>
                         <button pButton pRipple label="Entrada inventario" icon="pi pi-plus" class="p-button-help "
                             (click)="abrirModal('Entrada')"></button>
@@ -77,21 +77,33 @@
 
                         <div class="field col-12 md:col-12">
                             <label>Almacén</label>
-                            <p-dropdown [options]="almacenes" [(ngModel)]="almacen" optionLabel="name" appendTo="body"
+                            <p-dropdown [options]="almacenes" [(ngModel)]="item.almacen" optionLabel="name" appendTo="body"
                                 placeholder="Seleccione" emptyMessage="No hay resultados"
-                                [ngClass]="{ 'ng-invalid ng-dirty': submitted && !almacen.id }">
+                                [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.almacen }">
                             
                                 <ng-template let-almacen pTemplate="item">
                                     <span>{{ almacen.name }}</span>
                                 </ng-template>
                             </p-dropdown>
-                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !almacen.id">Selecciona el almacén.</small>
+                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.almacen">Campo requerido.</small>
                         </div>
     
-                        <div class="field col-12 ">
+                        <div class="field col-12 md:col-6 xl:col-6">
                             <label>Código</label>
                             <input type="text" pInputText [(ngModel)]="item.code" [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.code }">
-                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.code">Ingresa un código.</small>
+                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.code">Campo requerido.</small>
+                        </div>
+
+                        <div class="field col-12 md:col-6 xl:col-6">
+                            <label>Cantidad</label>
+                            <p-inputNumber [(ngModel)]="item.cantidad" [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.cantidad }"></p-inputNumber>
+                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.cantidad">Campo requerido.</small>
+                        </div>
+                        <div class="field col-12 ">
+                            <label>Observación</label>
+                            <textarea rows="3" cols="30" pInputTextarea [(ngModel)]="item.observacion"
+                            [ngClass]="{'ng-invalid ng-dirty' : submitted &&  !item.observacion}"></textarea>
+                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.observacion">Campo requerido.</small>
                         </div>
                     </div>
               
@@ -100,7 +112,7 @@
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
                     (click)="ajustar_dialog = false"></button>
-                <button pButton pRipple label="Facturar" icon="pi pi-check"
+                <button pButton pRipple label="Enviar" icon="pi pi-check"
                     class="p-button-text" (click)="ajustarInventario()"></button>
             </ng-template>
         </p-dialog>

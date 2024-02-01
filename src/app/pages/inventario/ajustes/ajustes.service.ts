@@ -9,7 +9,7 @@ import { rutas } from 'src/env/rutas';
 })
 export class AjustesService {
 
-  prefix:string = ''
+  prefix:string = 'inventories'
 
   constructor(private user: AuthService, private http: HttpClient) { }
 
@@ -41,7 +41,27 @@ export class AjustesService {
         Authorization: 'Bearer ' + this.user.token,
       });
 
-      this.http.post(rutas.ruta + this.prefix+'/',dataPost, { headers }).subscribe({
+      this.http.post(rutas.ruta + this.prefix+'/adjustments',dataPost, { headers }).subscribe({
+        next: (answer: any) => {
+          resolve(answer);
+        },
+        error: error => {
+          console.log(<any>error);
+          resolve(error);
+        }
+      });
+    });
+  }
+
+  async getAlmacenes() {
+
+   
+    return new Promise(resolve => {
+      const headers = new HttpHeaders({
+        Authorization: 'Bearer ' + this.user.token,
+      });
+
+      this.http.get(rutas.ruta +'reports/sales', { headers }).subscribe({
         next: (answer: any) => {
           resolve(answer);
         },

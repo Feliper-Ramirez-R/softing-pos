@@ -135,11 +135,9 @@ export class HistoricoVentasComponent {
        ]).alignment("center").end
      ); */
 
-    pdf.add(
-      [new QR(`Esa mierda deberia ir con este codigo QR y si si que putas de informacion le vamos a meter a este perro`).fit(100).alignment("center").end]
-    );
+     pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
 
-    pdf.pageMargins([15, 5, 5, 5]);
+    pdf.pageMargins([15, 20, 5, 5]);
     pdf.pageSize({
       width: 220,
       height: 550,
