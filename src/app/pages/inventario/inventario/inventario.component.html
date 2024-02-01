@@ -6,7 +6,7 @@
                     <div class="my-2">
                         <!--  <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary mr-2"
                             (click)="openNew()"></button> -->
-                        <p-autoComplete [(ngModel)]="bodega_seleccionada" [dropdown]="true"
+                        <p-autoComplete *ngIf="user.user.role_id == 1 || user.user.role_id == 2" [(ngModel)]="bodega_seleccionada" [dropdown]="true"
                             [suggestions]="bodega_filtrada" styleClass="w-15rem mr-2"
                             placeholder="Selecciona una bodega" (onSelect)="getInventarioBodega()"
                             (completeMethod)="filtrarBodega($event)" field="name"></p-autoComplete>

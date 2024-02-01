@@ -1,1 +1,71 @@
-<p>home works!</p>
+<div class="card col-12 ">
+    <span class="text-xl font-normal text-gray-600">Mi perfil</span>
+
+    <div class="flex justify-content-center flex-wrap card-container">
+        <div
+            class="flex align-items-center justify-content-center border-circle w-4rem h-4rem bg-indigo-400 font-bold text-gray-900 border-round m-2">
+            <span class="text-3xl font-normal text-white">{{user.user.name[0] | titlecase}}</span>
+        </div>
+    </div>
+    <div class="flex align-items-center justify-content-center font-bold text-gray-900 m-2"><span
+            class="text-xl font-normal text-gray-600">{{user.user.role_name | titlecase}}</span></div>
+    <div>
+        <p-divider layout="horizontal"></p-divider>
+    </div>
+
+
+    <div class="col-12 ">
+        <div class=" widget-team">
+            <ul>
+                <li >
+                    <div class="grid member">
+                        <div class="col-12 lg:col md:col team-box">
+                            <p-divider layout="vertical"></p-divider>
+                            <div class="profile-image">
+                                <i class="pi pi-user" style="font-size: 1.5rem"></i>
+                            </div>
+                            <div>
+                                <h6 class="team-member">Nombre</h6>
+                                <span class="team-member-role">{{user.user.name}}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 lg:col md:col team-box">
+                            <p-divider layout="vertical"></p-divider>
+                            <div class="profile-image">
+                                <i class="pi pi-envelope" style="font-size: 1.5rem"></i>
+                            </div>
+                            <div>
+                                <h6 class="team-member">Correo</h6>
+                                <span class="team-member-role">{{user.user.email}}</span>
+                            </div>
+                        </div>
+                        <div class="col-12 lg:col md:col team-box">
+                            <p-divider layout="vertical"></p-divider>
+                            <div class="profile-image">
+                                <i class="pi pi-id-card" style="font-size: 1.5rem"></i>
+                            </div>
+                            <div>
+                                <h6 class="team-member">N° de identificación</h6>
+                                <span class="team-member-role">{{user.user.dni}}</span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 lg:col md:col team-box">
+                            <p-divider layout="vertical"></p-divider>
+                            <div class="profile-image">
+                                <i class="pi pi-building" style="font-size: 1.5rem"></i>
+                            </div>
+                            <div>
+                                <h6 class="team-member">Mi almacen</h6>
+                                <span class="team-member-role">{{user.user.store_name}}</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </li>
+            
+            </ul>
+        </div>
+    </div>
+</div>

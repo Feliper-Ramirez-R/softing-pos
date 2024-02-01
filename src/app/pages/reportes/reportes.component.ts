@@ -4,13 +4,13 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 
 import * as XLSX from 'xlsx';
-import * as FileSaver from 'file-saver';
+// import * as FileSaver from 'file-saver';
 import { CalendarService } from 'src/app/services/calendar.service';
 
 
-const EXCEL_TYPE =
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-const EXCEL_EXTENSION = '.xlsx';
+// const EXCEL_TYPE =
+//   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+// const EXCEL_EXTENSION = '.xlsx';
 
 @Component({
   selector: 'app-reportes',
@@ -45,6 +45,11 @@ export class ReportesComponent {
      this.getAlmacenes();
  }
 
+ limpiar(){
+  this.cols = []; 
+  this.datosDB = [];
+ }
+
  onGlobalFilter(table: any, event: Event) {
    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
  }
@@ -57,11 +62,9 @@ export class ReportesComponent {
       let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0]
 
   let dataPost = {
-    data:{
       date_from:fecha1,
       date_to:fecha2,
       store_id:this.item.almacen ? this.item.almacen.id : null
-    }
   }
 
   console.log(dataPost);
@@ -74,6 +77,14 @@ export class ReportesComponent {
     this.datosDB = valid.data;
    
     if (valid.status == 200) {
+
+      await valid.data.forEach((a:any)=>{
+        a.created_at=new Date(a.created_at).toLocaleString("es-ES",{day: "2-digit", month: "short", year: "numeric"})+'-'+ new Date(a.created_at).toLocaleTimeString("es-ES",{hour: "2-digit", minute: "2-digit", hourCycle: 'h11'})
+      })
+
+      this.cols = valid.cols;
+      this.datosDB = valid.data;
+      this.excelData = valid.data;
 
     } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
   } else {
@@ -107,17 +118,20 @@ async getAlmacenes() {
 
 // excel
 
-async exportAsXLSX(): Promise<void> {
+/* async exportAsXLSX(): Promise<void> {
 
   if(this.excelData.length == 0){return}
 
  let data= this.excelData
 
- this.exportAsExcelFile(data, 'Exportable');
+
+ this.exportAsExcelFile(data, 'Reporte de '+this.item.reporte.name);
 }
 
 public exportAsExcelFile(json: any[], excelFileName: string): void {
 const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+
+
 const workbook: XLSX.WorkBook = {
   Sheets: { data: worksheet },
   SheetNames: ['data'],
@@ -128,13 +142,49 @@ const excelBuffer: any = XLSX.write(workbook, {
 });
 this.saveAsExcelFile(excelBuffer, excelFileName);
 }
+
 private saveAsExcelFile(buffer: any, fileName: string): void {
+  let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
+  let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0]
 const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
 FileSaver.saveAs(
   data,
-  fileName + '-' + new Date().toLocaleString("es-ES", { day: "2-digit", month: "long", year: "numeric" }) + EXCEL_EXTENSION
+  // fileName + '-' + new Date().toLocaleString("es-ES", { day: "2-digit", month: "long", year: "numeric" }) + EXCEL_EXTENSION
+  fileName +' de '+ fecha1+' a '+fecha2 + EXCEL_EXTENSION
 );
+} */
+
+
+
+exportToExcel() {
+
+  let Heading:any[] = [];
+  this.cols.forEach(element => {
+    Heading.push(element.header)
+  });
+
+  console.log([Heading]);
+  
+  //Had to create a new workbook and then add the header
+  const wb = XLSX.utils.book_new();
+  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([]);
+  XLSX.utils.sheet_add_aoa(ws, [Heading]);
+
+  //Starting in the second row to avoid overriding and skipping headers
+  XLSX.utils.sheet_add_json(ws, this.excelData, { origin: 'A2', skipHeader: true });
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Información');
+  let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
+  let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0]
+  XLSX.writeFile(wb,'Reporte de '+this.item.reporte.name+' de ' + fecha1+' a '+fecha2+ '.xlsx');
 }
+
+
+
+
+
+
+
 
 
 }

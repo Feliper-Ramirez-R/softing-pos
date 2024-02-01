@@ -12,7 +12,6 @@ export class ReportesService {
 
 
   async getReportes(tipo:string,dataPost: any) {
-
   
     let api = ''
 
@@ -21,10 +20,10 @@ export class ReportesService {
         api = 'reports/sales'
         break;
       case 'Cambios':
-        api = ''
+        api = 'reports/changes'
         break;
       default:
-        api = ''
+        api = 'reports/inventories'
         break;
     }
 

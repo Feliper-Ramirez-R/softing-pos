@@ -23,7 +23,7 @@ export class InventarioComponent {
   submitted: boolean = false;
 
   constructor(private inventarioService: InventarioService,
-    private user: AuthService,
+    protected user: AuthService,
     private messageService: MessageService,
   ) { }
 
