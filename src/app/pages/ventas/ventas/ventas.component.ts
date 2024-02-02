@@ -20,8 +20,10 @@ export class VentasComponent {
   datosDB: any[] = [];
   item: any = {};
 
-  metodos_pago: any[] = [{ id: 1, name: 'Efectivo' }, { id: 2, name: 'Transferencia' }];
+  metodos_pago: any[] = [{ id: 1, name: 'Efectivo' }, { id: 2, name: 'Transferencia' },{ id: 3, name: 'Crédito' }];
   metodo_pago: any = {};
+
+  empresas_credito: any[] = [{ id: 1, name: 'Sistecredito' }, { id: 2, name: 'Total crédito' }];
 
   stateOptions: any[] = [{ label: 'No', value: 'off' }, { label: 'Si', value: 'on' }];
   value_impri_fac: string | undefined;
@@ -56,6 +58,7 @@ export class VentasComponent {
     this.cambio = undefined;
     this.value_impri_fac = undefined;
     this.facturarDialog = true;
+    this.submitted = false;
   }
 
   operacionDevuelta() {
@@ -145,7 +148,7 @@ export class VentasComponent {
 
     this.submitted = true;
 
-    if (!this.metodo_pago.id || !this.value_impri_fac) { return }
+    if (!this.metodo_pago.id || !this.value_impri_fac || this.metodo_pago.name == 'Crédito' && !this.item.empresa_credito ) { return }
 
     let dataPost = {
       total: this.total,

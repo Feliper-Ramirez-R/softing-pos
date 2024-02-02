@@ -20,6 +20,8 @@ export class AjustesComponent {
 
   tipo_ajuste:string = '';
 
+  rangeDates:string | undefined
+
   constructor(private ajusteService: AjustesService,
     private user: AuthService,
     private messageService: MessageService
@@ -27,6 +29,7 @@ export class AjustesComponent {
 
 
   ngOnInit() {
+    this.getAlmacenes();
     // this.getAjustes();
   }
 
@@ -35,7 +38,6 @@ export class AjustesComponent {
   }
 
   abrirModal(tipo:string){
-    this.getAlmacenes();
     this.tipo_ajuste = tipo;
     this.ajustar_dialog = true;
     this.item = {};
@@ -44,13 +46,26 @@ export class AjustesComponent {
 
   async getAjustes() {
 
-    const valid: any = await this.ajusteService.getAjustes();
+    if (!this.rangeDates || !this.rangeDates[1]) { return }
+
+    let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
+    let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0];
+
+    let dataPost = {
+      date_from:fecha1,
+      date_to:fecha2,
+      store_id:this.item.almacen_consultar ? this.item.almacen_consultar.id : null
+    }
+
+    console.log(dataPost);
+    
+
+    const valid: any = await this.ajusteService.getAjustes(dataPost);
     console.log(valid);
 
     if (!valid.error) {
       this.datosDB = valid.data;
-      this.almacenes = valid.stores;
-     
+    
       if (valid.status == 200) {
 
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }

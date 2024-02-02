@@ -170,6 +170,19 @@
                             </p-dropdown>
                             <small class="ng-dirty ng-invalid" *ngIf="submitted && !metodo_pago.id">Selecciona el metodo de pago.</small>
                         </div>
+
+                        <div [ngClass]="{'hidden':metodo_pago.name !='Crédito'}" class="field col-12 md:col-12">
+                            <label>Empresa credito</label>
+                            <p-dropdown [options]="empresas_credito" [(ngModel)]="item.empresa_credito" optionLabel="name" appendTo="body"
+                                placeholder="Seleccione" emptyMessage="No hay resultados"
+                                [ngClass]="{'ng-invalid ng-dirty': submitted && !item.empresa_credito }">
+                            
+                                <ng-template let-metodo pTemplate="item">
+                                    <span>{{ metodo.name }}</span>
+                                </ng-template>
+                            </p-dropdown>
+                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.empresa_credito">Campo requerido.</small>
+                        </div>
     
                         <div *ngIf="metodo_pago.id == 1" class="field col-6 ">
                             <label>Efectivo</label>

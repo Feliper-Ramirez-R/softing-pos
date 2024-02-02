@@ -7,6 +7,8 @@
                     <div class="my-2">
                         <button *ngIf="user.user.role_id != 2" pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary mr-2"
                             (click)="abrirModal()"></button>
+                        <button *ngIf="user.user.role_id != 2" pButton pRipple label="Bono a favor" icon="pi pi-money-bill" class="p-button-primary mr-2"
+                            (click)="bonoModal()"></button>
                         <!-- <button pButton pRipple label=" Borrar" icon="pi pi-trash" class="p-button-danger"
                             (click)="alertSelectedItems()"
                             [disabled]="!selectedItems || !selectedItems.length"></button> -->
@@ -111,5 +113,29 @@
                     (click)="cambio_dialog = false"></button>
                 <button pButton pRipple label="Enviar" icon="pi pi-check"
                     class="p-button-text" (click)="hacerCambio()"></button>
+            </ng-template>
+        </p-dialog>
+
+
+<p-dialog [(visible)]="bono_dialog" [style]="{ width: '450px' }"
+            header="Bono a favor" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+
+                    <div class="p-fluid p-formgrid grid">
+
+                        <div class="field col-12 ">
+                            <label>Monto dinero</label>
+                            <p-inputNumber prefix="$" [(ngModel)]="bono_a_favor" [ngClass]="{ 'ng-invalid ng-dirty': submitted && !bono_a_favor }"></p-inputNumber>
+                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !bono_a_favor">El campo es obligatorio.</small>
+                        </div>
+                    </div>
+              
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                    (click)="bono_dialog = false"></button>
+                <button pButton pRipple label="Imprimir" icon="pi pi-check"
+                    class="p-button-text" (click)="imprimirBono()"></button>
             </ng-template>
         </p-dialog>

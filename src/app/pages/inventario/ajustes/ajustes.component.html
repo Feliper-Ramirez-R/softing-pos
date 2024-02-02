@@ -16,8 +16,17 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary"
-                        (click)="getAjustes()"></button>
+                    <p-dropdown [options]="almacenes" styleClass="mr-2"  [showClear]="true"
+                            [(ngModel)]="item.almacen_consultar" optionLabel="name" appendTo="body" placeholder="Almacen"
+                            emptyMessage="No hay resultados">
+                            <ng-template let-opcion pTemplate="item">
+                                <span>{{ opcion.name }}</span>
+                            </ng-template>
+                        </p-dropdown>
+
+                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true" appendTo="body"
+                    placeholder="Selecciona un rango" [readonlyInput]="true" (onClose)="getAjustes()">
+                </p-calendar>
                 </ng-template>
             </p-toolbar>
 
@@ -39,13 +48,23 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
-                        <th></th>
+                        <th pSortableColumn="name">Ajuste <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Código <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Cantidad <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Almacén <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Observación <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Usuario <p-sortIcon field="name"></p-sortIcon></th>
+                        <!-- <th></th> -->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-item>
                     <tr>
-                        <td style="min-width: 10rem;">{{item.name | titlecase}}</td>
+                        <td>{{item.type_name | titlecase}}</td>
+                        <td>{{item.product_code}}</td>
+                        <td>{{item.product_quantity}}</td>
+                        <td>{{item.store_name | titlecase}}</td>
+                        <td>{{item.observation | titlecase}}</td>
+                        <td>{{item.byUser_name | titlecase}}</td>
                         <!-- <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil" pTooltip="Actualizar" tooltipPosition="top"
