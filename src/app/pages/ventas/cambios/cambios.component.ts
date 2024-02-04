@@ -14,11 +14,15 @@ export class CambiosComponent {
 
   datosDB: any[] = [];
   item:any = {};
-  bono_a_favor:number | undefined
+
+  devolucion:any = {};
+
+  garantia:any = {};
 
   submitted:boolean = false;
   cambio_dialog:boolean = false;
   bono_dialog:boolean = false;
+  garantia_dialog:boolean = false;
 
   constructor(private cambiosService: CambiosService,
     protected user: AuthService,
@@ -44,7 +48,13 @@ export class CambiosComponent {
   bonoModal(){
     this.submitted = false;
     this.bono_dialog = true;
-    this.bono_a_favor = undefined
+    this.devolucion = {};
+  }
+
+  garantiaModal(){
+    this.submitted = false;
+    this.garantia_dialog = true;
+    this.garantia = {};
   }
 
   async getCambios() {
@@ -64,6 +74,34 @@ export class CambiosComponent {
     }
   }
 
+
+  async enviarGarantia() {
+
+    this.submitted = true;
+
+    if(!this.garantia.factura || !this.garantia.factura){return}
+
+    let dataPost = {
+      billNumber:this.garantia.factura,
+      store_id:this.user.user.store_id,
+      byUser:this.user.user.id,
+      code_out:this.garantia.codigo_entrada,
+    }
+
+    const valid: any = await this.cambiosService.enviarGarantia(dataPost);
+    console.log(valid);
+
+    if (!valid.error) {
+     
+      if (valid.status == 201) {
+        this.garantia_dialog = true;
+        this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
+      } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
+    } else {
+      if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
+      else { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ocurrió un error!', life: 5000 }); }
+    }
+  }
 
   async hacerCambio() {
 
@@ -95,6 +133,10 @@ export class CambiosComponent {
   }
 
   async imprimirBono(){
+
+    this.submitted = true;
+    
+    if(!this.devolucion.bono || !this.devolucion.factura || !this.devolucion.codigo_entrada){return}
 
     PdfMakeWrapper.setFonts(pdfFonts);
 
@@ -139,7 +181,7 @@ export class CambiosComponent {
 
 
     pdf.add(
-      new Columns([this.formatearMoneda("es-CO", "COP", 0, this.bono_a_favor)])
+      new Columns([this.formatearMoneda("es-CO", "COP", 0, this.devolucion.bono)])
         .fontSize(20)
         .alignment("center")
         .margin([0, 3, 0, 3])

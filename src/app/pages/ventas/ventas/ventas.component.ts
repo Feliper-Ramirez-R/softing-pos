@@ -20,7 +20,7 @@ export class VentasComponent {
   datosDB: any[] = [];
   item: any = {};
 
-  metodos_pago: any[] = [{ id: 1, name: 'Efectivo' }, { id: 2, name: 'Transferencia' },{ id: 3, name: 'Crédito' }];
+  metodos_pago: any[] = [{ id: 1, name: 'Efectivo' }, { id: 2, name: 'Transferencia' },{ id: 3, name: 'Crédito' },{ id: 4, name: 'Saldo a favor' }];
   metodo_pago: any = {};
 
   empresas_credito: any[] = [{ id: 1, name: 'Sistecredito' }, { id: 2, name: 'Total crédito' }];

@@ -21,7 +21,7 @@
 
 
             <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
-                [globalFilterFields]="['barcode','name','description','category_name','color_name','model_name','size_name','unit_measurement_name']"
+                [globalFilterFields]="['code','name','description','category_name','color_name','model_name','size_name','unit_measurement_name']"
                 [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
                 [rowHover]="true" dataKey="id">

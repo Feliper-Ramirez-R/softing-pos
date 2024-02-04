@@ -123,6 +123,7 @@ export class EntradasComponent {
       if (valid.status == 200) {
 
       }
+      else { this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.message, life: 5000 }); }
     } else {
       this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 });
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }

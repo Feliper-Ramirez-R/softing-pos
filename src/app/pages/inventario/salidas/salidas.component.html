@@ -10,19 +10,19 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
-                            placeholder="Selecciona un rango" [readonlyInput]="true"
+                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"[showButtonBar]="true"
+                            placeholder="Selecciona un rango" [readonlyInput]="true" appendTo="body"(onClearClick)="getSalidas()"
                             (onClose)="getEntradasRango()">
                         </p-calendar>
-                    <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary ml-2"
-                        (click)="getSalidas()"></button>
+                    <!-- <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary ml-2"
+                        (click)="getSalidas()"></button> -->
                 </ng-template>
             </p-toolbar>
 
 
 
             <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
-                [globalFilterFields]="['product_name','store_origin','store_destination','product_quantity','byUser_name','created_at']"
+                [globalFilterFields]="['code','product_name','store_origin','store_destination','product_quantity','byUser_name','created_at']"
                 [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
                 [rowHover]="true" dataKey="id">
@@ -41,6 +41,7 @@
                         <!-- <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th> -->
+                        <th pSortableColumn="code">Código <p-sortIcon field="code"></p-sortIcon></th>
                         <th pSortableColumn="product_name">Nombre <p-sortIcon field="product_name"></p-sortIcon></th>
                         <th pSortableColumn="store_origin">Origen <p-sortIcon field="store_origin"></p-sortIcon></th>
                         <th pSortableColumn="store_destination">Destino <p-sortIcon field="store_destination"></p-sortIcon></th>
@@ -55,6 +56,7 @@
                         <!--  <td>
                             <p-tableCheckbox [value]="item"></p-tableCheckbox>
                         </td> -->
+                        <td>{{item.code }}</td>
                         <td >{{item.product_name | titlecase}}</td>
                         <td>{{item.store_origin | titlecase}}</td>
                         <td>{{item.store_destination | titlecase}}</td>

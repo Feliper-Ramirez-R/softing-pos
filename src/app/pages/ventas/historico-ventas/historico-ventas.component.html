@@ -14,8 +14,8 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
-                        placeholder="Selecciona un rango" [readonlyInput]="true" (onClose)="getHistoricoFecha()">
+                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"[showButtonBar]="true"appendTo="body"
+                        placeholder="Selecciona un rango" [readonlyInput]="true" (onClose)="getHistoricoFecha()"(onClearClick)="limpiar()">
                     </p-calendar>
                 </ng-template>
             </p-toolbar>

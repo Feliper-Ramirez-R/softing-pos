@@ -134,7 +134,7 @@ export class ProductosComponent {
     this.submitted = true;
 
     if (!this.item.name  || !this.item.description || !this.item.cost || !this.item.price || !this.marca.id  || !this.modelo.id
-      || !this.color.id || !this.item.talla || !this.categoria.id || !this.proveedor.id || !this.unidad_medida.id
+      || !this.color.id || !this.item.size_name || !this.categoria.id || !this.proveedor.id || !this.unidad_medida.id
    ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
 
    if(this.item.price_min > this.item.price){this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'El precio mínimo no puede ser mayor al precio de venta', life: 5000 }); return}
@@ -149,7 +149,7 @@ export class ProductosComponent {
       brand_id:this.marca.brand_id ,
       model_id: this.modelo.model_id,
       color_id:this.color. color_id,
-      size_id:this.item.talla ,
+      size_id:this.item.size_name ,
       category_id:this.categoria.category_id ,
       provider_id:this.proveedor.provider_id ,
       unit_measurement_id:this.unidad_medida.unit_measurement_id,
@@ -181,7 +181,7 @@ export class ProductosComponent {
     this.submitted = true;
 
      if (!this.item.name  || !this.item.description || !this.item.cost || !this.item.price || !this.marca.id  || !this.modelo.id
-         || !this.color.id || !this.item.talla || !this.categoria.id || !this.proveedor.id || !this.unidad_medida.id
+         || !this.color.id || !this.item.size_name || !this.categoria.id || !this.proveedor.id || !this.unidad_medida.id
       ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
 
       if(this.item.price_min > this.item.price){this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'El precio mínimo no puede ser mayor al precio de venta', life: 5000 }); return}
@@ -196,7 +196,7 @@ export class ProductosComponent {
       brand_id:this.marca.id ,
       model_id: this.modelo.id,
       color_id:this.color.id,
-      size_id:this.item.talla,
+      size_id:this.item.size_name,
       category_id:this.categoria.id ,
       provider_id:this.proveedor.id ,
       unit_measurement_id:this.unidad_medida.id,

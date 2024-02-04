@@ -24,8 +24,8 @@
                             </ng-template>
                         </p-dropdown>
 
-                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true" appendTo="body"
-                    placeholder="Selecciona un rango" [readonlyInput]="true" (onClose)="getAjustes()">
+                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true" appendTo="body"[showButtonBar]="true"
+                    placeholder="Selecciona un rango" [readonlyInput]="true" (onClose)="getAjustes()"(onClearClick)="getAjustes()">
                 </p-calendar>
                 </ng-template>
             </p-toolbar>

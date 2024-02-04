@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AjustesService } from './ajustes.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
+import { CalendarService } from 'src/app/services/calendar.service';
 
 @Component({
   selector: 'app-ajustes',
@@ -24,13 +25,14 @@ export class AjustesComponent {
 
   constructor(private ajusteService: AjustesService,
     private user: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private calendarService: CalendarService
   ) { }
 
 
   ngOnInit() {
     this.getAlmacenes();
-    // this.getAjustes();
+    this.calendarService.calendarioEnEspanol();
   }
 
   onGlobalFilter(table: any, event: Event) {

@@ -68,7 +68,7 @@
                         <td>{{item.category_name }}</td>
                         <td>{{item.color_name }}</td>
                         <td>{{item.model_name }}</td>
-                        <td>{{item.size_name }}</td>
+                        <td>{{item.size_id }}</td>
                         <td>{{item.unit_measurement_name }}</td>
                         <td>${{item.cost | number }}</td>
                         <td>${{item.price | number }}</td>
@@ -219,9 +219,9 @@
 
                     <div class="field col-12 md:col-4">
                         <label for="">Talla</label>
-                        <input type="text" pInputText id="name" [(ngModel)]="item.talla" required autofocus
-                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.name }" />
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.talla">El campo es
+                        <input type="text" pInputText id="name" [(ngModel)]="item.size_name" required autofocus
+                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.size_name }" />
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.size_name">El campo es
                             requerido.</small>
                     </div>
 

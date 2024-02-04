@@ -26,8 +26,8 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"appendTo="body"
-                        [disabled]="!item.reporte" placeholder="Selecciona un rango" [readonlyInput]="true"
+                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"appendTo="body"(onClearClick)="limpiar()"
+                        [disabled]="!item.reporte" placeholder="Selecciona un rango" [readonlyInput]="true"[showButtonBar]="true"
                         (onClose)="getReportes()">
                     </p-calendar>
                 </ng-template>

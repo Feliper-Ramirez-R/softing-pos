@@ -10,7 +10,7 @@ import { CalendarService } from 'src/app/services/calendar.service';
   styleUrls: ['./salidas.component.scss']
 })
 export class SalidasComponent {
- 
+
   datosDB: any[] = [];
   item: any = {};
 
@@ -25,7 +25,7 @@ export class SalidasComponent {
   constructor(private salidaService: SalidasService,
     private user: AuthService,
     private messageService: MessageService,
-    private calendarService:CalendarService
+    private calendarService: CalendarService
   ) { }
 
 
@@ -37,6 +37,7 @@ export class SalidasComponent {
 
   openNew() {
     this.item = {};
+    this.bodega = {};
     this.submitted = false;
     this.itemCreateDialog = true;
   }
@@ -48,19 +49,19 @@ export class SalidasComponent {
   async getEntradasRango() {
 
 
-    if (!this.rangeDates || !this.rangeDates[1]){return}
+    if (!this.rangeDates || !this.rangeDates[1]) { return }
 
-      let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
-      let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0]
+    let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
+    let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0]
     console.log(this.rangeDates);
     console.log(fecha1);
     console.log(fecha2);
 
     let dataPost = {
-      date_from:fecha1,
-      date_to:fecha2 
+      date_from: fecha1,
+      date_to: fecha2
     }
- console.log(dataPost);
+    console.log(dataPost);
 
     const valid: any = await this.salidaService.getEntradasRango(dataPost);
     console.log(valid);
@@ -68,8 +69,10 @@ export class SalidasComponent {
     if (!valid.error) {
       this.datosDB = valid.data;
       if (valid.status == 200) {
-     
-        /*  this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); */ }
+
+        /*  this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); */
+}
+      else { this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.message, life: 5000 }); }
     } else {
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
       else { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ocurrió un error!', life: 5000 }); }
@@ -98,12 +101,12 @@ export class SalidasComponent {
 
     this.submitted = true;
 
-     if (!this.bodega.id || !this.item.cantidad || !this.item.codigo) { return }
+    if (!this.bodega.id || !this.item.cantidad || !this.item.codigo) { return }
 
     let dataPost = {
       code: this.item.codigo,
       stock: this.item.cantidad,
-      from_store_id:this.user.user.store_id,
+      from_store_id: this.user.user.store_id,
       to_store_id: this.bodega.id,
       byUser: this.user.user.id
     }

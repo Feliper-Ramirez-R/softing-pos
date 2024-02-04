@@ -43,8 +43,14 @@ export class HistoricoVentasComponent {
     this.ver_factura_dialog = true;
   }
 
+  limpiar(){
+    this.datosDB = [];
+  }
+
 
   async getHistoricoFecha() {
+
+    if (!this.rangeDates || !this.rangeDates[1]) { return }
 
     this.num_fac = '';
 
