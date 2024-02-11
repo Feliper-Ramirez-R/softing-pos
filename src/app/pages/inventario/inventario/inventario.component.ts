@@ -63,7 +63,7 @@ export class InventarioComponent {
   async getInventario() {
     this.bodega_seleccionada = '';
     let dataPost = {
-      store_id: 0
+      store_id: this.user.user.store_id
     }
 
     console.log(dataPost);

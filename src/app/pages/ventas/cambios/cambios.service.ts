@@ -16,14 +16,14 @@ export class CambiosService {
   constructor(private user: AuthService, private http: HttpClient) { }
 
 
-  async getCambios() {
+  async getCambios(dataPost:any) {
 
     return new Promise(resolve => {
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + this.user.token,
       });
 
-      this.http.get(rutas.ruta + this.prefix, { headers }).subscribe({
+      this.http.post(rutas.ruta + this.prefix+'/getChanges',dataPost, { headers }).subscribe({
         next: (answer: any) => {
           resolve(answer);
         },
@@ -55,24 +55,5 @@ export class CambiosService {
     });
   }
 
-  async enviarGarantia(dataPost:any) {
-
-    return new Promise(resolve => {
-      const headers = new HttpHeaders({
-        Authorization: 'Bearer ' + this.user.token,
-      });
-
-      this.http.post(rutas.ruta + 'this.prefix' ,dataPost, { headers }).subscribe({
-        next: (answer: any) => {
-          resolve(answer);
-        },
-        error: error => {
-          console.log(<any>error);
-          resolve(error);
-        }
-      });
-    });
-  }
-
-  
+ 
 }

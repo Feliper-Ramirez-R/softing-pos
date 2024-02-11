@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from '@angular/core';
+import {LOCALE_ID, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -7,6 +7,9 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+// import { register } from 'swiper/element';
 
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
@@ -54,7 +57,9 @@ import { CalendarModule } from 'primeng/calendar';
 
 
 
+registerLocaleData(localeEs)
 
+// register()
 
 @NgModule({
   declarations: [
@@ -108,8 +113,8 @@ import { CalendarModule } from 'primeng/calendar';
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     {
       provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true
-
     },
+    { provide: LOCALE_ID, useValue: 'es' },
     MessageService,
     ConfirmationService,
     BreadcrumbService,

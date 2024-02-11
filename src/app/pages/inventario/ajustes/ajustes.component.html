@@ -16,8 +16,8 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-dropdown [options]="almacenes" styleClass="mr-2"  [showClear]="true"
-                            [(ngModel)]="item.almacen_consultar" optionLabel="name" appendTo="body" placeholder="Almacen"
+                    <p-dropdown [options]="almacenes" styleClass="mr-2"  [showClear]="true" (onClear)="getAjustes()"(onChange)="getAjustes()"
+                            [(ngModel)]="item.almacen_consultar" optionLabel="name" appendTo="body" placeholder="Almacén"
                             emptyMessage="No hay resultados">
                             <ng-template let-opcion pTemplate="item">
                                 <span>{{ opcion.name }}</span>
@@ -25,14 +25,14 @@
                         </p-dropdown>
 
                     <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true" appendTo="body"[showButtonBar]="true"
-                    placeholder="Selecciona un rango" [readonlyInput]="true" (onClose)="getAjustes()"(onClearClick)="getAjustes()">
+                    placeholder="Selecciona un rango" [readonlyInput]="true" (onClose)="getAjustes()"(onClearClick)="limpiar()">
                 </p-calendar>
                 </ng-template>
             </p-toolbar>
 
 
 
-            <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name']"
+            <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['type_name','product_code','product_quantity','store_name','observation','byUser_name']"
                 [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
                 [rowHover]="true" dataKey="id">
@@ -48,12 +48,12 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="name">Ajuste <p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Código <p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Cantidad <p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Almacén <p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Observación <p-sortIcon field="name"></p-sortIcon></th>
-                        <th pSortableColumn="name">Usuario <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="type_name">Ajuste <p-sortIcon field="type_name"></p-sortIcon></th>
+                        <th pSortableColumn="product_code">Código <p-sortIcon field="product_code"></p-sortIcon></th>
+                        <th pSortableColumn="product_quantity">Cantidad <p-sortIcon field="product_quantity"></p-sortIcon></th>
+                        <th pSortableColumn="store_name">Almacén <p-sortIcon field="store_name"></p-sortIcon></th>
+                        <th pSortableColumn="observation">Observación <p-sortIcon field="observation"></p-sortIcon></th>
+                        <th pSortableColumn="byUser_name">Usuario <p-sortIcon field="byUser_name"></p-sortIcon></th>
                         <!-- <th></th> -->
                     </tr>
                 </ng-template>

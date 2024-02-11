@@ -66,6 +66,9 @@ import { HistoricoVentasComponent } from './ventas/historico-ventas/historico-ve
 import { AjustesComponent } from './inventario/ajustes/ajustes.component';
 import { CambiosComponent } from './ventas/cambios/cambios.component';
 import { ReportesComponent } from './reportes/reportes.component';
+import { DevolucionesComponent } from './ventas/devoluciones/devoluciones.component';
+import { GarantiasComponent } from './ventas/garantias/garantias.component';
+
 
 
 
@@ -92,6 +95,8 @@ import { ReportesComponent } from './reportes/reportes.component';
     AjustesComponent,
     CambiosComponent,
     ReportesComponent,
+    DevolucionesComponent,
+    GarantiasComponent,
   ],
   imports: [
     PagesRoutingModule,

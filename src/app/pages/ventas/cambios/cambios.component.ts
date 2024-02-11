@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CambiosService } from './cambios.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
-import { Columns, Img, ITable, PdfMakeWrapper, QR, Table, Txt } from 'pdfmake-wrapper';
-import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import { CalendarService } from 'src/app/services/calendar.service';
+
 
 @Component({
   selector: 'app-cambios',
@@ -15,23 +15,21 @@ export class CambiosComponent {
   datosDB: any[] = [];
   item:any = {};
 
-  devolucion:any = {};
-
-  garantia:any = {};
-
   submitted:boolean = false;
   cambio_dialog:boolean = false;
-  bono_dialog:boolean = false;
-  garantia_dialog:boolean = false;
+
+  rangeDates: any | undefined;
+ 
 
   constructor(private cambiosService: CambiosService,
     protected user: AuthService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private calendarService: CalendarService
   ) { }
 
 
   ngOnInit() {
-   
+   this.calendarService.calendarioEnEspanol();
      this.getCambios();
   }
 
@@ -45,63 +43,47 @@ export class CambiosComponent {
     this.cambio_dialog = true;
   }
 
-  bonoModal(){
-    this.submitted = false;
-    this.bono_dialog = true;
-    this.devolucion = {};
-  }
-
-  garantiaModal(){
-    this.submitted = false;
-    this.garantia_dialog = true;
-    this.garantia = {};
-  }
 
   async getCambios() {
 
-    const valid: any = await this.cambiosService.getCambios();
+    if(!this.rangeDates){
+      const fechaActual = new Date();
+      const fechaInicio = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+      const fechaFin = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+      this.rangeDates =  [fechaInicio,fechaFin]
+     }
+
+    if (!this.rangeDates || !this.rangeDates[1]) { return }
+
+    let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
+    let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0]
+    console.log(this.rangeDates);
+    console.log(fecha1);
+    console.log(fecha2);
+
+    let dataPost = {
+      date_from: fecha1,
+      date_to: fecha2,
+      store_id:this.user.user.store_id
+    }
+    console.log(dataPost);
+
+    const valid: any = await this.cambiosService.getCambios(dataPost);
     console.log(valid);
 
     if (!valid.error) {
       this.datosDB = valid.data;
-     
       if (valid.status == 200) {
 
-      } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
+        /*  this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); */
+}
+      else { this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.message, life: 5000 }); }
     } else {
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
       else { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ocurrió un error!', life: 5000 }); }
     }
   }
 
-
-  async enviarGarantia() {
-
-    this.submitted = true;
-
-    if(!this.garantia.factura || !this.garantia.factura){return}
-
-    let dataPost = {
-      billNumber:this.garantia.factura,
-      store_id:this.user.user.store_id,
-      byUser:this.user.user.id,
-      code_out:this.garantia.codigo_entrada,
-    }
-
-    const valid: any = await this.cambiosService.enviarGarantia(dataPost);
-    console.log(valid);
-
-    if (!valid.error) {
-     
-      if (valid.status == 201) {
-        this.garantia_dialog = true;
-        this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
-      } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
-    } else {
-      if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
-      else { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ocurrió un error!', life: 5000 }); }
-    }
-  }
 
   async hacerCambio() {
 
@@ -123,102 +105,13 @@ export class CambiosComponent {
     if (!valid.error) {
      
       if (valid.status == 201) {
-        this.cambio_dialog = true;
+        this.cambio_dialog = false;
         this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
       else { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ocurrió un error!', life: 5000 }); }
     }
-  }
-
-  async imprimirBono(){
-
-    this.submitted = true;
-    
-    if(!this.devolucion.bono || !this.devolucion.factura || !this.devolucion.codigo_entrada){return}
-
-    PdfMakeWrapper.setFonts(pdfFonts);
-
-    const pdf = new PdfMakeWrapper();
-
-    
-     pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
-
-    pdf.pageMargins([15, 20, 5, 5]);
-    pdf.pageSize({
-      width: 220,
-      height: 270,
-    });
-
-    pdf.add(pdf.ln(1));
-
-  let fechaActual = new Date()
-  let fecha2 = fechaActual.setMonth(fechaActual.getMonth() + 1)
-  let fechaVencimiento = new Date(fecha2).toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
-  
-   
-    pdf.add(
-      new Columns(["Fecha Entrega:", new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" })])
-        .fontSize(8)
-        .margin([0, 3, 0, 3])
-        .end
-    );
-
-
-    pdf.add(
-      new Columns(["Fecha Vencimiento:",fechaVencimiento])
-        .fontSize(8)
-        .margin([0, 3, 0, 3])
-        .end
-    );
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add({
-      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 190, y2: 0, lineWidth: 1 }],
-    });
-
-
-    pdf.add(
-      new Columns([this.formatearMoneda("es-CO", "COP", 0, this.devolucion.bono)])
-        .fontSize(20)
-        .alignment("center")
-        .margin([0, 3, 0, 3])
-        .end
-    );
-
-
-    pdf.add({
-      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 190, y2: 0, lineWidth: 1 }],
-    });
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Columns(["Entregó:", this.user.user.name])
-        .margin([0, 3, 0, 3])
-        .fontSize(8)
-        .end
-    );
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Txt(["NO SE ACEPTAN RECLAMOS O ENTREGAS DESPUÉS DE LA FECHA DE VENCIMIENTO,NI SIN ESTE DOCUMENTO."]).alignment("left").fontSize(8).end
-    );
-    this.bono_dialog = false;
-    pdf.create().open();
-   
-  }
-
-  formatearMoneda(locales: any, currency: any, fractionDigits: any, number: any) {
-    var formatted = new Intl.NumberFormat(locales, {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: fractionDigits
-    }).format(number);
-    return formatted;
   }
 
 

@@ -46,6 +46,10 @@ export class AjustesComponent {
     this.submitted = false;
   }
 
+  limpiar(){
+    this.datosDB = [];
+  }
+
   async getAjustes() {
 
     if (!this.rangeDates || !this.rangeDates[1]) { return }

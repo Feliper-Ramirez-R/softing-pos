@@ -1,0 +1,161 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button *ngIf="user.user.role_id != 2" pButton pRipple label="Entrar a garantia"
+                            icon="pi pi pi-plus" class="p-button-primary mr-2" (click)="garantiaModal(true)"></button>
+
+                        <button *ngIf="user.user.role_id != 2" pButton pRipple label="Salir de garantia"
+                            icon="pi pi pi-plus" class="p-button-primary mr-2" (click)="garantiaModal(false)"></button>
+                        <!-- <button pButton pRipple label=" Borrar" icon="pi pi-trash" class="p-button-danger"
+                            (click)="alertSelectedItems()"
+                            [disabled]="!selectedItems || !selectedItems.length"></button> -->
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"[showButtonBar]="true"
+                    placeholder="Selecciona un rango" [readonlyInput]="true" appendTo="body"(onClearClick)="getGarantias()"
+                    (onClose)="getGarantias()">
+                </p-calendar>
+                   <!--  <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary"
+                        (click)="getCambios()"></button> -->
+                </ng-template>
+            </p-toolbar>
+
+
+
+            <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['type_name','product_code','product_name','bill_number']"
+                [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
+                [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Cambios</h5>
+                        <span *ngIf="datosDB.length > 0" class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Tipo garantía</th>
+                        <th>Código</th>
+                        <th>Descripción</th>
+                        <th>Factura</th>
+                        <th>Cantidad</th>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <!-- <th></th> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <td>{{item.type_name}}</td>
+                        <td>{{item.product_code}}</td>
+                        <td>{{item.product_name}}</td>
+                        <td>{{item.bill_number}}</td>
+                        <td>{{item.product_quantity}}</td>
+                        <td>{{item.created_at | date: 'dd MMM yyyy'}}</td>
+                        <td>{{item.byUser_name}}</td>
+                        <!-- <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" pTooltip="Actualizar" tooltipPosition="top"
+                                    class="p-button-rounded p-button-success mr-2" (click)="openEdit(item)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                                    pTooltip="Eliminar" tooltipPosition="top" (click)="deleteAlert(item)"></button>
+                            </div>
+                        </td> -->
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+    </div>
+</div>
+
+
+
+<p-dialog [(visible)]="garantia_dialog" [style]="{ width: '450px' }" header="{{tipo_garantia}}  garantía" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+        <div *ngIf="entrada_a_garantia" class="p-fluid p-formgrid grid">
+            <div class="field col-12 ">
+                <label>Código entrada</label>
+                <input type="text" pInputText [(ngModel)]="garantia.codigo_entrada"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && !garantia.codigo_entrada }">
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !garantia.codigo_entrada">El campo es
+                    obligatorio.</small>
+            </div>
+            <div class="field col-12 ">
+                <label>N° factura</label>
+                <input type="text" pInputText [(ngModel)]="garantia.factura"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && !garantia.factura }">
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !garantia.factura">El campo es
+                    obligatorio.</small>
+            </div>
+        </div>
+
+        <div *ngIf="!entrada_a_garantia" class="p-fluid p-formgrid grid">
+            <div class="field col-12 ">
+                <label>Código salida</label>
+                <input type="text" pInputText [(ngModel)]="garantia.codigo_salida"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && !garantia.codigo_salida }">
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !garantia.codigo_salida">El campo es
+                    obligatorio.</small>
+            </div>
+            <div class="field col-12 ">
+                <label>N° comprobante garantia</label>
+                <input type="text" pInputText [(ngModel)]="garantia.num_comprobante"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && !garantia.num_comprobante }">
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !garantia.num_comprobante">El campo es
+                    obligatorio.</small>
+            </div>
+        </div>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+            (click)="garantia_dialog = false"></button>
+        <button pButton pRipple label="{{entrada_a_garantia ? 'Ingresar' : 'Devolver'}}" icon="pi pi-check" class="p-button-text"
+            (click)="entrada_a_garantia ? enviarGarantia() : devolverGarantia()"></button>
+    </ng-template>
+</p-dialog>
+
+
+
+<!-- <p-dialog [(visible)]="garantia_dialog" [style]="{ width: '450px' }" header="Salir de garantía" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+
+        <div class="p-fluid p-formgrid grid">
+
+            <div class="field col-12 ">
+                <label>Código salida</label>
+                <input type="text" pInputText [(ngModel)]="garantia.codigo_salida"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && !garantia.codigo_salida }">
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !garantia.codigo_salida">El campo es
+                    obligatorio.</small>
+            </div>
+            <div class="field col-12 ">
+                <label>N° comprobante garantia</label>
+                <input type="text" pInputText [(ngModel)]="garantia.num_comprobante"
+                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && !garantia.num_comprobante }">
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !garantia.num_comprobante">El campo es
+                    obligatorio.</small>
+            </div>
+        </div>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+            (click)="garantia_dialog = false"></button>
+        <button pButton pRipple label="Imprimir" icon="pi pi-check" class="p-button-text"
+            (click)="enviarGarantia()"></button>
+    </ng-template>
+</p-dialog> -->

@@ -26,7 +26,7 @@
 
 
             <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
-                [globalFilterFields]="['code','product_name','description','sotck']" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['code','product_name','description','stock']" [rows]="10" [paginator]="true"
                 [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
                 [rowHover]="true" dataKey="id">
@@ -48,7 +48,7 @@
                         <th pSortableColumn="code">Código <p-sortIcon field="code"></p-sortIcon></th>
                         <th pSortableColumn="product_name">Nombre <p-sortIcon field="product_name"></p-sortIcon></th>
                         <th pSortableColumn="description">Descripción <p-sortIcon field="description"></p-sortIcon></th>
-                        <th pSortableColumn="sotck">Cantidad <p-sortIcon field="sotck"></p-sortIcon></th>
+                        <th pSortableColumn="stock">Cantidad <p-sortIcon field="stock"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -60,7 +60,7 @@
                         <td>{{item.code }}</td>
                         <td>{{item.product_name | titlecase}}</td>
                         <td>{{item.description }}</td>
-                        <td>{{item.sotck }}</td>
+                        <td>{{item.stock }}</td>
                         <!-- <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-database" pTooltip="Ingresar inventario" tooltipPosition="top"

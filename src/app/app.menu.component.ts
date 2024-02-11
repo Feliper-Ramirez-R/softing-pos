@@ -56,11 +56,13 @@ export class AppMenuComponent implements OnInit {
                             label: 'P.D.V', icon: 'pi pi-fw pi-clone',
                             items: [
                                 { label: 'Facturar', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/ventas'] },
-                                { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                                 { label: 'Cambios', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/pages/cambios'] },
+                                { label: 'Devoluciones', icon: 'pi pi-fw pi-arrow-down', routerLink: ['/pages/devoluciones'] },
+                                { label: 'Garantías', icon: 'pi pi-fw pi-times-circle', routerLink: ['/pages/garantias'] },
                                
                             ]
                         },
+                        { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                     ]
                 },
                 {
@@ -116,11 +118,13 @@ export class AppMenuComponent implements OnInit {
                         label: 'P.D.V', icon: 'pi pi-fw pi-clone',
                         items: [
                             { label: 'Facturar', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/ventas'] },
-                            { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                             { label: 'Cambios', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/pages/cambios'] },
+                            { label: 'Devoluciones', icon: 'pi pi-fw pi-arrow-down', routerLink: ['/pages/devoluciones'] },
+                            { label: 'Garantías', icon: 'pi pi-fw pi-times-circle', routerLink: ['/pages/garantias'] },
                            
                         ]
                     },
+                    { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                 ]
             },
             {
@@ -161,10 +165,10 @@ export class AppMenuComponent implements OnInit {
                         label: 'P.D.V', icon: 'pi pi-fw pi-clone',
                         items: [
                             { label: 'Facturar', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/ventas'] },
-                            { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                            
                         ]
                     },
+                    { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                 ]
             },
         ];
@@ -205,11 +209,12 @@ export class AppMenuComponent implements OnInit {
                         label: 'P.D.V', icon: 'pi pi-fw pi-clone',
                         items: [
                             { label: 'Facturar', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/ventas'] },
-                            { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                             { label: 'Cambios', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/pages/cambios'] },
-                           
+                            { label: 'Devoluciones', icon: 'pi pi-fw pi-arrow-down', routerLink: ['/pages/devoluciones'] },
+                            { label: 'Garantías', icon: 'pi pi-fw pi-times-circle', routerLink: ['/pages/garantias'] },
                         ]
                     },
+                    { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                 ]
             },
         ];

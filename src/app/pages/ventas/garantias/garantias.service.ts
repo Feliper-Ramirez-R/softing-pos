@@ -6,21 +6,21 @@ import { rutas } from 'src/env/rutas';
 @Injectable({
   providedIn: 'root'
 })
-export class RecepcionService {
+export class GarantiasService {
 
-  prefix:string = 'inventories'
+  prefix:string = 'inventories/'
 
   constructor(private user: AuthService, private http: HttpClient) { }
 
 
-  async getProductos() {
+  async enviarGarantia(dataPost:any) {
 
     return new Promise(resolve => {
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + this.user.token,
       });
 
-      this.http.get(rutas.ruta + this.prefix+'/getProducts', { headers }).subscribe({
+      this.http.post(rutas.ruta + this.prefix+'warranties' ,dataPost, { headers }).subscribe({
         next: (answer: any) => {
           resolve(answer);
         },
@@ -32,14 +32,14 @@ export class RecepcionService {
     });
   }
 
-  async ingresarInventario(dataPost:any) {
+  async devolverGarantia(dataPost:any) {
 
     return new Promise(resolve => {
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + this.user.token,
       });
 
-      this.http.post(rutas.ruta + this.prefix+'/receptionInventory',dataPost, { headers }).subscribe({
+      this.http.post(rutas.ruta + this.prefix+'warrantiesOut' ,dataPost, { headers }).subscribe({
         next: (answer: any) => {
           resolve(answer);
         },
@@ -51,15 +51,14 @@ export class RecepcionService {
     });
   }
 
-
-  async enviarArchivo(dataPost:any) {
+  async getGarantias(dataPost:any) {
 
     return new Promise(resolve => {
       const headers = new HttpHeaders({
         Authorization: 'Bearer ' + this.user.token,
       });
 
-      this.http.post(rutas.ruta + this.prefix+'/uploadFileFisrtOne',dataPost, { headers }).subscribe({
+      this.http.post(rutas.ruta + this.prefix+'getWarranties',dataPost, { headers }).subscribe({
         next: (answer: any) => {
           resolve(answer);
         },

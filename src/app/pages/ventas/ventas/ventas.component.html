@@ -7,7 +7,7 @@
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (keydown.enter)="leerProducto()"
-                                placeholder="Ingresa codigo..." autofocus [(ngModel)]="item.codigo"
+                                placeholder="Ingresa código..." autofocus [(ngModel)]="item.codigo"
                                 class="w-full sm:w-auto" />
                         </span>
                     </div>
@@ -69,7 +69,7 @@
         <div class="card widget-support-request">
             <div class="grid grid-nogutter">
                 <div class="col-6 title">
-                    <h5>A E Importaciones</h5>
+                    <h5>AE Importaciones</h5>
                 </div>
                 <div class="col-6 support-info">
                     <p>📅 {{fecha}} <br>
@@ -85,7 +85,7 @@
                                 <p>Descripción</p>
                             </div>
                             <div class="col-3 checkbox">
-                               <span class="ml-5"> Cantidad</span>
+                                <span class="ml-5"> Cantidad</span>
                             </div>
                             <div class="col-3 checkbox-row-info">
                                 <span class="mr-5">Precio</span>
@@ -100,7 +100,7 @@
                                 <p>{{produc.product_name}}</p>
                             </div>
                             <div class="col-2 checkbox">
-                                <span >1</span>
+                                <span>1</span>
                             </div>
                             <div class="col-3 checkbox-row-info">
                                 <span class="time">${{produc.price | number}}</span>
@@ -111,7 +111,8 @@
             </div>
             <div class="resolution-button-bar">
                 <button type="button" (click)="openFacturar()" label="Facturar" icon="pi pi-star" pButton></button>
-                <button type="button" label="${{total | number}}" pButton class="p-button-secondary p-button-text"></button>
+                <button type="button" label="${{total | number}}" pButton
+                    class="p-button-secondary p-button-text"></button>
             </div>
         </div>
     </div>
@@ -119,97 +120,110 @@
 
 
 
-<p-dialog [(visible)]="facturarDialog" [style]="{ width: '450px' }"
-            header="Valor a pagar $ {{total | number}}" [modal]="true" class="p-fluid">
-            <ng-template pTemplate="content">
+<p-dialog [(visible)]="facturarDialog" [style]="{ width: '450px' }" header="Valor a pagar $ {{total | number}}"
+    [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
 
 
-                <p-fieldset styleClass="mb-5">
-                    <ng-template pTemplate="header">
-                        <div class="flex align-items-center text-primary">
-                            <span class="pi pi-user mr-2"></span>
-                            <span class="font-bold text-lg">Datos del cliente</span>
-                        </div>
-                    </ng-template>
-                    <div class="p-fluid p-formgrid grid">
-
-                        <div class="field col-12 ">
-                            <label>Nombre</label>
-                            <input type="text" pInputText [(ngModel)]="item.nombre_cliente">
-                        </div>
-                        <div  class="field col-12 ">
-                            <label>Cédula</label>
-                            <input type="number" pInputText [(ngModel)]="item.cedula_cliente">
-                        </div>
-                        <div  class="field col-12 ">
-                            <label>Teléfono</label>
-                            <input type="number" pInputText [(ngModel)]="item.telefono_cliente">
-                        </div>
-    
-                    </div>
-                </p-fieldset>
-
-                <p-fieldset styleClass="mb-5">
-                    <ng-template pTemplate="header">
-                        <div class="flex align-items-center text-primary">
-                            <span class="pi pi-dollar mr-2"></span>
-                            <span class="font-bold text-lg">Datos del pago</span>
-                        </div>
-                    </ng-template>
-                    <div class="p-fluid p-formgrid grid">
-
-                        <div class="field col-12 md:col-12">
-                            <label>Método de pago</label>
-                            <p-dropdown [options]="metodos_pago" [(ngModel)]="metodo_pago" optionLabel="name" appendTo="body"
-                                placeholder="Seleccione" emptyMessage="No hay resultados"
-                                [ngClass]="{ 'ng-invalid ng-dirty': submitted && !metodo_pago.id }">
-                            
-                                <ng-template let-metodo pTemplate="item">
-                                    <span>{{ metodo.name }}</span>
-                                </ng-template>
-                            </p-dropdown>
-                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !metodo_pago.id">Selecciona el metodo de pago.</small>
-                        </div>
-
-                        <div [ngClass]="{'hidden':metodo_pago.name !='Crédito'}" class="field col-12 md:col-12">
-                            <label>Empresa credito</label>
-                            <p-dropdown [options]="empresas_credito" [(ngModel)]="item.empresa_credito" optionLabel="name" appendTo="body"
-                                placeholder="Seleccione" emptyMessage="No hay resultados"
-                                [ngClass]="{'ng-invalid ng-dirty': submitted && !item.empresa_credito }">
-                            
-                                <ng-template let-metodo pTemplate="item">
-                                    <span>{{ metodo.name }}</span>
-                                </ng-template>
-                            </p-dropdown>
-                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.empresa_credito">Campo requerido.</small>
-                        </div>
-    
-                        <div *ngIf="metodo_pago.id == 1" class="field col-6 ">
-                            <label>Efectivo</label>
-                            <p-inputNumber prefix="$" [(ngModel)]="efectivo"(keydown.enter)="operacionDevuelta()"> </p-inputNumber>
-                        </div>
-    
-                        <div *ngIf="metodo_pago.id == 1" class="field col-6 ">
-                            <label >Cambio</label>
-                            <p-inputNumber prefix="$"  [(ngModel)]="cambio" [readonly]="true"> </p-inputNumber>
-                        </div>
-    
-                        <div class="field col-12 md:col-6">
-                            <label>Desea imprimir factura?</label>
-                            <p-selectButton [options]="stateOptions" [(ngModel)]="value_impri_fac" optionLabel="label" [ngClass]="{ 'ng-invalid ng-dirty': submitted && !value_impri_fac }" optionValue="value"></p-selectButton>
-                            <small class="ng-dirty ng-invalid" *ngIf="submitted && !value_impri_fac">Selecciona una opción.</small>
-                        </div>
-                    </div>
-                </p-fieldset>
-
-               
-            
+        <p-fieldset styleClass="mb-5">
+            <ng-template pTemplate="header">
+                <div class="flex align-items-center text-primary">
+                    <span class="pi pi-user mr-2"></span>
+                    <span class="font-bold text-lg">Datos del cliente</span>
+                </div>
             </ng-template>
+            <div class="p-fluid p-formgrid grid">
 
-            <ng-template pTemplate="footer">
-                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
-                    (click)="facturarDialog = false"></button>
-                <button pButton pRipple label="Facturar" icon="pi pi-check"
-                    class="p-button-text" (click)="enviarFactura()"></button>
+                <div class="field col-12 ">
+                    <label>Nombre</label>
+                    <input type="text" pInputText [(ngModel)]="item.nombre_cliente">
+                </div>
+                <div class="field col-12 ">
+                    <label>Cédula</label>
+                    <input type="number" pInputText [(ngModel)]="item.cedula_cliente">
+                </div>
+                <div class="field col-12 ">
+                    <label>Teléfono</label>
+                    <input type="number" pInputText [(ngModel)]="item.telefono_cliente">
+                </div>
+
+            </div>
+        </p-fieldset>
+
+        <p-fieldset styleClass="mb-5">
+            <ng-template pTemplate="header">
+                <div class="flex align-items-center text-primary">
+                    <span class="pi pi-dollar mr-2"></span>
+                    <span class="font-bold text-lg">Datos del pago</span>
+                </div>
             </ng-template>
-        </p-dialog>
+            <div class="p-fluid p-formgrid grid">
+
+                <div class="field col-12 md:col-12">
+                    <label>Método de pago</label>
+                    <p-dropdown [options]="metodos_pago" [(ngModel)]="metodo_pago" optionLabel="name" appendTo="body"
+                        placeholder="Seleccione" emptyMessage="No hay resultados"
+                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !metodo_pago.id }">
+
+                        <ng-template let-metodo pTemplate="item">
+                            <span>{{ metodo.name }}</span>
+                        </ng-template>
+                    </p-dropdown>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !metodo_pago.id">Selecciona el metodo de
+                        pago.</small>
+                </div>
+
+                <div [ngClass]="{'hidden':metodo_pago.name !='Crédito'}" class="field col-12 md:col-12">
+                    <label>Empresa crédito</label>
+                    <p-dropdown [options]="empresas_credito" [(ngModel)]="item.empresa_credito" optionLabel="name"
+                        appendTo="body" placeholder="Seleccione" emptyMessage="No hay resultados"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && !item.empresa_credito }">
+
+                        <ng-template let-metodo pTemplate="item">
+                            <span>{{ metodo.name }}</span>
+                        </ng-template>
+                    </p-dropdown>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.empresa_credito">Campo
+                        requerido.</small>
+                </div>
+
+                <div [ngClass]="{'hidden':metodo_pago.name !='Saldo a favor'}" class="field col-12 md:col-12">
+                    <label>Numero de bono</label>
+                    <input type="number" pInputText [(ngModel)]="item.numero_bono" required
+                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.numero_bono}" />
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.numero_bono">Campo requerido.</small>
+                </div>
+
+                <div *ngIf="metodo_pago.id == 1" class="field col-6 ">
+                    <label>Efectivo</label>
+                    <p-inputNumber prefix="$" [(ngModel)]="efectivo" (keydown.enter)="operacionDevuelta()">
+                    </p-inputNumber>
+                </div>
+
+                <div *ngIf="metodo_pago.id == 1" class="field col-6 ">
+                    <label>Cambio</label>
+                    <p-inputNumber prefix="$" [(ngModel)]="cambio" [readonly]="true"> </p-inputNumber>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Desea imprimir factura?</label>
+                    <p-selectButton [options]="stateOptions" [(ngModel)]="value_impri_fac" optionLabel="label"
+                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !value_impri_fac }"
+                        optionValue="value"></p-selectButton>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !value_impri_fac">Selecciona una
+                        opción.</small>
+                </div>
+            </div>
+        </p-fieldset>
+
+
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+            (click)="facturarDialog = false"></button>
+        <button pButton pRipple label="Facturar" icon="pi pi-check" class="p-button-text"
+            (click)="enviarFactura()"></button>
+    </ng-template>
+</p-dialog>

@@ -54,8 +54,8 @@ export class HistoricoVentasComponent {
 
     this.num_fac = '';
 
-    let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
-    let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0];
+    let fecha1 =this.rangeDates[0].toISOString().split('T')[0];
+    let fecha2 =this.rangeDates[1].toISOString().split('T')[0];
 
     let dataPost = {
       date_from: fecha1,

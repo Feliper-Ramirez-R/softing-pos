@@ -37,8 +37,8 @@ export class VentasComponent {
   contadorId: number = 1;
   facturarDialog: boolean = false;
   submitted: boolean = false;
-  efectivo: any | undefined
-  cambio: any | undefined
+  efectivo: any = 0;
+  cambio: any = 0;
 
   constructor(private ventasService: VentasService,
     private user: AuthService,
@@ -83,9 +83,9 @@ export class VentasComponent {
 
     this.confirmationService.confirm({
       target: event.target!,
-      message: 'Desea eliminar este item?',
+      message: 'Desea eliminar este ítem?',
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'si',
+      acceptLabel: 'Si',
 
       accept: () => {
         this.eliminar(producto);
@@ -148,7 +148,11 @@ export class VentasComponent {
 
     this.submitted = true;
 
-    if (!this.metodo_pago.id || !this.value_impri_fac || this.metodo_pago.name == 'Crédito' && !this.item.empresa_credito ) { return }
+    if (!this.metodo_pago.id || 
+      !this.value_impri_fac ||
+       this.metodo_pago.name == 'Crédito' && !this.item.empresa_credito ||
+       this.metodo_pago.name == 'Saldo a favor' && !this.item.numero_bono 
+       ) { return }
 
     let dataPost = {
       total: this.total,
@@ -160,7 +164,8 @@ export class VentasComponent {
       customer_dni: String(this.item.cedula_cliente),
       customer_phone: String(this.item.telefono_cliente),
       change: this.cambio,
-      cash: this.efectivo
+      cash: this.efectivo,
+      bonus_id:this.item.numero_bono
     }
 
     console.log(dataPost);
@@ -170,11 +175,12 @@ export class VentasComponent {
     console.log(valid);
 
     if (!valid.error) {
-      if (this.value_impri_fac == 'on') { await this.pdf() }
+      
       if (valid.status == 201) {
+        if (this.value_impri_fac == 'on') { await this.pdf() }
         this.datosDB = [];
         this.facturarDialog = false;
-        this.messageService.add({ severity: 'success', summary: 'success!', detail: valid.message, life: 5000 });
+        this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
@@ -200,7 +206,7 @@ export class VentasComponent {
 
      pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
 
-    pdf.pageMargins([15, 20, 5, 5]);
+    pdf.pageMargins([15, 15, 15, 0]);
     pdf.pageSize({
       width: 220,
       height: 550,
@@ -208,13 +214,13 @@ export class VentasComponent {
 
     pdf.add(pdf.ln(1));
     pdf.add(
-      new Txt(["A Y E IMPORTACIONES"]).alignment("center").fontSize(8).end
+      new Txt(["AE IMPORTACIONES"]).alignment("center").fontSize(8).end
     );
     pdf.add(
-      new Txt(["Nit: ", "900435377-3"]).alignment("center").fontSize(8).end
+      new Txt(["Nit: ", "43550632-0"]).alignment("center").fontSize(8).end
     );
     pdf.add(
-      new Txt(["Tel: ", "3115628545"]).alignment("center").fontSize(8).end
+      new Txt(["No responsable de IVA"]).alignment("center").fontSize(8).end
     );
     pdf.add(
       new Txt(["Fecha elaboración: ", this.fecha])
@@ -247,10 +253,10 @@ export class VentasComponent {
     });
 
     pdf.add(
-      new Txt(["Efectivo: ", this.formatearMoneda("es-CO", "COP", 0, this.efectivo)]).alignment("right").fontSize(8).margin([0, 5, 20, 5]).end
+      new Txt(["Efectivo: ", this.formatearMoneda("es-CO", "COP", 0, this.efectivo | 0)]).alignment("right").fontSize(8).margin([0, 5, 20, 5]).end
     );
     pdf.add(
-      new Txt(["Cambio: ", this.formatearMoneda("es-CO", "COP", 0, this.cambio)]).alignment("right").fontSize(8).margin([0, 0, 20, 5]).end
+      new Txt(["Cambio: ", this.formatearMoneda("es-CO", "COP", 0, this.cambio | 0)]).alignment("right").fontSize(8).margin([0, 0, 20, 5]).end
     );
 
     pdf.add({
@@ -279,23 +285,23 @@ export class VentasComponent {
     pdf.add(
       new Columns(["Items:", this.datosDB.length])
         .fontSize(8)
+        .margin([0, 3, 0, 3])
         .end
     );
     pdf.add(
       new Columns(["Fecha Facturación:", new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" })])
         .fontSize(8)
-        .margin([0, 3, 0, 3])
         .end
     );
     pdf.add(
       new Columns(["Hora Facturación:", this.hora])
         .fontSize(8)
+        .margin([0, 3, 0, 3])
         .end
     );
 
     pdf.add(
       new Columns(["Facturó:", this.user.user.name])
-        .margin([0, 3, 0, 3])
         .fontSize(8)
         .end
     );
@@ -310,7 +316,7 @@ export class VentasComponent {
     pdf.add(pdf.ln(1));
 
     pdf.add(
-      new Txt(["Softing-post creado por Softing-dev"]).alignment("left").fontSize(8).margin([0, 0, 0, 5]).end
+      new Txt(["Softing-pos creado por Softing-dev"]).alignment("left").fontSize(8).margin([0, 0, 0, 5]).end
     );
     pdf.add(pdf.ln(1));
     pdf.add(await new Img('assets/images/logo.png').fit([30, 30]).alignment("center").build());

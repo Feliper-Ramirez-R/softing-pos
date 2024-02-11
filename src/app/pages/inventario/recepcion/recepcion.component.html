@@ -4,6 +4,12 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
+                        <input style="display: none;" type="file" (change)="ingresarInventarioExcel($event)" #selectFile
+                        accept=".xlsx, .xls, .csv">
+                    <p-button *ngIf="user.user.role_id == 1" (click)="selectFile.click()"  styleClass="p-button-outlined">
+                        <img alt="logo" src="assets/images/excel.jpg" style="width: 3.5rem" />
+                    </p-button>
+                       
                         <!--  <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary mr-2"
                             (click)="openNew()"></button> -->
                         <!-- <button pButton pRipple label=" Borrar" icon="pi pi-trash" class="p-button-danger"
@@ -85,7 +91,7 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="imprimirDialog" header="Imprimir códigos" [modal]="true" [style]="{width:'450px'}">
+<!-- <p-dialog [(visible)]="imprimirDialog" header="Imprimir códigos" [modal]="true" [style]="{width:'450px'}">
     <div class="flex align-items-center justify-content-center">
         <div class="p-fluid p-formgrid grid">
             <div class="field col-12">
@@ -103,7 +109,7 @@
         <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Imprimir"
             (click)="generarPdfEtiquetas()"></button>
     </ng-template>
-</p-dialog>
+</p-dialog> -->
 
 
 <p-dialog [(visible)]="inventarioDialog" header="Ingresar inventario" [modal]="true" [style]="{width:'450px'}">
@@ -142,6 +148,24 @@
             (click)="inventarioDialog = false"></button>
         <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Ingresar"
             (click)="ingresarInventario()"></button>
+    </ng-template>
+</p-dialog>
+
+
+<p-dialog [(visible)]="vista_previa_archivo" header="{{ nombre_archivo_plano}}" [modal]="true"
+    [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+
+        <span>Desea adjuntar el archivo <b style="font-size: larger;color:#2196f3;">"{{
+                nombre_archivo_plano}}"</b> con <b style="font-size: larger;color:#2196f3;">({{
+                    datosExcel.length-1}})</b> registros?</span>
+
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancelar"
+            (click)="vista_previa_archivo = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Si, adjuntar"
+            (click)="enviarArchivo()"></button>
     </ng-template>
 </p-dialog>
 

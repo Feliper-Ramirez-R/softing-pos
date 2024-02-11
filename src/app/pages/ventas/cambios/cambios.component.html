@@ -4,12 +4,8 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button *ngIf="user.user.role_id != 2" pButton pRipple label="Cambio" icon="pi pi-plus"
+                        <button *ngIf="user.user.role_id != 2" pButton pRipple label="Nuevo" icon="pi pi-plus"
                             class="p-button-primary mr-2" (click)="abrirModal()"></button>
-                        <button *ngIf="user.user.role_id != 2" pButton pRipple label="Devolución"
-                            icon="pi pi-money-bill" class="p-button-primary mr-2" (click)="bonoModal()"></button>
-                        <button *ngIf="user.user.role_id != 2" pButton pRipple label="Garantía"
-                            icon="pi pi-times-circle" class="p-button-primary mr-2" (click)="garantiaModal()"></button>
                         <!-- <button pButton pRipple label=" Borrar" icon="pi pi-trash" class="p-button-danger"
                             (click)="alertSelectedItems()"
                             [disabled]="!selectedItems || !selectedItems.length"></button> -->
@@ -17,8 +13,12 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary"
-                        (click)="getCambios()"></button>
+                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"[showButtonBar]="true"
+                            placeholder="Selecciona un rango" [readonlyInput]="true" appendTo="body"(onClearClick)="getCambios()"
+                            (onClose)="getCambios()">
+                        </p-calendar>
+                    <!-- <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary"
+                        (click)="getCambios()"></button> -->
                 </ng-template>
             </p-toolbar>
 
@@ -45,6 +45,7 @@
                         <th>Producto entrada</th>
                         <th>Código salida</th>
                         <th>Producto salida</th>
+                        <th>Fecha</th>
                         <th>Factura</th>
                         <th>Almacén</th>
                         <th>Usuario</th>
@@ -53,13 +54,14 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-item>
                     <tr>
-                        <td style="min-width: 10rem;">{{item.code_in}}</td>
-                        <td style="min-width: 10rem;">{{item.code_out}}</td>
-                        <td style="min-width: 10rem;">{{item.product_name_in}}</td>
-                        <td style="min-width: 10rem;">{{item.product_name_out}}</td>
-                        <td style="min-width: 10rem;">{{item.billNumber}}</td>
-                        <td style="min-width: 10rem;">{{item.store_name}}</td>
-                        <td style="min-width: 10rem;">{{item.byUser_name}}</td>
+                        <td>{{item.code_in}}</td>
+                        <td>{{item.product_name_in}}</td>
+                        <td>{{item.code_out}}</td>
+                        <td>{{item.product_name_out}}</td>
+                        <td>{{item.created_at | date: 'dd MMM yyyy'}}</td>
+                        <td>{{item.billNumber}}</td>
+                        <td>{{item.store_name}}</td>
+                        <td>{{item.byUser_name}}</td>
                         <!-- <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil" pTooltip="Actualizar" tooltipPosition="top"
@@ -123,74 +125,3 @@
     </ng-template>
 </p-dialog>
 
-
-<p-dialog [(visible)]="bono_dialog" [style]="{ width: '450px' }" header="Devolución" [modal]="true" class="p-fluid">
-    <ng-template pTemplate="content">
-
-        <div class="p-fluid p-formgrid grid">
-
-            
-                <div class="field col-12 ">
-                    <label>N° factura</label>
-                    <input type="text" pInputText [(ngModel)]="devolucion.factura"
-                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !devolucion.factura }">
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !devolucion.factura">El campo es
-                        obligatorio.</small>
-                </div>
-                <div class="field col-12 ">
-                    <label>Código entrada</label>
-                    <input type="text" pInputText [(ngModel)]="devolucion.codigo_entrada"
-                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !devolucion.codigo_entrada }">
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !devolucion.codigo_entrada">El campo es
-                        obligatorio.</small>
-                </div>
-                <div class="field col-12 ">
-                    <label>Monto dinero</label>
-                    <p-inputNumber prefix="$" [(ngModel)]="devolucion.bono"
-                        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !devolucion.bono }"></p-inputNumber>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !devolucion.bono">El campo es
-                        obligatorio.</small>
-                </div>
-        </div>
-
-    </ng-template>
-
-    <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
-            (click)="bono_dialog = false"></button>
-        <button pButton pRipple label="Imprimir" icon="pi pi-check" class="p-button-text"
-            (click)="imprimirBono()"></button>
-    </ng-template>
-</p-dialog>
-
-
-<p-dialog [(visible)]="garantia_dialog" [style]="{ width: '450px' }" header="Garantia" [modal]="true" class="p-fluid">
-    <ng-template pTemplate="content">
-
-        <div class="p-fluid p-formgrid grid">
-
-            <div class="field col-12 ">
-                <label>Código entrada</label>
-                <input type="text" pInputText [(ngModel)]="garantia.codigo_entrada"
-                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && !garantia.codigo_entrada }">
-                <small class="ng-dirty ng-invalid" *ngIf="submitted && !garantia.codigo_entrada">El campo es
-                    obligatorio.</small>
-            </div>
-            <div class="field col-12 ">
-                <label>N° factura</label>
-                <input type="text" pInputText [(ngModel)]="garantia.factura"
-                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && !garantia.factura }">
-                <small class="ng-dirty ng-invalid" *ngIf="submitted && !garantia.factura">El campo es
-                    obligatorio.</small>
-            </div>
-        </div>
-
-    </ng-template>
-
-    <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
-            (click)="garantia_dialog = false"></button>
-        <button pButton pRipple label="Imprimir" icon="pi pi-check" class="p-button-text"
-            (click)="enviarGarantia()"></button>
-    </ng-template>
-</p-dialog>
