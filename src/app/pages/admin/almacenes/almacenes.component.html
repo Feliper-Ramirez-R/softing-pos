@@ -89,7 +89,7 @@
                     <div class="field col-12 md:col-12">
                         <label>Administrador</label>
                         <p-dropdown [options]="admins" [(ngModel)]="admin" optionLabel="name" appendTo="body"
-                            placeholder="Seleccione" emptyMessage="No hay resultados"
+                            placeholder="Seleccione" emptyMessage="No hay resultados"[showClear]="true"
                             [ngClass]="{ 'ng-invalid ng-dirty': submitted && !admin.id }">
                             <ng-template pTemplate="selectedItem">
                                 <span *ngIf="admin">{{ admin.name }}</span>

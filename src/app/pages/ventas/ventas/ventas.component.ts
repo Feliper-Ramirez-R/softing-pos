@@ -177,10 +177,10 @@ export class VentasComponent {
     if (!valid.error) {
       
       if (valid.status == 201) {
-        if (this.value_impri_fac == 'on') { await this.pdf() }
-        this.datosDB = [];
         this.facturarDialog = false;
         this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
+        if (this.value_impri_fac == 'on') { await this.pdf() }
+          this.datosDB = [];
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
@@ -191,25 +191,16 @@ export class VentasComponent {
 
   async pdf() {
 
-
     PdfMakeWrapper.setFonts(pdfFonts);
 
     const pdf = new PdfMakeWrapper();
 
-    /*  pdf.add(
-       new Table([
-         [
-           await new Img('assets/images/logo.png').width(90).height(90).build(),
-         ],
-       ]).alignment("center").end
-     ); */
-
-     pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
+      pdf.add(await new Img('assets/images/logoAE2.jpg').fit([100, 100]).alignment("center").build());
 
     pdf.pageMargins([15, 15, 15, 0]);
     pdf.pageSize({
       width: 220,
-      height: 550,
+      height: 950,
     });
 
     pdf.add(pdf.ln(1));
@@ -244,7 +235,7 @@ export class VentasComponent {
       new Txt(["Total a pagar: ", this.formatearMoneda("es-CO", "COP", 0, this.total)]).alignment("right").fontSize(8).margin([0, 5, 20, 5]).end
     );
     pdf.add(
-      new Txt(["Forma de pago: ", this.metodo_pago.name]).alignment("right").fontSize(8).margin([0, 0, 20, 5]).end
+      new Txt(["Método de pago: ", this.metodo_pago.name]).alignment("right").fontSize(8).margin([0, 0, 20, 5]).end
     );
 
     pdf.add(pdf.ln(1));
@@ -319,7 +310,7 @@ export class VentasComponent {
       new Txt(["Softing-pos creado por Softing-dev"]).alignment("left").fontSize(8).margin([0, 0, 0, 5]).end
     );
     pdf.add(pdf.ln(1));
-    pdf.add(await new Img('assets/images/logo.png').fit([30, 30]).alignment("center").build());
+    // pdf.add(await new Img('assets/images/logo.png').fit([30, 30]).alignment("center").build());
 
     pdf.create().open();
 

@@ -141,7 +141,7 @@ export class HistoricoVentasComponent {
        ]).alignment("center").end
      ); */
 
-     pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
+     pdf.add(await new Img('assets/images/logoAE2.jpg').fit([100, 100]).alignment("center").build());
 
     pdf.pageMargins([15, 20, 5, 5]);
     pdf.pageSize({

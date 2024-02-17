@@ -61,7 +61,8 @@ export class DevolucionesComponent {
 
     let dataPost = {
       date_from: fecha1,
-      date_to: fecha2
+      date_to: fecha2,
+      store_id:this.user.user.store_id
     }
     console.log(dataPost);
 

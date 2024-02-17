@@ -107,6 +107,7 @@ export class AjustesComponent {
      
       if (valid.status == 201) {
          this.ajustar_dialog = false;
+         this.getAjustes();
          this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {

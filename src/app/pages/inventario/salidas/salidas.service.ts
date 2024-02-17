@@ -58,7 +58,7 @@ export class SalidasService {
         Authorization: 'Bearer ' + this.user.token,
       });
 
-      this.http.post(rutas.ruta + this.prefix+'/getInsRange' , dataPost, { headers }).subscribe({
+      this.http.post(rutas.ruta + this.prefix+'/getOutsRange' , dataPost, { headers }).subscribe({
         next: (answer: any) => {
           resolve(answer);
         },
