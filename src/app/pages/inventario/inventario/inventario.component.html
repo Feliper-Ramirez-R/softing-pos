@@ -26,7 +26,7 @@
 
 
             <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
-                [globalFilterFields]="['code','product_name','description','stock']" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['code','product_name','description','size_id','color_name','stock']" [rows]="10" [paginator]="true"
                 [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
                 [rowHover]="true" dataKey="id">
@@ -48,8 +48,8 @@
                         <th pSortableColumn="code">Código <p-sortIcon field="code"></p-sortIcon></th>
                         <th pSortableColumn="product_name">Nombre <p-sortIcon field="product_name"></p-sortIcon></th>
                         <th pSortableColumn="description">Descripción <p-sortIcon field="description"></p-sortIcon></th>
-                        <th pSortableColumn="description">Talla <p-sortIcon field="description"></p-sortIcon></th>
-                        <th pSortableColumn="description">Color <p-sortIcon field="description"></p-sortIcon></th>
+                        <th pSortableColumn="size_id">Talla <p-sortIcon field="size_id"></p-sortIcon></th>
+                        <th pSortableColumn="color_name">Color <p-sortIcon field="color_name"></p-sortIcon></th>
                         <th pSortableColumn="stock">Cantidad <p-sortIcon field="stock"></p-sortIcon></th>
                         <th></th>
                     </tr>
@@ -62,8 +62,8 @@
                         <td>{{item.code }}</td>
                         <td>{{item.product_name | titlecase}}</td>
                         <td>{{item.description }}</td>
-                        <td>{{item.talla }}</td>
-                        <td>{{item.color }}</td>
+                        <td>{{item.size_id }}</td>
+                        <td>{{item.color_name }}</td>
                         <td>{{item.stock }}</td>
                         <!-- <td>
                             <div class="flex">
