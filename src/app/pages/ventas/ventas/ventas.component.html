@@ -1,6 +1,7 @@
 <div class="grid">
     <div class="col-12">
         <div class="card px-6 py-6">
+            <h5>Punto de venta</h5>
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
@@ -14,6 +15,7 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
+                    
                     <!--  <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
                             placeholder="Selecciona un rango" [readonlyInput]="true"[showButtonBar]="true"
                             (onClose)="getEntradasRango()">
@@ -69,12 +71,12 @@
         <div class="card widget-support-request">
             <div class="grid grid-nogutter">
                 <div class="col-6 title">
-                    <h5>AE Importaciones</h5>
+                    <h5>{{user.user.store_name}}</h5>
                 </div>
                 <div class="col-6 support-info">
                     <p>📅 {{fecha}} <br>
                         ⏰ {{hora}}</p>
-                    <span class="highlighted">Factura N° {{facNumero | number: '3.0-0'}}</span>
+                    <span class="highlighted">Recibo N° {{facNumero | number: '3.0-0'}}</span>
                 </div>
             </div>
             <div class="card widget-tasks">

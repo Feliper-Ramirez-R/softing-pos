@@ -138,25 +138,26 @@ export class ProductosComponent {
    ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
 
    if(this.item.price_min > this.item.price){this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'El precio mínimo no puede ser mayor al precio de venta', life: 5000 }); return}
+console.log(this.categoria);
 
-    let dataPost = {
+let dataPost = {
 
-      name:this.item.name ,
-      code: "",
-      description:this.item.description ,
-      cost:this.item.cost ,
-      price:this.item.price ,
-      brand_id:this.marca.brand_id ,
-      model_id: this.modelo.model_id,
-      color_id:this.color. color_id,
-      size_id:this.item.size_name ,
-      category_id:this.categoria.category_id ,
-      provider_id:this.proveedor.provider_id ,
-      unit_measurement_id:this.unidad_medida.unit_measurement_id,
-      url_file: "",
-      enabled: true,
-      price_min:this.item.price_min
-    }
+  name:this.item.name ,
+  code: "",
+  description:this.item.description ,
+  cost:this.item.cost ,
+  price:this.item.price ,
+  brand_id:this.marca.id ,
+  model_id: this.modelo.id,
+  color_id:this.color.id,
+  size_id:this.item.size_name,
+  category_id:this.categoria.id ,
+  provider_id:this.proveedor.id ,
+  unit_measurement_id:this.unidad_medida.id,
+  url_file: "",
+  enabled: true,
+  price_min:this.item.price_min
+}
     console.log(dataPost)
     const valid: any = await this.productService.editItem(dataPost, this.item.id);
     console.log(valid);

@@ -198,7 +198,7 @@ export class GarantiasComponent {
 
 
     pdf.add(
-      new Columns(["Código:", this.garantia.codigo_entrada])
+      new Columns(["Código:", this.garantia.codigo_entrada.toLowerCase()])
         .fontSize(8)
         .margin([0, 3, 0, 3])
         .end

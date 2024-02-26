@@ -96,13 +96,13 @@ export class AlmacenesComponent {
     async editItem() {
       this.submitted = true;
   
-      if (!this.item.name || !this.item.code || !this.admin.id ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
+      if (!this.item.name || !this.item.code ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
   
       let dataPost = {
   
         name: this.item.name,
         code: this.item.code,
-        admin_id: this.admin.id,
+        admin_id: this.admin ?  this.admin.id : null,
         enabled:this.value == 'off'?false:true
       }
       console.log(dataPost)
@@ -128,13 +128,13 @@ export class AlmacenesComponent {
     
       this.submitted = true;
   
-      if (!this.item.name || !this.item.code || !this.admin.id ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
+      if (!this.item.name || !this.item.code ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos', life: 5000 }); return }
   
       let dataPost = {
   
         name: this.item.name,
         code: this.item.code,
-        admin_id: this.admin.id,
+        admin_id: this.admin ?  this.admin.id : null,
         enabled: true
       }
       console.log(dataPost);

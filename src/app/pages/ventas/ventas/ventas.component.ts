@@ -41,7 +41,7 @@ export class VentasComponent {
   cambio: any = 0;
 
   constructor(private ventasService: VentasService,
-    private user: AuthService,
+    protected user: AuthService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private calendarService: CalendarService
@@ -195,13 +195,21 @@ export class VentasComponent {
 
     const pdf = new PdfMakeWrapper();
 
-      pdf.add(await new Img('assets/images/logoAE2.jpg').fit([100, 100]).alignment("center").build());
+      // pdf.add(await new Img('assets/images/logoAE2.jpg').fit([100, 100]).alignment("center").build());
 
     pdf.pageMargins([15, 15, 15, 0]);
     pdf.pageSize({
       width: 220,
       height: 950,
     });
+
+    pdf.add(pdf.ln(1));
+
+    pdf.add(
+      new Txt(this.user.user.store_name)
+        .alignment("center")
+        .fontSize(10).end
+    );
 
     pdf.add(pdf.ln(1));
     pdf.add(
@@ -220,7 +228,7 @@ export class VentasComponent {
     );
     pdf.add(pdf.ln(1));
     pdf.add(
-      new Txt("Factura venta N°: " + this.facNumero?.toString().padStart(4, '0'))
+      new Txt("Recibo N°: " + this.facNumero?.toString().padStart(4, '0'))
         .alignment("center")
         .fontSize(10).end
     );
@@ -280,19 +288,19 @@ export class VentasComponent {
         .end
     );
     pdf.add(
-      new Columns(["Fecha Facturación:", new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" })])
+      new Columns(["Fecha :", new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" })])
         .fontSize(8)
         .end
     );
     pdf.add(
-      new Columns(["Hora Facturación:", this.hora])
+      new Columns(["Hora:", this.hora])
         .fontSize(8)
         .margin([0, 3, 0, 3])
         .end
     );
 
     pdf.add(
-      new Columns(["Facturó:", this.user.user.name])
+      new Columns(["Vendedor:", this.user.user.name])
         .fontSize(8)
         .end
     );
@@ -301,7 +309,7 @@ export class VentasComponent {
     pdf.add(pdf.ln(1));
 
     pdf.add(
-      new Txt(["NO SE ACEPTAN RECLAMOS DESPUÉS DE 30 DIAS DE HABER REALIZADO SU COMPRA. SIN ESTA FACTURA NO SE ACEPTAN CAMBIOS NI GARANTÍAS GRACIAS."]).alignment("left").fontSize(8).end
+      new Txt(["NO SE ACEPTAN RECLAMOS DESPUÉS DE 30 DIAS DE HABER REALIZADO SU COMPRA. SIN ESTE RECIBO NO SE ACEPTAN CAMBIOS NI GARANTÍAS GRACIAS."]).alignment("left").fontSize(8).end
     );
 
     pdf.add(pdf.ln(1));
@@ -311,6 +319,12 @@ export class VentasComponent {
     );
     pdf.add(pdf.ln(1));
     // pdf.add(await new Img('assets/images/logo.png').fit([30, 30]).alignment("center").build());
+
+    pdf.add(
+      new Txt('No estoy obligado a facturar Art 1.6.1.4.3 del decreto 1625 del 2016.')
+        .alignment("center")
+        .fontSize(8).end
+    );
 
     pdf.create().open();
 
