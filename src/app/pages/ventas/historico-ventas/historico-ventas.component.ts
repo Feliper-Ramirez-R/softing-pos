@@ -173,7 +173,7 @@ export class HistoricoVentasComponent {
       new Txt(["Nit: ", "900435377-3"]).alignment("center").fontSize(8).end
     );
     pdf.add(
-      new Txt(["Tel: ", "3115628545"]).alignment("center").fontSize(8).end
+      new Txt(["No responsable de IVA"]).alignment("center").fontSize(8).end
     );
     pdf.add(
       new Txt(["Fecha elaboración: ", this.item.fecha])
