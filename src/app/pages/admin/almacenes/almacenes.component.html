@@ -89,8 +89,7 @@
                     <div class="field col-12 md:col-12">
                         <label>Administrador</label>
                         <p-dropdown [options]="admins" [(ngModel)]="admin" optionLabel="name" appendTo="body"
-                            placeholder="Seleccione" emptyMessage="No hay resultados"[showClear]="true"
-                            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !admin.id }">
+                            placeholder="Seleccione" emptyMessage="No hay resultados"[showClear]="true">
                             <ng-template pTemplate="selectedItem">
                                 <span *ngIf="admin">{{ admin.name }}</span>
                             </ng-template>
@@ -99,8 +98,7 @@
                                 <span>{{ perfile.name }}</span>
                             </ng-template>
                         </p-dropdown>
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !admin.id">El campo es
-                            requerido.</small>
+            
                     </div>
 
                     <div *ngIf="!crear" class="field col-6">

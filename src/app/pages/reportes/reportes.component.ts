@@ -111,49 +111,7 @@ async getAlmacenes() {
 
 
 
-
-
-
-
-
-// excel
-
-/* async exportAsXLSX(): Promise<void> {
-
-  if(this.excelData.length == 0){return}
-
- let data= this.excelData
-
-
- this.exportAsExcelFile(data, 'Reporte de '+this.item.reporte.name);
-}
-
-public exportAsExcelFile(json: any[], excelFileName: string): void {
-const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
-
-
-const workbook: XLSX.WorkBook = {
-  Sheets: { data: worksheet },
-  SheetNames: ['data'],
-};
-const excelBuffer: any = XLSX.write(workbook, {
-  bookType: 'xlsx',
-  type: 'array',
-});
-this.saveAsExcelFile(excelBuffer, excelFileName);
-}
-
-private saveAsExcelFile(buffer: any, fileName: string): void {
-  let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
-  let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0]
-const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
-FileSaver.saveAs(
-  data,
-  // fileName + '-' + new Date().toLocaleString("es-ES", { day: "2-digit", month: "long", year: "numeric" }) + EXCEL_EXTENSION
-  fileName +' de '+ fecha1+' a '+fecha2 + EXCEL_EXTENSION
-);
-} */
-
+// Excel
 
 
 exportToExcel() {
