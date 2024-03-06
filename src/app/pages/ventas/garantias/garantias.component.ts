@@ -170,19 +170,21 @@ export class GarantiasComponent {
     const pdf = new PdfMakeWrapper();
 
     pdf.add(
-      new Columns(["Comprobante: " + this.garantia.factura])
+      new Columns(["Comprobante de garantia: " + this.garantia.factura])
         .margin([0, 3, 0, 3])
-        .fontSize(8)
+        .fontSize(10)
         .end
     );
 
     pdf.add(pdf.ln(1));
 
+    pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
+
     pdf.add(
-      new Txt(this.user.user.store_name)
-        .alignment("center")
-        .fontSize(10).end
-    );
+     new Txt(this.user.user.store_name)
+       .alignment("center")
+       .fontSize(10).end
+   );
 
     pdf.add(pdf.ln(1));
 
@@ -196,7 +198,7 @@ export class GarantiasComponent {
     pdf.pageMargins([10, 15, 10, 5]);
     pdf.pageSize({
       width: 220,
-      height: 250,
+      height: 290,
     });
 
     pdf.add(pdf.ln(1));
