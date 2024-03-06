@@ -134,21 +134,30 @@ export class DevolucionesComponent {
 
     const pdf = new PdfMakeWrapper();
 
+
     pdf.add(
       new Columns(["Bono: " + bono, "Fac: " + this.devolucion.factura])
         .margin([0, 3, 0, 3])
-        .fontSize(8)
+        .fontSize(10)
         .end
     );
 
     pdf.add(pdf.ln(1));
 
-    // pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
+    pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
+
+    pdf.add(
+     new Txt(this.user.user.store_name)
+       .alignment("center")
+       .fontSize(10).end
+   );
+
+   pdf.add(pdf.ln(1));
 
     pdf.pageMargins([10, 15, 10, 5]);
     pdf.pageSize({
       width: 220,
-      height: 250,
+      height: 300,
     });
 
     pdf.add(pdf.ln(1));
