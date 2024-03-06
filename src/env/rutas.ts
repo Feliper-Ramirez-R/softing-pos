@@ -1,18 +1,22 @@
 
 
 const rutas = {
-   
+
     /* produccion */
     // ruta:  'https://dev-edusoft-server.up.railway.app/api/',
-   
-   
-    /* Desarrollo */
-     ruta:  'https://server-softing-pos.onrender.com/api/',
-   
-   
-     /* local */
+
+
+    /* QA */
+    //  ruta:  'https://server-softing-pos.onrender.com/api/',
+
+
+    /* desarrollo */
+    ruta: 'https://server-sonfting-pos-development.up.railway.app/api/',
+
+
+    /* local */
     //  ruta:  'http://192.168.0.86:3000/api/',
-   
+
 }
 
-export {rutas}
+export { rutas }
