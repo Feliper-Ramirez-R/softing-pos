@@ -21,6 +21,7 @@ export class InventarioComponent {
   productoDialog: boolean = false;
   verInventarioDialog: boolean = false;
   submitted: boolean = false;
+  inventario:number | undefined;
 
   constructor(private inventarioService: InventarioService,
     protected user: AuthService,
@@ -73,6 +74,7 @@ export class InventarioComponent {
     console.log(valid);
 
     if (!valid.error) {
+      this.inventario = valid.total_stock
       this.datosDB = valid.data;
       this.bodegas = valid.stores;
 
@@ -126,6 +128,7 @@ export class InventarioComponent {
 
     if (!valid.error) {
       this.datosDB = valid.data;
+      this.inventario = valid.total_stock;
 
       if (valid.status == 200) {
 

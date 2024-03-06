@@ -178,12 +178,25 @@ export class GarantiasComponent {
 
     pdf.add(pdf.ln(1));
 
-    pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
+    pdf.add(
+      new Txt(this.user.user.store_name)
+        .alignment("center")
+        .fontSize(10).end
+    );
+
+    pdf.add(pdf.ln(1));
+
+    pdf.add({
+      canvas: [{ type: 'line', x1: 10, y1: 0, x2: 190, y2: 0, lineWidth: 1 }]
+    });
+
+
+    // pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
 
     pdf.pageMargins([10, 15, 10, 5]);
     pdf.pageSize({
       width: 220,
-      height: 270,
+      height: 250,
     });
 
     pdf.add(pdf.ln(1));
@@ -198,7 +211,7 @@ export class GarantiasComponent {
 
 
     pdf.add(
-      new Columns(["Código:", this.garantia.codigo_entrada.toLowerCase()])
+      new Columns(["Código:", this.garantia.codigo_entrada.toUpperCase()])
         .fontSize(8)
         .margin([0, 3, 0, 3])
         .end

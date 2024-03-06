@@ -68,6 +68,9 @@ export class AppMenuComponent implements OnInit {
                 {
                     label: 'Reportes', icon: 'pi pi-fw pi-file', routerLink: ['/pages/reportes']
                 },
+                {
+                    label: 'Gastos', icon: 'pi pi-fw pi-money-bill', routerLink: ['/pages/gastos']
+                },
             ];
         }
 
@@ -130,6 +133,9 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Reportes', icon: 'pi pi-fw pi-file', routerLink: ['/pages/reportes']
             },
+            {
+                label: 'Gastos', icon: 'pi pi-fw pi-money-bill', routerLink: ['/pages/gastos']
+            },
         ];
 
 
@@ -170,6 +176,9 @@ export class AppMenuComponent implements OnInit {
                     },
                     { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                 ]
+            },
+            {
+                label: 'Gastos', icon: 'pi pi-fw pi-money-bill', routerLink: ['/pages/gastos']
             },
         ];
       }
@@ -217,8 +226,69 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
                 ]
             },
+            {
+                label: 'Gastos', icon: 'pi pi-fw pi-money-bill', routerLink: ['/pages/gastos']
+            },
         ];
       }
+
+
+
+
+
+
+
+
+
+
+      /* secretaria administrativa */
+      else if(this.user.user.role_id == 5)
+      {
+        this.model = [
+            { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['home'] },
+            {
+                label: 'Inventarios', icon: 'pi pi-fw pi-box', routerLink: ['/usuarios'],
+                items: [
+                    // { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/pages/productos'] },
+                    // { label: 'Inventario', icon: 'pi pi-fw pi-book', routerLink: ['/pages/inventario'] },
+                    {
+                        label: 'Movimientos', icon: 'pi pi-fw pi-clone',
+                        items: [
+                            { label: 'Salidas', icon: 'pi pi-fw pi-arrow-circle-up', routerLink: ['/pages/salidas'] },
+                            { label: 'Entradas', icon: 'pi pi-fw pi-arrow-circle-down', routerLink: ['/pages/entradas'] },
+                        ]
+                    },
+                ]
+            },
+            {
+                label: 'Ventas', icon: 'pi pi-fw pi-dollar', routerLink: ['/inventario'],
+                items: [
+                    /* { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/pages/productos'] },
+                    { label: 'Inventario', icon: 'pi pi-fw pi-book', routerLink: ['/pages/inventario'] }, */
+                   /*  {
+                        label: 'P.D.V', icon: 'pi pi-fw pi-clone',
+                        items: [
+                            { label: 'Facturar', icon: 'pi pi-fw pi-dollar', routerLink: ['/pages/ventas'] },
+                            { label: 'Cambios', icon: 'pi pi-fw pi-arrow-right-arrow-left', routerLink: ['/pages/cambios'] },
+                            { label: 'Devoluciones', icon: 'pi pi-fw pi-arrow-down', routerLink: ['/pages/devoluciones'] },
+                            { label: 'Garantías', icon: 'pi pi-fw pi-times-circle', routerLink: ['/pages/garantias'] },
+                        ]
+                    }, */
+                    { label: 'Historico', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/historicoVentas'] },
+                ]
+            },
+            {
+                label: 'Reportes', icon: 'pi pi-fw pi-file', routerLink: ['/pages/reportes']
+            },
+            {
+                label: 'Gastos', icon: 'pi pi-fw pi-money-bill', routerLink: ['/pages/gastos']
+            },
+        ];
+      }
+
+
+
+
      
     }
 

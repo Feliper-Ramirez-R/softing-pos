@@ -70,4 +70,23 @@ export class SalidasService {
     });
   }
 
+  async revertirEntrada(dataPost:any) {
+
+    return new Promise(resolve => {
+      const headers = new HttpHeaders({
+        Authorization: 'Bearer ' + this.user.token,
+      });
+
+      this.http.post(rutas.ruta + this.prefix+'/revertOutInventory' , dataPost, { headers }).subscribe({
+        next: (answer: any) => {
+          resolve(answer);
+        },
+        error: error => {
+          console.log(<any>error);
+          resolve(error);
+        }
+      });
+    });
+  }
+
 }

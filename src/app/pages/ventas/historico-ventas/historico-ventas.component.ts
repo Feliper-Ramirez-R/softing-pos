@@ -133,29 +133,19 @@ export class HistoricoVentasComponent {
 
     const pdf = new PdfMakeWrapper();
 
-    /*  pdf.add(
-       new Table([
-         [
-           await new Img('assets/images/logo.png').width(90).height(90).build(),
-         ],
-       ]).alignment("center").end
-     ); */
+    pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
 
-    //  pdf.add(await new Img('assets/images/logoAE2.jpg').fit([100, 100]).alignment("center").build());
+    pdf.add(
+     new Txt(this.user.user.store_name)
+       .alignment("center")
+       .fontSize(10).end
+   );
 
     pdf.pageMargins([15, 20, 5, 5]);
     pdf.pageSize({
       width: 220,
       height: 550,
     });
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Txt(this.user.user.store_name)
-        .alignment("center")
-        .fontSize(10).end
-    );
 
     pdf.add(pdf.ln(1));
 

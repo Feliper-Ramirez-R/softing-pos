@@ -143,12 +143,12 @@ export class DevolucionesComponent {
 
     pdf.add(pdf.ln(1));
 
-    pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
+    // pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
 
     pdf.pageMargins([10, 15, 10, 5]);
     pdf.pageSize({
       width: 220,
-      height: 270,
+      height: 250,
     });
 
     pdf.add(pdf.ln(1));

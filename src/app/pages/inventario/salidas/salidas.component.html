@@ -48,7 +48,8 @@
                         <th pSortableColumn="product_quantity">Cantidad <p-sortIcon field="product_quantity"></p-sortIcon></th>
                         <th pSortableColumn="byUser_name">Usuario <p-sortIcon field="byUser_name"></p-sortIcon></th>
                         <th pSortableColumn="created_at">Fecha <p-sortIcon field="created_at"></p-sortIcon></th>
-                      <!--   <th></th> -->
+                        <th pSortableColumn="created_at">Estado <p-sortIcon field="created_at"></p-sortIcon></th>
+                        <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-item>
@@ -63,21 +64,29 @@
                         <td>{{item.product_quantity }}</td>
                         <td>{{item.byUser_name | titlecase}}</td>
                         <td>{{item.created_at | date:'YYYY-MM-dd'}}</td>
-                        <!-- <td>
-                            <div class="flex">
-                                <button pButton pRipple icon="pi pi-database" pTooltip="Ingresar inventario" tooltipPosition="top"
-                                    class="p-button-rounded p-button-success mr-2" (click)="openRecibir(item)"></button>
+                        <td>
+                            <p-tag severity="{{
+                                item.status_id == 1?'warning':
+                                item.status_id == 2?'success':
+                                item.status_id == 3?'primary':
+                                ''}}" value="{{item.status_name | titlecase}}">
+                            </p-tag>
+                        </td>
+                        <td>
+                            <div *ngIf="item.store_origin_id == user.user.store_id" class="flex">
+                                <button pButton pRipple icon="pi pi-backward" pTooltip="Revertir salida" tooltipPosition="top"
+                                    class="p-button-rounded p-button-success mr-2" (click)="confirm($event,item)"></button>
     
-                                <button pButton pRipple icon="pi pi-print" class="p-button-rounded p-button-primary"
+                               <!--  <button pButton pRipple icon="pi pi-print" class="p-button-rounded p-button-primary"
                                     pTooltip="Imprimir códigos" tooltipPosition="top"
-                                    (click)="alertImprimir(item)"></button>
+                                    (click)="alertImprimir(item)"></button> -->
                             </div>
 
-                        </td> -->
+                        </td>
                     </tr>
                 </ng-template>
-
             </p-table>
+            <p-confirmPopup></p-confirmPopup>
         </div>
     </div>
 </div>
