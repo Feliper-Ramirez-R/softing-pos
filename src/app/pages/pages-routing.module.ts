@@ -21,6 +21,7 @@ import { CambiosComponent } from './ventas/cambios/cambios.component';
 import { ReportesComponent } from './reportes/reportes.component';
 import { DevolucionesComponent } from './ventas/devoluciones/devoluciones.component';
 import { GarantiasComponent } from './ventas/garantias/garantias.component';
+import { GastosComponent } from './gastos/gastos.component';
 
 
 
@@ -131,6 +132,11 @@ const routes: Routes = [
         {
             path:'reportes',
             component: ReportesComponent,
+            canActivate:[AuthGuard]
+        }, 
+        {
+            path:'gastos',
+            component: GastosComponent,
             canActivate:[AuthGuard]
         }, 
         

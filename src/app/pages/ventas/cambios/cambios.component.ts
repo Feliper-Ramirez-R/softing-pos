@@ -91,12 +91,15 @@ export class CambiosComponent {
 
     if(!this.item.codigo_entrada || !this.item.codigo_salida || !this.item.factura){return}
 
+    
+
     let dataPost = {
       billNumber:this.item.factura,
       store_id:this.user.user.store_id,
       byUser:this.user.user.id,
       code_in:this.item.codigo_entrada,
       code_out:this.item.codigo_salida,
+      residue: this.item.residue ? this.item.residue : null
     }
 
     const valid: any = await this.cambiosService.hacerCambio(dataPost);

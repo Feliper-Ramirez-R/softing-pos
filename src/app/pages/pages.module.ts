@@ -68,6 +68,7 @@ import { CambiosComponent } from './ventas/cambios/cambios.component';
 import { ReportesComponent } from './reportes/reportes.component';
 import { DevolucionesComponent } from './ventas/devoluciones/devoluciones.component';
 import { GarantiasComponent } from './ventas/garantias/garantias.component';
+import { GastosComponent } from './gastos/gastos.component';
 
 
 
@@ -97,6 +98,7 @@ import { GarantiasComponent } from './ventas/garantias/garantias.component';
     ReportesComponent,
     DevolucionesComponent,
     GarantiasComponent,
+    GastosComponent,
   ],
   imports: [
     PagesRoutingModule,

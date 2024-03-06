@@ -71,10 +71,10 @@ export class VentasComponent {
   }
 
   async editar2(producto: any) {
-    if (producto.price < producto.price_min) {
+   /*  if (producto.price < producto.price_min) {
       this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Precio de venta no permitido!', life: 5000 });
       return
-    }
+    } */
     producto.descuento = false;
     this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.price, 0);
   }
@@ -195,21 +195,19 @@ export class VentasComponent {
 
     const pdf = new PdfMakeWrapper();
 
-      // pdf.add(await new Img('assets/images/logoAE2.jpg').fit([100, 100]).alignment("center").build());
+     pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
+
+     pdf.add(
+      new Txt(this.user.user.store_name)
+        .alignment("center")
+        .fontSize(10).end
+    );
 
     pdf.pageMargins([15, 15, 15, 0]);
     pdf.pageSize({
       width: 220,
       height: 950,
     });
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Txt(this.user.user.store_name)
-        .alignment("center")
-        .fontSize(10).end
-    );
 
     pdf.add(pdf.ln(1));
     pdf.add(

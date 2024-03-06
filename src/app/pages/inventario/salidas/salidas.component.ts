@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SalidasService } from './salidas.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { CalendarService } from 'src/app/services/calendar.service';
 
 @Component({
@@ -23,9 +23,10 @@ export class SalidasComponent {
   rangeDates: any | undefined;
 
   constructor(private salidaService: SalidasService,
-    private user: AuthService,
+    protected user: AuthService,
     private messageService: MessageService,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    private confirmationService: ConfirmationService
   ) { }
 
 
@@ -122,6 +123,51 @@ export class SalidasComponent {
 
       if (valid.status == 201) {
         this.itemCreateDialog = false;
+        this.getSalidas();
+      } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
+    } else {
+      if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
+      else { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ocurrió un error!', life: 5000 }); }
+    }
+  }
+
+
+  confirm(event: Event, item: any) {
+
+    this.confirmationService.confirm({
+      target: event.target!,
+      message: 'Desea revertir la salida?',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Si',
+
+      accept: () => {
+        this.revertirEntrada(item);
+      },
+      reject: () => {
+
+      }
+    });
+  }
+
+
+  async revertirEntrada(item:any) {
+
+    let dataPost = {
+      movement_id : item.id,
+      byUser: this.user.user.id
+    }
+
+    console.log(dataPost);
+
+
+    const valid: any = await this.salidaService.revertirEntrada(dataPost);
+    console.log(valid);
+
+    if (!valid.error) {
+      // this.datosDB = valid.data;
+
+      if (valid.status == 201) {
+        this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 });
         this.getSalidas();
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {

@@ -1,0 +1,107 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary mr-2"
+                            (click)="openNew()"></button>
+                        <!-- <button pButton pRipple label=" Borrar" icon="pi pi-trash" class="p-button-danger"
+                            (click)="alertSelectedItems()"
+                            [disabled]="!selectedItems || !selectedItems.length"></button> -->
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"[showButtonBar]="true"
+                    placeholder="Selecciona un rango" [readonlyInput]="true" appendTo="body"(onClearClick)="getGastos()"
+                    (onClose)="getGastos()">
+                </p-calendar>
+                </ng-template>
+            </p-toolbar>
+
+
+
+            <p-table #dt [value]="datosDB" responsiveLayout="scroll" [rows]="10"
+                [globalFilterFields]="['observation','amount','store_name','created_at']" [rows]="10" [paginator]="true"
+                [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
+                [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Gastos</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="observation">Concepto <p-sortIcon field="observation"></p-sortIcon></th>
+                        <th pSortableColumn="amount">Gasto <p-sortIcon field="amount"></p-sortIcon></th>
+                        <th pSortableColumn="store_name">Almacen <p-sortIcon field="store_name"></p-sortIcon></th>
+                        <th pSortableColumn="created_at">Fecha <p-sortIcon field="created_at"></p-sortIcon></th>
+                        <!-- <th></th> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <td>{{item.observation | titlecase}}</td>
+                        <td>{{item.amount | number}}</td>
+                        <td>{{item.store_name }}</td>
+                        <td>{{item.created_at | date: 'dd MMM yyyy' }}</td>
+
+                        <!-- <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" pTooltip="Actualizar" tooltipPosition="top"
+                                    class="p-button-rounded p-button-success mr-2" (click)="openEdit(item)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                                    pTooltip="Eliminar" tooltipPosition="top" (click)="deleteAlert(item)"></button>
+                            </div>
+                        </td> -->
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<p-dialog [(visible)]="itemEditDialog" [style]="{ width: '450px' }"
+header="Nuevo gasto" [modal]="true" class="p-fluid">
+<ng-template pTemplate="content">
+
+    <div class="p-fluid p-formgrid grid">
+
+        <div class="field col-12">
+            <label>Valor</label>
+            <p-inputNumber [(ngModel)]="item.valor" [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.valor }"></p-inputNumber>
+            <small class="ng-dirty ng-invalid text-red-500" *ngIf="submitted && !item.valor">El campo es
+                requerido.</small>
+        </div>
+
+        <div class="field col-12">
+            <label>Concepto gasto</label>
+            <textarea rows="3" cols="30" pInputTextarea [(ngModel)]="item.concepto"
+            [ngClass]="{'ng-invalid ng-dirty' : submitted &&  !item.concepto}"></textarea>
+            <small class="ng-dirty ng-invalid text-red-500" *ngIf="submitted && !item.concepto">El campo es
+                requerido.</small>
+        </div>
+
+    </div>
+
+</ng-template>
+
+<ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+        (click)="hideDialog()"></button>
+    <button pButton pRipple label="Guardar" icon="pi pi-check"
+        class="p-button-text" (click)="saveItem()"></button>
+</ng-template>
+</p-dialog>
