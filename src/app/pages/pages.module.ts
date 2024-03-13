@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PagesRoutingModule } from './pages-routing.module';
 
 /* prime */
@@ -101,6 +101,7 @@ import { GastosComponent } from './gastos/gastos.component';
     GastosComponent,
   ],
   imports: [
+    ReactiveFormsModule,
     PagesRoutingModule,
     CommonModule,
     TableModule,

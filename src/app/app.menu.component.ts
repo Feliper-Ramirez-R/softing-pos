@@ -284,6 +284,30 @@ export class AppMenuComponent implements OnInit {
                 label: 'Gastos', icon: 'pi pi-fw pi-money-bill', routerLink: ['/pages/gastos']
             },
         ];
+
+        /* auxiliar bodega */
+      }else if(this.user.user.role_id == 6)
+      {
+        this.model = [
+            { label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['home'] },
+            {
+                label: 'Inventarios', icon: 'pi pi-fw pi-box', routerLink: ['/usuarios'],
+                items: [
+                    { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/pages/productos'] },
+                    { label: 'Inventario', icon: 'pi pi-fw pi-book', routerLink: ['/pages/inventario'] },
+                    {
+                        label: 'Movimientos', icon: 'pi pi-fw pi-clone',
+                        items: [
+                            { label: 'Salidas', icon: 'pi pi-fw pi-arrow-circle-up', routerLink: ['/pages/salidas'] },
+                            { label: 'Entradas', icon: 'pi pi-fw pi-arrow-circle-down', routerLink: ['/pages/entradas'] },
+                        ]
+                    },
+                ]
+            },
+            {
+                label: 'Gastos', icon: 'pi pi-fw pi-money-bill', routerLink: ['/pages/gastos']
+            },
+        ];
       }
 
 

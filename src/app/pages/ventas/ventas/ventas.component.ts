@@ -6,6 +6,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Columns, Img, ITable, PdfMakeWrapper, QR, Table, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { CalendarService } from 'src/app/services/calendar.service';
+import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-ventas',
@@ -20,13 +21,19 @@ export class VentasComponent {
   datosDB: any[] = [];
   item: any = {};
 
-  metodos_pago: any[] = [{ id: 1, name: 'Efectivo' }, { id: 2, name: 'Transferencia' },{ id: 3, name: 'Crédito' },{ id: 4, name: 'Saldo a favor' }];
+  metodos_pago: any[] = [
+    { id: 1, name: 'Efectivo' },
+    { id: 2, name: 'Transferencia' },
+    { id: 3, name: 'Crédito' },
+    { id: 4, name: 'Bono' },
+    { id: 5, name: 'Otros' }
+  ];
   metodo_pago: any = {};
 
   empresas_credito: any[] = [{ id: 1, name: 'Sistecredito' }, { id: 2, name: 'Total crédito' }];
 
   stateOptions: any[] = [{ label: 'No', value: 'off' }, { label: 'Si', value: 'on' }];
-  value_impri_fac: string | undefined;
+  value_impri_fac: string = 'on';
 
   infoQR: string = '';
 
@@ -40,25 +47,63 @@ export class VentasComponent {
   efectivo: any = 0;
   cambio: any = 0;
 
+  // miFormulario!: FormGroup;
+
+  miFormulario = this.fb.group({
+    // Inicializa el FormArray vacío
+    otros: this.fb.array([])
+  });
+
   constructor(private ventasService: VentasService,
     protected user: AuthService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    private fb: FormBuilder
   ) { }
 
 
   ngOnInit() {
+   this.agregarFila();
     this.calendarService.calendarioEnEspanol();
   }
+
+  // Adicionar otros para otros metodos de pagos
+
+  // Getter para obtener el FormArray del formulario
+  get otrosFormArray() {
+    return this.miFormulario.get('otros') as FormArray;
+  }
+
+   // Método para agregar una nueva fila de inputs
+   agregarFila() {
+    const filaFormGroup = this.fb.group({
+      metodo: '',
+      valor: ''
+      // Agrega aquí más inputs si es necesario
+    });
+
+    this.otrosFormArray.push(filaFormGroup);
+  }
+
+  eliminarFila(index: number) {
+    this.otrosFormArray.removeAt(index);
+  }
+
+
 
   openFacturar() {
     this.metodo_pago = {};
     this.efectivo = undefined;
     this.cambio = undefined;
-    this.value_impri_fac = undefined;
+    this.value_impri_fac = 'on';
     this.facturarDialog = true;
     this.submitted = false;
+    this.miFormulario = this.fb.group({
+      // Inicializa el FormArray vacío
+      otros: this.fb.array([])
+    });
+    this.agregarFila();
   }
 
   operacionDevuelta() {
@@ -71,10 +116,10 @@ export class VentasComponent {
   }
 
   async editar2(producto: any) {
-   /*  if (producto.price < producto.price_min) {
-      this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Precio de venta no permitido!', life: 5000 });
-      return
-    } */
+     if (producto.price < producto.price_min) {
+       this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Precio de venta no permitido!', life: 5000 });
+       return
+     }
     producto.descuento = false;
     this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.price, 0);
   }
@@ -145,14 +190,16 @@ export class VentasComponent {
 
   async enviarFactura() {
 
+console.log(this.miFormulario.value);return
 
     this.submitted = true;
 
-    if (!this.metodo_pago.id || 
+    if (!this.metodo_pago.id ||
       !this.value_impri_fac ||
-       this.metodo_pago.name == 'Crédito' && !this.item.empresa_credito ||
-       this.metodo_pago.name == 'Saldo a favor' && !this.item.numero_bono 
-       ) { return }
+      this.metodo_pago.name == 'Crédito' && !this.item.empresa_credito ||
+      this.metodo_pago.name == 'Saldo a favor' && !this.item.numero_bono ||
+      this.metodo_pago.id == 5 && this.miFormulario.invalid
+    ) { return }
 
     let dataPost = {
       total: this.total,
@@ -165,7 +212,7 @@ export class VentasComponent {
       customer_phone: String(this.item.telefono_cliente),
       change: this.cambio,
       cash: this.efectivo,
-      bonus_id:this.item.numero_bono
+      bonus_id: this.item.numero_bono
     }
 
     console.log(dataPost);
@@ -175,12 +222,13 @@ export class VentasComponent {
     console.log(valid);
 
     if (!valid.error) {
-      
+
       if (valid.status == 201) {
+        this.facNumero = valid.billNumber;
         this.facturarDialog = false;
         this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
         if (this.value_impri_fac == 'on') { await this.pdf() }
-          this.datosDB = [];
+        this.datosDB = [];
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
@@ -195,9 +243,9 @@ export class VentasComponent {
 
     const pdf = new PdfMakeWrapper();
 
-     pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
+    pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
 
-     pdf.add(
+    pdf.add(
       new Txt(this.user.user.store_name)
         .alignment("center")
         .fontSize(10).end

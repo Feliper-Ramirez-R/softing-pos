@@ -15,7 +15,7 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    
+
                     <!--  <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
                             placeholder="Selecciona un rango" [readonlyInput]="true"[showButtonBar]="true"
                             (onClose)="getEntradasRango()">
@@ -76,7 +76,7 @@
                 <div class="col-6 support-info">
                     <p>📅 {{fecha}} <br>
                         ⏰ {{hora}}</p>
-                    <span class="highlighted">Recibo N° {{facNumero | number: '3.0-0'}}</span>
+                    <!-- <span class="highlighted">Recibo N° {{facNumero | number: '3.0-0'}}</span> -->
                 </div>
             </div>
             <div class="card widget-tasks">
@@ -207,13 +207,50 @@
                     <p-inputNumber prefix="$" [(ngModel)]="cambio" [readonly]="true"> </p-inputNumber>
                 </div>
 
+
+
+
+
+
+                <form *ngIf="metodo_pago.id == 5" class="field col-12" [formGroup]="miFormulario">
+                    <div formArrayName="otros">
+                     <div  class="p-fluid p-formgrid grid">
+                        <label  class="field col-5 m-0">Método</label>
+                        <label  class="field col-5 m-0">Valor</label>
+                     </div>
+                        <div class="p-fluid p-formgrid grid" *ngFor="let fila of otrosFormArray.controls; let i=index"
+                            [formGroupName]="i">
+                            <div class="field col-5"> <input type="text" pInputText formControlName="metodo" required
+                                [ngClass]="{ 'ng-invalid ng-dirty': submitted && miFormulario.invalid}" />
+                                <small class="ng-dirty ng-invalid" *ngIf="submitted && miFormulario.invalid">Campo
+                                    requerido.</small>
+                            </div>
+                            <div class="field col-5"><p-inputNumber prefix="$" formControlName="valor"
+                                [ngClass]="{ 'ng-invalid ng-dirty': submitted && miFormulario.invalid}">
+                                </p-inputNumber>
+                                <small class="ng-dirty ng-invalid" *ngIf="submitted && miFormulario.invalid">Campo
+                                    requerido.</small>
+                            </div>
+                            <!-- Agrega aquí más inputs si es necesario -->
+                            <div  class="field col-2"><button pButton pRipple icon="pi pi-trash" pTooltip="Eliminar fila"
+                                    tooltipPosition="top" [disabled]="i==0"
+                                    class="p-button-rounded p-button-danger mr-2" (click)="eliminarFila(i)"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field col-12"><button pButton pRipple icon="pi pi-plus" pTooltip="Agregar valores"
+                            tooltipPosition="top" class="p-button-rounded p-button-success mr-2"
+                            (click)="agregarFila()"></button></div>
+                </form>
+
+
                 <div class="field col-12 md:col-6">
                     <label>Desea imprimir factura?</label>
                     <p-selectButton [options]="stateOptions" [(ngModel)]="value_impri_fac" optionLabel="label"
                         [ngClass]="{ 'ng-invalid ng-dirty': submitted && !value_impri_fac }"
                         optionValue="value"></p-selectButton>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !value_impri_fac">Selecciona una
-                        opción.</small>
+                    <!--  <small class="ng-dirty ng-invalid" *ngIf="submitted && !value_impri_fac">Selecciona una
+                        opción.</small> -->
                 </div>
             </div>
         </p-fieldset>

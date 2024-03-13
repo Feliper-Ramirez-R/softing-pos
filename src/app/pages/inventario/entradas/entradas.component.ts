@@ -25,7 +25,7 @@ export class EntradasComponent {
   submitted: boolean = false;
 
   constructor(private entradasService: EntradasService,
-    private user: AuthService,
+    protected user: AuthService,
     private messageService: MessageService,
     private calendarService:CalendarService
   ) { }
