@@ -26,6 +26,14 @@ export class VentasComponent {
     { id: 2, name: 'Transferencia' },
     { id: 3, name: 'Crédito' },
     { id: 4, name: 'Bono' },
+    { id: 5, name: 'Multiple' }
+  ];
+
+  metodos_pago_multiple: any[] = [
+    { id: 1, name: 'Efectivo' },
+    { id: 2, name: 'Transferencia' },
+    { id: 3, name: 'Crédito' },
+    { id: 4, name: 'Bono' },
     { id: 5, name: 'Otros' }
   ];
   metodo_pago: any = {};
@@ -51,7 +59,7 @@ export class VentasComponent {
 
   miFormulario = this.fb.group({
     // Inicializa el FormArray vacío
-    otros: this.fb.array([])
+    multiple: this.fb.array([])
   });
 
   constructor(private ventasService: VentasService,
@@ -68,11 +76,11 @@ export class VentasComponent {
     this.calendarService.calendarioEnEspanol();
   }
 
-  // Adicionar otros para otros metodos de pagos
+  // Adicionar multiple para otros metodos de pagos
 
   // Getter para obtener el FormArray del formulario
-  get otrosFormArray() {
-    return this.miFormulario.get('otros') as FormArray;
+  get multipleFormArray() {
+    return this.miFormulario.get('multiple') as FormArray;
   }
 
    // Método para agregar una nueva fila de inputs
@@ -83,11 +91,11 @@ export class VentasComponent {
       // Agrega aquí más inputs si es necesario
     });
 
-    this.otrosFormArray.push(filaFormGroup);
+    this.multipleFormArray.push(filaFormGroup);
   }
 
   eliminarFila(index: number) {
-    this.otrosFormArray.removeAt(index);
+    this.multipleFormArray.removeAt(index);
   }
 
 
@@ -101,7 +109,7 @@ export class VentasComponent {
     this.submitted = false;
     this.miFormulario = this.fb.group({
       // Inicializa el FormArray vacío
-      otros: this.fb.array([])
+      multiple: this.fb.array([])
     });
     this.agregarFila();
   }
@@ -190,7 +198,7 @@ export class VentasComponent {
 
   async enviarFactura() {
 
-console.log(this.miFormulario.value);return
+console.log(this.miFormulario.value);
 
     this.submitted = true;
 
@@ -201,18 +209,22 @@ console.log(this.miFormulario.value);return
       this.metodo_pago.id == 5 && this.miFormulario.invalid
     ) { return }
 
+    this.miFormulario.value.multiple?.forEach((element:any) =>{element.metodo = element.metodo.name})
+
+
     let dataPost = {
       total: this.total,
       store_id: this.datosDB[0].store_id,
       byUser: this.user.user.id,
       list: this.datosDB,
       payment_way: this.metodo_pago.id,
-      customer_name: this.item.nombre_cliente,
-      customer_dni: String(this.item.cedula_cliente),
-      customer_phone: String(this.item.telefono_cliente),
-      change: this.cambio,
-      cash: this.efectivo,
-      bonus_id: this.item.numero_bono
+      customer_name:this.item.nombre_cliente ? this.item.nombre_cliente : '',
+      customer_dni:this.item.cedula_cliente ? String(this.item.cedula_cliente) : '',
+      customer_phone:this.item.telefono_cliente? String(this.item.telefono_cliente) : '',
+      change:this.cambio ?  this.cambio : 0,
+      cash:this.efectivo ? this.efectivo : 0,
+      bonus_id: this.item.numero_bono,
+      observation:this.miFormulario.value
     }
 
     console.log(dataPost);
@@ -228,7 +240,7 @@ console.log(this.miFormulario.value);return
         this.facturarDialog = false;
         this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
         if (this.value_impri_fac == 'on') { await this.pdf() }
-        this.datosDB = [];
+        setTimeout(function () { location.reload(); }, 2000);
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
@@ -261,9 +273,9 @@ console.log(this.miFormulario.value);return
     pdf.add(
       new Txt(["AE IMPORTACIONES"]).alignment("center").fontSize(8).end
     );
-    pdf.add(
+   /*  pdf.add(
       new Txt(["Nit: ", "43550632-0"]).alignment("center").fontSize(8).end
-    );
+    ); */
     pdf.add(
       new Txt(["No responsable de IVA"]).alignment("center").fontSize(8).end
     );

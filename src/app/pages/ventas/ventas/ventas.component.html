@@ -213,26 +213,34 @@
 
 
                 <form *ngIf="metodo_pago.id == 5" class="field col-12" [formGroup]="miFormulario">
-                    <div formArrayName="otros">
-                     <div  class="p-fluid p-formgrid grid">
-                        <label  class="field col-5 m-0">Método</label>
-                        <label  class="field col-5 m-0">Valor</label>
-                     </div>
-                        <div class="p-fluid p-formgrid grid" *ngFor="let fila of otrosFormArray.controls; let i=index"
+                    <div formArrayName="multiple">
+                        <div class="p-fluid p-formgrid grid">
+                            <label class="field col-5 m-0">Método</label>
+                            <label class="field col-5 m-0">Valor</label>
+                        </div>
+                        <div class="p-fluid p-formgrid grid" *ngFor="let fila of multipleFormArray.controls; let i=index"
                             [formGroupName]="i">
-                            <div class="field col-5"> <input type="text" pInputText formControlName="metodo" required
-                                [ngClass]="{ 'ng-invalid ng-dirty': submitted && miFormulario.invalid}" />
+                            <div class="field col-5">
+                                <p-dropdown [options]="metodos_pago_multiple" formControlName="metodo" optionLabel="name"
+                                    appendTo="body" placeholder="Seleccione" emptyMessage="No hay resultados"
+                                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && miFormulario.invalid }">
+
+                                    <ng-template let-metodo pTemplate="item">
+                                        <span>{{ metodo.name }}</span>
+                                    </ng-template>
+                                </p-dropdown>
                                 <small class="ng-dirty ng-invalid" *ngIf="submitted && miFormulario.invalid">Campo
                                     requerido.</small>
                             </div>
+
                             <div class="field col-5"><p-inputNumber prefix="$" formControlName="valor"
-                                [ngClass]="{ 'ng-invalid ng-dirty': submitted && miFormulario.invalid}">
+                                    [ngClass]="{ 'ng-invalid ng-dirty': submitted && miFormulario.invalid}">
                                 </p-inputNumber>
                                 <small class="ng-dirty ng-invalid" *ngIf="submitted && miFormulario.invalid">Campo
                                     requerido.</small>
                             </div>
                             <!-- Agrega aquí más inputs si es necesario -->
-                            <div  class="field col-2"><button pButton pRipple icon="pi pi-trash" pTooltip="Eliminar fila"
+                            <div class="field col-2"><button pButton pRipple icon="pi pi-trash" pTooltip="Eliminar fila"
                                     tooltipPosition="top" [disabled]="i==0"
                                     class="p-button-rounded p-button-danger mr-2" (click)="eliminarFila(i)"></button>
                             </div>

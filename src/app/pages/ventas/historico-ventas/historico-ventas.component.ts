@@ -157,11 +157,11 @@ export class HistoricoVentasComponent {
 
     pdf.add(pdf.ln(1));
     pdf.add(
-      new Txt(["A Y E IMPORTACIONES"]).alignment("center").fontSize(8).end
+      new Txt(["AE IMPORTACIONES"]).alignment("center").fontSize(8).end
     );
-    pdf.add(
+    /* pdf.add(
       new Txt(["Nit: ", "900435377-3"]).alignment("center").fontSize(8).end
-    );
+    ); */
     pdf.add(
       new Txt(["No responsable de IVA"]).alignment("center").fontSize(8).end
     );

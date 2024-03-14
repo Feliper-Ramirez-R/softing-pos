@@ -51,13 +51,13 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <p-dropdown [options]="[{id:1,name:'Ventas'},{id:2,name:'Cambios'}]" (onChange)="getReportes()"
+                        <!-- <p-dropdown [options]="[{id:1,name:'Ventas'},{id:2,name:'Cambios'}]" (onChange)="getReportes()"
                             [(ngModel)]="item.reporte" optionLabel="name" appendTo="body" placeholder="Tipo reporte"(onClear)="getReportes()"
                             emptyMessage="No hay resultados">
                             <ng-template let-opcion pTemplate="item">
                                 <span>{{ opcion.name }}</span>
                             </ng-template>
-                        </p-dropdown>
+                        </p-dropdown> -->
 
                         <p-dropdown [options]="almacenes" styleClass="ml-2" (onChange)="getReportes()" [showClear]="true"
                             [(ngModel)]="item.almacen" optionLabel="name" appendTo="body" placeholder="Almacen"(onClear)="getReportes()"
@@ -74,7 +74,7 @@
 
                 <ng-template pTemplate="right">
                     <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true" appendTo="body"
-                        (onClearClick)="limpiar()" [disabled]="!item.reporte" placeholder="Selecciona un rango"
+                        (onClearClick)="limpiar()"placeholder="Selecciona un rango"
                         [readonlyInput]="true" [showButtonBar]="true" (onClose)="getReportes()">
                     </p-calendar>
                 </ng-template>
