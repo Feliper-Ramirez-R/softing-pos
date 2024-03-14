@@ -74,7 +74,7 @@ export class ReportesComponent {
     console.log(dataPost);
 
 
-    const valid: any = await this.reportesService.getReportes(this.item.reporte.name, dataPost);
+    const valid: any = await this.reportesService.getReportes('Ventas', dataPost);
     console.log(valid);
 
     if (!valid.error) {
