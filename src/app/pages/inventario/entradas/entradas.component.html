@@ -82,7 +82,7 @@
                         </td>
 
                         <td>
-                            <div *ngIf="item.status_id == 1 && item.store_origin_id == user.user.store_id" class="flex">
+                            <div *ngIf="item.status_id == 1 && item.store_destination_id == user.user.store_id" class="flex">
                                 <button pButton pRipple icon="pi pi-check" pTooltip="Aceptar entrada"
                                     tooltipPosition="top" class="p-button-rounded  mr-2"
                                     (click)="openRecibir(item)"></button>

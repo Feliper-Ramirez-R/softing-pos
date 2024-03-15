@@ -98,7 +98,12 @@ export class VentasComponent {
     this.multipleFormArray.removeAt(index);
   }
 
-
+  /* interface MiObjeto {
+    observation?: Partial<{
+      multiple: unknown[];
+    }>;
+  }
+ */
 
   openFacturar() {
     this.metodo_pago = {};
@@ -211,7 +216,6 @@ console.log(this.miFormulario.value);
 
     this.miFormulario.value.multiple?.forEach((element:any) =>{element.metodo = element.metodo.name})
 
-
     let dataPost = {
       total: this.total,
       store_id: this.datosDB[0].store_id,
@@ -240,7 +244,7 @@ console.log(this.miFormulario.value);
         this.facturarDialog = false;
         this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
         if (this.value_impri_fac == 'on') { await this.pdf() }
-        setTimeout(function () { location.reload(); }, 2000);
+         setTimeout(function () { location.reload(); }, 2000);
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
