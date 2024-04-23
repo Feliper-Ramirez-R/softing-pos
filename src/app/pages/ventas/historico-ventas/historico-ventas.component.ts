@@ -3,9 +3,13 @@ import { HistoricoVentasService } from './historico-ventas.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 
-import { Columns, Img, ITable, PdfMakeWrapper, QR, Table, Txt } from 'pdfmake-wrapper';
+// import { Columns, Img, ITable, PdfMakeWrapper, QR, Table, Txt } from 'pdfmake-wrapper';
+import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { CalendarService } from 'src/app/services/calendar.service';
+import { Observable, from } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-historico-ventas',
@@ -26,7 +30,8 @@ export class HistoricoVentasComponent {
   constructor(private historicoService: HistoricoVentasService,
     protected user: AuthService,
     private messageService: MessageService,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    private http: HttpClient
   ) { }
 
 
@@ -123,10 +128,99 @@ export class HistoricoVentasComponent {
   }
 
 
+  getImageBase64(url: string): Observable<string> {
+    return this.http.get(url, { responseType: 'blob' }).pipe(
+      switchMap(blob => {
+        return from(new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = error => reject(error);
+        }));
+      })
+    );
+  }
+
+
+  imagenBase64(){
+    return new Promise(resolve => {
+      this.getImageBase64('assets/images/tienda.png').subscribe({
+        next: (answer: any) => {
+          resolve(answer);
+        },
+        error: error => {
+          resolve(error);
+        }
+      });
+    });
+  }
 
 
 
-  async pdf() {
+   async generarTabla() {
+ 
+    const image = await this.imagenBase64();
+    
+    (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+    const docDefinition:any = {
+      pageSize: {
+        width: 220,  // Aproximadamente 8.27 pulgadas, para A4 es 210mm
+        height: 950   // Aproximadamente 11.69 pulgadas, para A4 es 297mm
+      },
+      content: [
+        {
+          image:image,  // Aquí va tu imagen en base64
+          width: 150,
+          height: 150,
+          style: 'image'
+        },
+        {
+          table: {
+            headerRows: 1,
+            widths: [40, 50, 20, 40],
+            body: [
+              ['Código', 'Descripción', 'Cant', 'Valor'],
+              ...this.extraerData(this.datosDB)
+            ]
+          },
+          layout: {
+            hLineWidth: function (i:any, node:any) {
+              return (i === 0 || i === node.table.body.length) ? 2 : 1;
+            },
+            vLineWidth: function (i:any, node:any) {
+              return 0;
+            },
+            hLineColor: function (i:any) {
+              return i === 0 ? 'black' : '#aaa';
+            }
+          }
+        },
+      ],
+      pageMargins: [15, 15, 15, 0],
+      styles: {
+        header: {
+          fontSize: 7,
+          bold: true
+        },
+        body: {
+          fontSize: 5
+        }
+      },
+      defaultStyle: {
+        alignment: 'left'
+      },
+      image: {
+        margin: [0, 0, 0, 10]
+      }
+    };
+
+    // Para descargar el PDF generado
+    pdfMake.createPdf(docDefinition).open();
+  }
+
+
+
+/*   async pdf() {
 
 
     PdfMakeWrapper.setFonts(pdfFonts);
@@ -159,9 +253,7 @@ export class HistoricoVentasComponent {
     pdf.add(
       new Txt(["AE IMPORTACIONES"]).alignment("center").fontSize(8).end
     );
-    /* pdf.add(
-      new Txt(["Nit: ", "900435377-3"]).alignment("center").fontSize(8).end
-    ); */
+  
     pdf.add(
       new Txt(["No responsable de IVA"]).alignment("center").fontSize(8).end
     );
@@ -274,9 +366,9 @@ export class HistoricoVentasComponent {
     this.ver_factura_dialog = false;
     pdf.create().open();
 
-  }
+  } */
 
-  generarTabla(): ITable {
+ /*  generarTabla(): ITable {
     [{}]
     return new Table([
       ['Código', ' Descripción ', 'Cant', 'valor'],
@@ -296,14 +388,14 @@ export class HistoricoVentasComponent {
 
       .fontSize(8)
       .end
-  }
+  } */
 
 
 
 
 
   extraerData(data: any) {
-    return data.map((row: any) => [row.code, row.product_name.substring(0, 13), 1, this.formatearMoneda("es-CO", "COP", 0, row.subtotal)]);
+    return data.map((row: any) => [row.code, row.product_name, 1, this.formatearMoneda("es-CO", "COP", 0, row.subtotal)]);
   }
 
 

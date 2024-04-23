@@ -43,8 +43,6 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TagModule } from 'primeng/tag';
 import { FieldsetModule } from 'primeng/fieldset';
 
-/* barcode */
-import { NgxBarcodeModule } from 'ngx-barcode';
 
 /* Componentes */
 import { HomeComponent } from './home/home.component';
@@ -141,7 +139,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
     DividerModule,
     CheckboxModule,
     AccordionModule, 
-    NgxBarcodeModule,
     AutoCompleteModule,
     TagModule,
     CalendarModule,

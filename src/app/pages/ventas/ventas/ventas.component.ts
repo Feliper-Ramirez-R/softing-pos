@@ -3,7 +3,9 @@ import { VentasService } from './ventas.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
-import { Columns, Img, ITable, PdfMakeWrapper, QR, Table, Txt } from 'pdfmake-wrapper';
+// import { Columns, Img, ITable, PdfMakeWrapper, QR, Table, Txt } from 'pdfmake-wrapper';
+
+import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { CalendarService } from 'src/app/services/calendar.service';
 import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
@@ -244,7 +246,7 @@ console.log(this.miFormulario.value);
         this.facturarDialog = false;
         this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
         if (this.value_impri_fac == 'on') { await this.pdf() }
-         setTimeout(function () { location.reload(); }, 2000);
+        //  setTimeout(function () { location.reload(); }, 2000);
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {
       if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
@@ -253,7 +255,7 @@ console.log(this.miFormulario.value);
   }
 
 
-  async pdf() {
+/*   async pdf() {
 
     PdfMakeWrapper.setFonts(pdfFonts);
 
@@ -277,9 +279,7 @@ console.log(this.miFormulario.value);
     pdf.add(
       new Txt(["AE IMPORTACIONES"]).alignment("center").fontSize(8).end
     );
-   /*  pdf.add(
-      new Txt(["Nit: ", "43550632-0"]).alignment("center").fontSize(8).end
-    ); */
+   
     pdf.add(
       new Txt(["No responsable de IVA"]).alignment("center").fontSize(8).end
     );
@@ -412,7 +412,113 @@ console.log(this.miFormulario.value);
 
       .fontSize(8)
       .end
+  } */
+  async pdf() {
+this.generarTabla()
+    
+    // pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
+
+
+
+    // pdf.pageMargins([15, 15, 15, 0]);
+    // pdf.pageSize({
+    //   width: 220,
+    //   height: 950,
+    // });
+
+    // pdf.add(pdf.ln(1));
+
+
+    // pdf.add(
+    //   new Txt(["AE IMPORTACIONES"]).alignment("center").fontSize(8).end
+    // );
+   
+   
+
+    // pdf.add(pdf.ln(2));
+
+    // pdf.add(this.generarTabla());
+
+   
+
+    // pdf.add(pdf.ln(1));
+    // pdf.add({
+    //   canvas: [{ type: 'line', x1: 0, y1: 0, x2: 190, y2: 0, lineWidth: 1 }],
+    // });
+
+
+    // pdf.add(
+    //   new Columns(["Teléfono: ", this.item.telefono_cliente])
+    //     .fontSize(8)
+    //     .end
+    // );
+
+
+
+    // pdf.create().open();
+
   }
+
+  generarTabla() {
+    (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+    const docDefinition:any = {
+      pageSize: {
+        width: 220,  // Aproximadamente 8.27 pulgadas, para A4 es 210mm
+        height: 950   // Aproximadamente 11.69 pulgadas, para A4 es 297mm
+      },
+      content: [
+      /*   {
+          image: 'assets/images/tienda.png',  // Aquí va tu imagen en base64
+          width: 150,
+          height: 150,
+          style: 'image'
+        }, */
+        {
+          table: {
+            headerRows: 1,
+            widths: [40, 50, 20, 40],
+            body: [
+              ['Código', 'Descripción', 'Cant', 'Valor'],
+              ...this.extraerData(this.datosDB)
+            ]
+          },
+          layout: {
+            hLineWidth: function (i:any, node:any) {
+              return (i === 0 || i === node.table.body.length) ? 2 : 1;
+            },
+            vLineWidth: function (i:any, node:any) {
+              return 0;
+            },
+            hLineColor: function (i:any) {
+              return i === 0 ? 'black' : '#aaa';
+            }
+          }
+        },
+      ],
+      pageMargins: [15, 15, 15, 0],
+      styles: {
+        header: {
+          fontSize: 7,
+          bold: true
+        },
+        body: {
+          fontSize: 5
+        }
+      },
+      defaultStyle: {
+        alignment: 'left'
+      },
+      image: {
+        margin: [0, 0, 0, 10]
+      }
+    };
+
+    // Para descargar el PDF generado
+    pdfMake.createPdf(docDefinition).open();
+  }
+
+
+
 
   extraerData(data: any) {
     return data.map((row: any) => [row.code, row.description.substring(0, 13), 1, this.formatearMoneda("es-CO", "COP", 0, row.price)]);

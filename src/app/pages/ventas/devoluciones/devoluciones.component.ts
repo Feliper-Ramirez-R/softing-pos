@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { DevolucionesService } from './devoluciones.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
-import { Columns, Img, ITable, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
+// import { Columns, Img, ITable, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { CalendarService } from 'src/app/services/calendar.service';
 
@@ -130,7 +130,7 @@ export class DevolucionesComponent {
 
   async imprimirBono(bono:any) {
 
-    PdfMakeWrapper.setFonts(pdfFonts);
+   /*  PdfMakeWrapper.setFonts(pdfFonts);
 
     const pdf = new PdfMakeWrapper();
 
@@ -217,7 +217,7 @@ export class DevolucionesComponent {
       new Txt(["NO SE ACEPTAN RECLAMOS O ENTREGAS DESPUÉS DE LA FECHA DE VENCIMIENTO, O SIN ESTE DOCUMENTO."]).alignment("left").fontSize(8).end
     );
     this.bono_dialog = false;
-    pdf.create().open();
+    pdf.create().open(); */
 
   }
 

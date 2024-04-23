@@ -3,7 +3,7 @@ import { GarantiasService } from './garantias.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 import { CalendarService } from 'src/app/services/calendar.service';
-import { Columns, Img, ITable, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
+// import { Columns, Img, ITable, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 
 @Component({
@@ -165,7 +165,7 @@ export class GarantiasComponent {
 
   async imprimirComprobante() {
 
-    PdfMakeWrapper.setFonts(pdfFonts);
+   /*  PdfMakeWrapper.setFonts(pdfFonts);
 
     const pdf = new PdfMakeWrapper();
 
@@ -241,7 +241,7 @@ export class GarantiasComponent {
       new Txt(["ENTREGAR ESTE COMPROBANTE AL MOMENTO DE RECLAMAR SU GARANTÍA."]).alignment("left").fontSize(8).end
     );
     this.garantia_dialog = false;
-    pdf.create().open();
+    pdf.create().open(); */
 
   }
 
