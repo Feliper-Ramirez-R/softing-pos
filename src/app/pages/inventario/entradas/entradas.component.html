@@ -72,7 +72,7 @@
                         <td>{{item.store_destination | titlecase}}</td>
                         <td>{{item.product_quantity }}</td>
                         <td>{{item.byUser_name | titlecase}}</td>
-                        <td>{{item.created_at | date:'YYYY-MM-dd'}}</td>
+                        <td>{{item.created_at | date:'dd MMM yyyy - HH:mm'}}</td>
                         <td>
                             <p-tag severity="{{
                                 item.status_id == 1?'warning':

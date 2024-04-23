@@ -75,10 +75,10 @@ export class HistoricoVentasComponent {
 
       if (valid.status == 200) {
 
-        await valid.data.forEach((a: any) => {
+       /*  await valid.data.forEach((a: any) => {
           a.fecha = new Date(a.created_at).toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" })
           a.hora = new Date(a.created_at).toLocaleTimeString()
-        })
+        }) */
 
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {
@@ -110,10 +110,10 @@ export class HistoricoVentasComponent {
 
       if (valid.status == 200) {
 
-        await valid.data.forEach((a: any) => {
+        /* await valid.data.forEach((a: any) => {
           a.fecha = new Date(a.created_at).toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" })
           a.hora = new Date(a.created_at).toLocaleTimeString()
-        })
+        }) */
 
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
     } else {

@@ -371,7 +371,7 @@ console.log(this.miFormulario.value);
     pdf.add(pdf.ln(1));
 
     pdf.add(
-      new Txt(["NO SE ACEPTAN RECLAMOS DESPUÉS DE 30 DIAS DE HABER REALIZADO SU COMPRA. SIN ESTE RECIBO NO SE ACEPTAN CAMBIOS NI GARANTÍAS GRACIAS."]).alignment("left").fontSize(8).end
+      new Txt(["RECUERDA QUE SON 8 DIAS PARA CAMBIOS Y 30 PARA GARANTÍAS. SIN ESTE RECIBO NO SE ACEPTAN CAMBIOS NI GARANTÍAS GRACIAS."]).alignment("left").fontSize(8).end
     );
 
     pdf.add(pdf.ln(1));

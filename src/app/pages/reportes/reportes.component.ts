@@ -142,7 +142,7 @@ export class ReportesComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Información');
     let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
     let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0]
-    XLSX.writeFile(wb, 'Reporte de ' + this.item.reporte.name + ' de ' + fecha1 + ' a ' + fecha2 + '.xlsx');
+    XLSX.writeFile(wb, 'Reporte de ' + 'ventas' + ' de ' + fecha1 + ' a ' + fecha2 + '.xlsx');
   }
 
 

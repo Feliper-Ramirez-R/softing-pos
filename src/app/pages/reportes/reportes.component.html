@@ -59,7 +59,7 @@
                             </ng-template>
                         </p-dropdown> -->
 
-                        <p-dropdown [options]="almacenes" styleClass="ml-2" (onChange)="getReportes()" [showClear]="true"
+                        <p-dropdown [options]="almacenes" styleClass="ml-2" (onChange)="getReportes()" [showClear]="true"[filter]="true" filterBy="name"
                             [(ngModel)]="item.almacen" optionLabel="name" appendTo="body" placeholder="Almacen"(onClear)="getReportes()"
                             emptyMessage="No hay resultados">
                             <ng-template let-opcion pTemplate="item">

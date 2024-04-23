@@ -69,6 +69,7 @@ import { ReportesComponent } from './reportes/reportes.component';
 import { DevolucionesComponent } from './ventas/devoluciones/devoluciones.component';
 import { GarantiasComponent } from './ventas/garantias/garantias.component';
 import { GastosComponent } from './gastos/gastos.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 
@@ -144,7 +145,8 @@ import { GastosComponent } from './gastos/gastos.component';
     AutoCompleteModule,
     TagModule,
     CalendarModule,
-    FieldsetModule
+    FieldsetModule,
+    MultiSelectModule
   ]
 })
 export class PagesModule { }

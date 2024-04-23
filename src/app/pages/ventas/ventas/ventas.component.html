@@ -189,7 +189,7 @@
                         requerido.</small>
                 </div>
 
-                <div [ngClass]="{'hidden':metodo_pago.name !='Saldo a favor'}" class="field col-12 md:col-12">
+                <div [ngClass]="{'hidden':metodo_pago.name !='Bono'}" class="field col-12 md:col-12">
                     <label>Numero de bono</label>
                     <input type="number" pInputText [(ngModel)]="item.numero_bono" required
                         [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.numero_bono}" />

@@ -3,7 +3,12 @@
 const rutas = {
 
     /* produccion */
+    // ruta:  'https://server-sonfting-pos-main.up.railway.app/api/',
+
+
+    /* demo */
     // ruta:  'https://server-sonfting-pos-production.up.railway.app/api/',
+    
 
 
     /* QA */

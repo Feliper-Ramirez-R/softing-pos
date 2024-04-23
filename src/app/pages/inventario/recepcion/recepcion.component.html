@@ -119,7 +119,7 @@
             <div class=" field col-12">
                 <label for="">Seleccione donde vas a recibir</label>
 
-                <p-dropdown [options]="bodegas" [(ngModel)]="bodega" optionLabel="name" appendTo="body"
+                <p-dropdown [options]="bodegas" [(ngModel)]="bodega" optionLabel="name" appendTo="body"[filter]="true" filterBy="name"
                     placeholder="Seleccione" emptyMessage="No hay resultados"
                     [ngClass]="{ 'ng-invalid ng-dirty': submitted && !bodega.id }">
                     <ng-template pTemplate="selectedItem">
