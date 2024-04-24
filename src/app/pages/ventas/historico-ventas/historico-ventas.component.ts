@@ -156,32 +156,72 @@ export class HistoricoVentasComponent {
   }
 
 
-
-   async generarTabla() {
- 
+   async pdf() {
+  
     const image = await this.imagenBase64();
     
     (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
     const docDefinition:any = {
       pageSize: {
         width: 220,  // Aproximadamente 8.27 pulgadas, para A4 es 210mm
-        height: 950   // Aproximadamente 11.69 pulgadas, para A4 es 297mm
+        height: 650   // Aproximadamente 11.69 pulgadas, para A4 es 297mm
       },
       content: [
         {
           image:image,  // Aquí va tu imagen en base64
-          width: 150,
-          height: 150,
-          style: 'image'
+          width: 25,
+          height: 25,
+          alignment:'center',
+          margin: [0, 0, 0, 10]
         },
+
+        {
+          text: this.user.user.store_name,
+          fontSize: 9,
+          alignment: 'center',
+          margin: [0, 0, 0, 10],
+          bold: true
+        },
+        {
+          text: '(COPIA)',
+          fontSize: 8,
+          alignment: 'center',
+          margin: [0, 0, 0, 10],
+        },
+        {
+          text: "AE IMPORTACIONES",
+          fontSize: 8,
+          alignment: 'center',
+          // margin: [0, 0, 0, 10],
+        },
+        {
+          text: "No responsable de IVA",
+          fontSize: 8,
+          alignment: 'center',
+          // margin: [0, 0, 0, 10],
+        },
+        {
+          text: "Fecha elaboración: "+ new Date(this.item.created_at).toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" }),
+          fontSize: 8,
+          alignment: 'center',
+          margin: [0, 0, 0, 10],
+        },
+        {
+          text: "Recibo N°: " + this.item.id.toString().padStart(4, '0'),
+          fontSize: 10,
+          alignment: 'center',
+          margin: [0, 0, 0, 20],
+        },
+
         {
           table: {
             headerRows: 1,
             widths: [40, 50, 20, 40],
             body: [
-              ['Código', 'Descripción', 'Cant', 'Valor'],
-              ...this.extraerData(this.datosDB)
+              [{ text: 'Código', style: 'header' }, { text: 'Descripción', style: 'header' }, { text: 'Cant', style: 'header' }, { text: 'Valor', style: 'header' }],
+               ...this.extraerData(this.item.details)
             ]
+            
           },
           layout: {
             hLineWidth: function (i:any, node:any) {
@@ -191,34 +231,225 @@ export class HistoricoVentasComponent {
               return 0;
             },
             hLineColor: function (i:any) {
-              return i === 0 ? 'black' : '#aaa';
+              return i === 1 ? 'black' : '#FFFFFF';
             }
           }
         },
+        {
+          text: "Total a pagar: "+ this.formatearMoneda("es-CO", "COP", 0, this.item.total),
+          fontSize: 8,
+          alignment: 'right',
+          margin: [0, 20, 0, 6],
+        },
+        {
+          text: "Forma de pago: "+ this.item.type,
+          fontSize: 8,
+          alignment: 'right',
+          margin: [0, 0, 0, 10],
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0, y1: 0,
+              x2: 190, y2: 0,  // Ajusta el ancho según el tamaño de la página o el diseño deseado
+              lineWidth: 1
+            }
+          ]
+        },
+        {
+          text: "Efectivo: "+ this.formatearMoneda("es-CO", "COP", 0, this.item.cash),
+          fontSize: 8,
+          alignment: 'right',
+          margin: [0, 10, 0, 5],
+        },
+        {
+          text: "Cambio: "+ this.formatearMoneda("es-CO", "COP", 0, this.item.change),
+          fontSize: 8,
+          alignment: 'right',
+          margin: [0, 0, 0, 10]
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0, y1: 0,
+              x2: 190, y2: 0,  // Ajusta el ancho según el tamaño de la página o el diseño deseado
+              lineWidth: 1
+            }
+          ]
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Cliente:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.item.customer_name,
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 5, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Cédula:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.item.customer_dni ? this.item.customer_dni : '' ,
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 0, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Teléfono:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.item.customer_phone ? this.item.customer_phone : '',
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 0, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Items:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.item.details.length,
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 0, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Fecha reimpresión:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" }),
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 0, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Hora:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text:new Date(this.item.created_at).toLocaleTimeString(),
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 0, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Vendedor:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.item.byUser_name,
+              fontSize: 8,
+            }
+          ],
+          columnGap: 10
+        },
+        {
+          text: "NO SE ACEPTAN RECLAMOS DESPUÉS DE 30 DIAS DE HABER REALIZADO SU COMPRA. SIN ESTE RECIBO NO SE ACEPTAN CAMBIOS NI GARANTÍAS GRACIAS.",
+          fontSize: 9,
+          margin: [0, 20, 0, 20],
+          alignment: 'center',
+          bold: true
+        },
+        {
+          text: "Softing-post creado por Softing-dev.",
+          fontSize: 8,
+          margin: [0, 0, 0, 20],
+          alignment: 'center'
+        },
+        {
+          text: "No estoy obligado a facturar Art 1.6.1.4.3 del decreto 1625 del 2016.",
+          fontSize: 8,
+          margin: [0, 0, 0, 0],
+          alignment: 'center'
+        },
+        
       ],
       pageMargins: [15, 15, 15, 0],
       styles: {
         header: {
-          fontSize: 7,
+          fontSize: 9,
           bold: true
         },
         body: {
-          fontSize: 5
-        }
+          fontSize: 8
+        },
       },
       defaultStyle: {
         alignment: 'left'
       },
-      image: {
-        margin: [0, 0, 0, 10]
-      }
     };
 
     // Para descargar el PDF generado
     pdfMake.createPdf(docDefinition).open();
   }
-
-
 
 /*   async pdf() {
 
@@ -391,11 +622,13 @@ export class HistoricoVentasComponent {
   } */
 
 
-
-
-
   extraerData(data: any) {
-    return data.map((row: any) => [row.code, row.product_name, 1, this.formatearMoneda("es-CO", "COP", 0, row.subtotal)]);
+    return data.map((row: any) => [ 
+      { text: row.code, style: 'body' },
+      { text: row.product_name.substring(0, 13), style: 'body' },
+      { text: 1, style: 'body' },
+      { text: this.formatearMoneda("es-CO", "COP", 0, row.subtotal), style: 'body' },
+      ])
   }
 
 

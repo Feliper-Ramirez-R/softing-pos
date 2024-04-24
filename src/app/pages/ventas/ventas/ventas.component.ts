@@ -9,6 +9,8 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { CalendarService } from 'src/app/services/calendar.service';
 import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
+import { Observable, from, switchMap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-ventas',
@@ -69,7 +71,8 @@ export class VentasComponent {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private calendarService: CalendarService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private http: HttpClient
   ) { }
 
 
@@ -413,74 +416,97 @@ console.log(this.miFormulario.value);
       .fontSize(8)
       .end
   } */
-  async pdf() {
-this.generarTabla()
-    
-    // pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
 
 
-
-    // pdf.pageMargins([15, 15, 15, 0]);
-    // pdf.pageSize({
-    //   width: 220,
-    //   height: 950,
-    // });
-
-    // pdf.add(pdf.ln(1));
-
-
-    // pdf.add(
-    //   new Txt(["AE IMPORTACIONES"]).alignment("center").fontSize(8).end
-    // );
-   
-   
-
-    // pdf.add(pdf.ln(2));
-
-    // pdf.add(this.generarTabla());
-
-   
-
-    // pdf.add(pdf.ln(1));
-    // pdf.add({
-    //   canvas: [{ type: 'line', x1: 0, y1: 0, x2: 190, y2: 0, lineWidth: 1 }],
-    // });
-
-
-    // pdf.add(
-    //   new Columns(["Teléfono: ", this.item.telefono_cliente])
-    //     .fontSize(8)
-    //     .end
-    // );
-
-
-
-    // pdf.create().open();
-
+  getImageBase64(url: string): Observable<string> {
+    return this.http.get(url, { responseType: 'blob' }).pipe(
+      switchMap(blob => {
+        return from(new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = error => reject(error);
+        }));
+      })
+    );
   }
 
-  generarTabla() {
+
+  imagenBase64(){
+    return new Promise(resolve => {
+      this.getImageBase64('assets/images/tienda.png').subscribe({
+        next: (answer: any) => {
+          resolve(answer);
+        },
+        error: error => {
+          resolve(error);
+        }
+      });
+    });
+  }
+
+
+  async pdf() {
+  
+  
+    const image = await this.imagenBase64();
+    
     (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
     const docDefinition:any = {
       pageSize: {
         width: 220,  // Aproximadamente 8.27 pulgadas, para A4 es 210mm
-        height: 950   // Aproximadamente 11.69 pulgadas, para A4 es 297mm
+        height: 650   // Aproximadamente 11.69 pulgadas, para A4 es 297mm
       },
       content: [
-      /*   {
-          image: 'assets/images/tienda.png',  // Aquí va tu imagen en base64
-          width: 150,
-          height: 150,
-          style: 'image'
-        }, */
+        {
+          image:image,  // Aquí va tu imagen en base64
+          width: 25,
+          height: 25,
+          alignment:'center',
+          margin: [0, 0, 0, 10]
+        },
+
+        {
+          text: this.user.user.store_name,
+          fontSize: 9,
+          alignment: 'center',
+          margin: [0, 0, 0, 10],
+          bold: true
+        },
+        {
+          text: "AE IMPORTACIONES",
+          fontSize: 8,
+          alignment: 'center',
+          // margin: [0, 0, 0, 10],
+        },
+        {
+          text: "No responsable de IVA",
+          fontSize: 8,
+          alignment: 'center',
+          // margin: [0, 0, 0, 10],
+        },
+        {
+          text: "Fecha elaboración: "+ this.fecha,
+          fontSize: 8,
+          alignment: 'center',
+          margin: [0, 0, 0, 10],
+        },
+        {
+          text: "Recibo N°: " + this.facNumero?.toString().padStart(4, '0'),
+          fontSize: 10,
+          alignment: 'center',
+          margin: [0, 0, 0, 20],
+        },
+
         {
           table: {
             headerRows: 1,
             widths: [40, 50, 20, 40],
             body: [
-              ['Código', 'Descripción', 'Cant', 'Valor'],
-              ...this.extraerData(this.datosDB)
+              [{ text: 'Código', style: 'header' }, { text: 'Descripción', style: 'header' }, { text: 'Cant', style: 'header' }, { text: 'Valor', style: 'header' }],
+               ...this.extraerData(this.datosDB)
             ]
+            
           },
           layout: {
             hLineWidth: function (i:any, node:any) {
@@ -490,27 +516,220 @@ this.generarTabla()
               return 0;
             },
             hLineColor: function (i:any) {
-              return i === 0 ? 'black' : '#aaa';
+              return i === 1 ? 'black' : '#FFFFFF';
             }
           }
         },
+        {
+          text: "Total a pagar: "+ this.formatearMoneda("es-CO", "COP", 0, this.total),
+          fontSize: 8,
+          alignment: 'right',
+          margin: [0, 20, 0, 6],
+        },
+        {
+          text: "Forma de pago: "+ this.metodo_pago.name,
+          fontSize: 8,
+          alignment: 'right',
+          margin: [0, 0, 0, 10],
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0, y1: 0,
+              x2: 190, y2: 0,  // Ajusta el ancho según el tamaño de la página o el diseño deseado
+              lineWidth: 1
+            }
+          ]
+        },
+        {
+          text: "Efectivo: "+ this.formatearMoneda("es-CO", "COP", 0, this.efectivo | 0) ,
+          fontSize: 8,
+          alignment: 'right',
+          margin: [0, 10, 0, 5],
+        },
+        {
+          text: "Cambio: "+ this.formatearMoneda("es-CO", "COP", 0, this.cambio | 0),
+          fontSize: 8,
+          alignment: 'right',
+          margin: [0, 0, 0, 10]
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0, y1: 0,
+              x2: 190, y2: 0,  // Ajusta el ancho según el tamaño de la página o el diseño deseado
+              lineWidth: 1
+            }
+          ]
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Cliente:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.item.nombre_cliente,
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 5, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Cédula:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.item.cedula_cliente,
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 0, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Teléfono:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.item.telefono_cliente,
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 0, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Items:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.datosDB.length,
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 0, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Fecha reimpresión:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" }),
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 0, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Hora:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text:new Date().toLocaleTimeString(),
+              fontSize: 8,
+            }
+          ],
+          margin: [0, 0, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Vendedor:',
+              fontSize: 9,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.user.user.name,
+              fontSize: 8,
+            }
+          ],
+          columnGap: 10
+        },
+        {
+          text: "NO SE ACEPTAN RECLAMOS DESPUÉS DE 30 DIAS DE HABER REALIZADO SU COMPRA. SIN ESTE RECIBO NO SE ACEPTAN CAMBIOS NI GARANTÍAS GRACIAS.",
+          fontSize: 9,
+          margin: [0, 20, 0, 20],
+          alignment: 'center',
+          bold: true
+        },
+        {
+          text: "Softing-post creado por Softing-dev.",
+          fontSize: 8,
+          margin: [0, 0, 0, 20],
+          alignment: 'center'
+        },
+        {
+          text: "No estoy obligado a facturar Art 1.6.1.4.3 del decreto 1625 del 2016.",
+          fontSize: 8,
+          margin: [0, 0, 0, 0],
+          alignment: 'center'
+        },
+        
       ],
       pageMargins: [15, 15, 15, 0],
       styles: {
         header: {
-          fontSize: 7,
+          fontSize: 9,
           bold: true
         },
         body: {
-          fontSize: 5
-        }
+          fontSize: 8
+        },
       },
       defaultStyle: {
         alignment: 'left'
       },
-      image: {
-        margin: [0, 0, 0, 10]
-      }
     };
 
     // Para descargar el PDF generado
@@ -518,12 +737,14 @@ this.generarTabla()
   }
 
 
-
-
   extraerData(data: any) {
-    return data.map((row: any) => [row.code, row.description.substring(0, 13), 1, this.formatearMoneda("es-CO", "COP", 0, row.price)]);
+    return data.map((row: any) => [ 
+      { text: row.code, style: 'body' },
+      { text: row.description.substring(0, 13), style: 'body' },
+      { text: 1, style: 'body' },
+      { text: this.formatearMoneda("es-CO", "COP", 0, row.price), style: 'body' },
+      ])
   }
-
 
 
 
