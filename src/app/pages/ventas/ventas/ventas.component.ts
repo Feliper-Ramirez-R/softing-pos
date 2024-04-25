@@ -227,9 +227,9 @@ console.log(this.miFormulario.value);
       byUser: this.user.user.id,
       list: this.datosDB,
       payment_way: this.metodo_pago.id,
-      customer_name:this.item.nombre_cliente ? this.item.nombre_cliente : '',
-      customer_dni:this.item.cedula_cliente ? String(this.item.cedula_cliente) : '',
-      customer_phone:this.item.telefono_cliente? String(this.item.telefono_cliente) : '',
+      customer_name:this.item.nombre_cliente ? this.item.nombre_cliente : null,
+      customer_dni:this.item.cedula_cliente ? String(this.item.cedula_cliente) : null,
+      customer_phone:this.item.telefono_cliente? String(this.item.telefono_cliente) : null,
       change:this.cambio ?  this.cambio : 0,
       cash:this.efectivo ? this.efectivo : 0,
       bonus_id: this.item.numero_bono,
@@ -697,7 +697,7 @@ console.log(this.miFormulario.value);
           columnGap: 10
         },
         {
-          text: "NO SE ACEPTAN RECLAMOS DESPUÉS DE 30 DIAS DE HABER REALIZADO SU COMPRA. SIN ESTE RECIBO NO SE ACEPTAN CAMBIOS NI GARANTÍAS GRACIAS.",
+          text: "TIENES 8 DIAS PARA CAMBIOS Y 30 PARA GARANTÍA. SIN ESTE RECIBO NO SE ACEPTAN RECLAMOS GRACIAS.",
           fontSize: 9,
           margin: [0, 20, 0, 20],
           alignment: 'center',

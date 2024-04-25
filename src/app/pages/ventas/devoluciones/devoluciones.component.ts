@@ -4,7 +4,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 // import { Columns, Img, ITable, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import * as pdfMake from 'pdfmake/build/pdfmake';
 import { CalendarService } from 'src/app/services/calendar.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable, from, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-devoluciones',
@@ -22,7 +25,8 @@ export class DevolucionesComponent {
   constructor(private devolucionesService: DevolucionesService,
     protected user: AuthService,
     private messageService: MessageService,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    private http: HttpClient
   ) { }
 
 
@@ -128,96 +132,189 @@ export class DevolucionesComponent {
 
   /* pdf */
 
-  async imprimirBono(bono:any) {
-
-   /*  PdfMakeWrapper.setFonts(pdfFonts);
-
-    const pdf = new PdfMakeWrapper();
-
-
-    pdf.add(
-      new Columns(["Bono: " + bono, "Fac: " + this.devolucion.factura])
-        .margin([0, 3, 0, 3])
-        .fontSize(10)
-        .end
+  getImageBase64(url: string): Observable<string> {
+    return this.http.get(url, { responseType: 'blob' }).pipe(
+      switchMap(blob => {
+        return from(new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = error => reject(error);
+        }));
+      })
     );
+  }
 
-    pdf.add(pdf.ln(1));
 
-    pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
-
-    pdf.add(
-     new Txt(this.user.user.store_name)
-       .alignment("center")
-       .fontSize(10).end
-   );
-
-   pdf.add(pdf.ln(1));
-
-    pdf.pageMargins([10, 15, 10, 5]);
-    pdf.pageSize({
-      width: 220,
-      height: 300,
+  imagenBase64(){
+    return new Promise(resolve => {
+      this.getImageBase64('assets/images/tienda.png').subscribe({
+        next: (answer: any) => {
+          resolve(answer);
+        },
+        error: error => {
+          resolve(error);
+        }
+      });
     });
+  }
 
-    pdf.add(pdf.ln(1));
+  async imprimirBono(bono:any) {
 
     let fechaActual = new Date()
     let fecha2 = fechaActual.setMonth(fechaActual.getMonth() + 1)
     let fechaVencimiento = new Date(fecha2).toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" });
 
+    const image = await this.imagenBase64();
 
-    pdf.add(
-      new Columns(["Fecha Entrega:", new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" })])
-        .fontSize(8)
-        .margin([0, 3, 0, 3])
-        .end
-    );
+    (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+    const docDefinition:any = {
+      pageSize: {
+        width: 220,  // Aproximadamente 8.27 pulgadas, para A4 es 210mm
+        height: 300   // Aproximadamente 11.69 pulgadas, para A4 es 297mm
+      },
+      content: [
 
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Bono:',
+              fontSize: 10,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.devolucion.factura,
+              fontSize: 10,
+              alignment:'right',
+              bold: true
+            }
+          ],
+          margin: [0, 5, 0, 10],
+          columnGap: 10
+        },
 
-    pdf.add(
-      new Columns(["Fecha Vencimiento:", fechaVencimiento])
-        .fontSize(8)
-        .margin([0, 3, 0, 3])
-        .end
-    );
+        {
+          image:image,  // Aquí va tu imagen en base64
+          width: 25,
+          height: 25,
+          alignment:'center',
+          margin: [0, 0, 0, 10]
+        },
+        {
+          text: this.user.user.store_name,
+          fontSize: 10,
+          alignment: 'center',
+          margin: [0, 0, 0, 10],
+          bold: true
+        },
 
-    pdf.add(pdf.ln(1));
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Fecha Entrega:',
+              fontSize: 10,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" }),
+              fontSize: 10,
+              bold: true
+            }
+          ],
+          margin: [0, 5, 0, 10],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Fecha Vencimiento:',
+              fontSize: 10,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: fechaVencimiento,
+              fontSize: 10,
+              bold: true
+            }
+          ],
+          margin: [0, 5, 0, 10],
+          columnGap: 10
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0, y1: 0,
+              x2: 190, y2: 0,  // Ajusta el ancho según el tamaño de la página o el diseño deseado
+              lineWidth: 1
+            }
+          ]
+        },
+        {
+          text:this.formatearMoneda("es-CO", "COP", 0, this.devolucion.bono),
+          fontSize: 20,
+          alignment: 'center',
+          margin: [0, 10, 0, 5],
+          bold: true
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0, y1: 0,
+              x2: 190, y2: 0,  // Ajusta el ancho según el tamaño de la página o el diseño deseado
+              lineWidth: 1
+            }
+          ]
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Entregó:',
+              fontSize: 10,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.user.user.name,
+              fontSize: 10,
+              bold: true
+            }
+          ],
+          margin: [0, 5, 0, 10],
+          columnGap: 10
+        },
+        {
+          text:"NO SE ACEPTAN RECLAMOS O ENTREGAS DESPUÉS DE LA FECHA DE VENCIMIENTO, O SIN ESTE DOCUMENTO.",
+          fontSize: 10,
+          alignment: 'center',
+          margin: [0, 10, 0, 5],
+          bold: true
+        },
 
-    pdf.add({
-      canvas: [{ type: 'line', x1: 10, y1: 0, x2: 190, y2: 0, lineWidth: 1 }]
-    });
+      ],
+      pageMargins: [10, 15, 10, 5],
 
+      
+    }
 
-    pdf.add(
-      new Columns([this.formatearMoneda("es-CO", "COP", 0, this.devolucion.bono)])
-        .fontSize(20)
-        .alignment("center")
-        .margin([0, 3, 0, 3])
-        .end
-    );
-
-
-    pdf.add({
-      canvas: [{ type: 'line', x1: 10, y1: 0, x2: 190, y2: 0, lineWidth: 1 }],
-    });
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Columns(["Entregó:", this.user.user.name])
-        .margin([0, 3, 0, 3])
-        .fontSize(8)
-        .end
-    );
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Txt(["NO SE ACEPTAN RECLAMOS O ENTREGAS DESPUÉS DE LA FECHA DE VENCIMIENTO, O SIN ESTE DOCUMENTO."]).alignment("left").fontSize(8).end
-    );
     this.bono_dialog = false;
-    pdf.create().open(); */
+    pdfMake.createPdf(docDefinition).open();
 
   }
 

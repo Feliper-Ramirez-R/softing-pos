@@ -412,7 +412,7 @@ export class HistoricoVentasComponent {
           columnGap: 10
         },
         {
-          text: "NO SE ACEPTAN RECLAMOS DESPUÉS DE 30 DIAS DE HABER REALIZADO SU COMPRA. SIN ESTE RECIBO NO SE ACEPTAN CAMBIOS NI GARANTÍAS GRACIAS.",
+          text: "TIENES 8 DIAS PARA CAMBIOS Y 30 PARA GARANTÍA. SIN ESTE RECIBO NO SE ACEPTAN RECLAMOS GRACIAS.",
           fontSize: 9,
           margin: [0, 20, 0, 20],
           alignment: 'center',
