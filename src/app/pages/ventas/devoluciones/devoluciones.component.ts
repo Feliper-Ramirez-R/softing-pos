@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { DevolucionesService } from './devoluciones.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
-// import { Columns, Img, ITable, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { CalendarService } from 'src/app/services/calendar.service';
@@ -180,14 +179,14 @@ export class DevolucionesComponent {
             {
               // Columna izquierda
               width: 'auto',
-              text: 'Bono:',
+              text: 'Bono: '+bono,
               fontSize: 10,
               bold: true
             },
             {
               // Columna derecha
               width: '*',
-              text: this.devolucion.factura,
+              text:'Fac: '+ this.devolucion.factura,
               fontSize: 10,
               alignment:'right',
               bold: true
@@ -249,7 +248,7 @@ export class DevolucionesComponent {
               bold: true
             }
           ],
-          margin: [0, 5, 0, 10],
+          margin: [0, 0, 0, 10],
           columnGap: 10
         },
         {
@@ -266,7 +265,7 @@ export class DevolucionesComponent {
           text:this.formatearMoneda("es-CO", "COP", 0, this.devolucion.bono),
           fontSize: 20,
           alignment: 'center',
-          margin: [0, 10, 0, 5],
+          margin: [0, 10, 0, 10],
           bold: true
         },
         {
@@ -296,11 +295,11 @@ export class DevolucionesComponent {
               bold: true
             }
           ],
-          margin: [0, 5, 0, 10],
+          margin: [0, 10, 0, 10],
           columnGap: 10
         },
         {
-          text:"NO SE ACEPTAN RECLAMOS O ENTREGAS DESPUÉS DE LA FECHA DE VENCIMIENTO, O SIN ESTE DOCUMENTO.",
+          text:"NO SE ACEPTAN RECLAMOS O ENTREGAS DESPUÉS DE LA FECHA DE VENCIMIENTO, NI SIN ESTE DOCUMENTO.",
           fontSize: 10,
           alignment: 'center',
           margin: [0, 10, 0, 5],
@@ -326,7 +325,5 @@ export class DevolucionesComponent {
     }).format(number);
     return formatted;
   }
-
-
 
 }

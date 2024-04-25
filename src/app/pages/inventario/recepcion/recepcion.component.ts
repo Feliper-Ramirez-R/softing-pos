@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { RecepcionService } from './recepcion.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
-// import { Columns, Img, PdfMakeWrapper} from 'pdfmake-wrapper';
 import * as XLSX from 'xlsx';
 
 @Component({

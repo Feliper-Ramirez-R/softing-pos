@@ -2,9 +2,6 @@ import { Component } from '@angular/core';
 import { VentasService } from './ventas.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-
-// import { Columns, Img, ITable, PdfMakeWrapper, QR, Table, Txt } from 'pdfmake-wrapper';
-
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import { CalendarService } from 'src/app/services/calendar.service';
@@ -77,7 +74,7 @@ export class VentasComponent {
 
 
   ngOnInit() {
-   this.agregarFila();
+    this.agregarFila();
     this.calendarService.calendarioEnEspanol();
   }
 
@@ -88,8 +85,8 @@ export class VentasComponent {
     return this.miFormulario.get('multiple') as FormArray;
   }
 
-   // Método para agregar una nueva fila de inputs
-   agregarFila() {
+  // Método para agregar una nueva fila de inputs
+  agregarFila() {
     const filaFormGroup = this.fb.group({
       metodo: '',
       valor: ''
@@ -134,10 +131,10 @@ export class VentasComponent {
   }
 
   async editar2(producto: any) {
-     if (producto.price < producto.price_min) {
-       this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Precio de venta no permitido!', life: 5000 });
-       return
-     }
+    if (producto.price < producto.price_min) {
+      this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Precio de venta no permitido!', life: 5000 });
+      return
+    }
     producto.descuento = false;
     this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.price, 0);
   }
@@ -208,7 +205,7 @@ export class VentasComponent {
 
   async enviarFactura() {
 
-console.log(this.miFormulario.value);
+    console.log(this.miFormulario.value);
 
     this.submitted = true;
 
@@ -219,7 +216,7 @@ console.log(this.miFormulario.value);
       this.metodo_pago.id == 5 && this.miFormulario.invalid
     ) { return }
 
-    this.miFormulario.value.multiple?.forEach((element:any) =>{element.metodo = element.metodo.name})
+    this.miFormulario.value.multiple?.forEach((element: any) => { element.metodo = element.metodo.name })
 
     let dataPost = {
       total: this.total,
@@ -227,13 +224,13 @@ console.log(this.miFormulario.value);
       byUser: this.user.user.id,
       list: this.datosDB,
       payment_way: this.metodo_pago.id,
-      customer_name:this.item.nombre_cliente ? this.item.nombre_cliente : null,
-      customer_dni:this.item.cedula_cliente ? String(this.item.cedula_cliente) : null,
-      customer_phone:this.item.telefono_cliente? String(this.item.telefono_cliente) : null,
-      change:this.cambio ?  this.cambio : 0,
-      cash:this.efectivo ? this.efectivo : 0,
+      customer_name: this.item.nombre_cliente ? this.item.nombre_cliente : null,
+      customer_dni: this.item.cedula_cliente ? String(this.item.cedula_cliente) : null,
+      customer_phone: this.item.telefono_cliente ? String(this.item.telefono_cliente) : null,
+      change: this.cambio ? this.cambio : 0,
+      cash: this.efectivo ? this.efectivo : 0,
       bonus_id: this.item.numero_bono,
-      observation:this.miFormulario.value
+      observation: this.miFormulario.value
     }
 
     console.log(dataPost);
@@ -258,166 +255,6 @@ console.log(this.miFormulario.value);
   }
 
 
-/*   async pdf() {
-
-    PdfMakeWrapper.setFonts(pdfFonts);
-
-    const pdf = new PdfMakeWrapper();
-
-    pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
-
-    pdf.add(
-      new Txt(this.user.user.store_name)
-        .alignment("center")
-        .fontSize(10).end
-    );
-
-    pdf.pageMargins([15, 15, 15, 0]);
-    pdf.pageSize({
-      width: 220,
-      height: 950,
-    });
-
-    pdf.add(pdf.ln(1));
-    pdf.add(
-      new Txt(["AE IMPORTACIONES"]).alignment("center").fontSize(8).end
-    );
-   
-    pdf.add(
-      new Txt(["No responsable de IVA"]).alignment("center").fontSize(8).end
-    );
-    pdf.add(
-      new Txt(["Fecha elaboración: ", this.fecha])
-        .alignment("center")
-        .fontSize(8).end
-    );
-    pdf.add(pdf.ln(1));
-    pdf.add(
-      new Txt("Recibo N°: " + this.facNumero?.toString().padStart(4, '0'))
-        .alignment("center")
-        .fontSize(10).end
-    );
-
-    pdf.add(pdf.ln(2));
-
-    pdf.add(this.generarTabla());
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Txt(["Total a pagar: ", this.formatearMoneda("es-CO", "COP", 0, this.total)]).alignment("right").fontSize(8).margin([0, 5, 20, 5]).end
-    );
-    pdf.add(
-      new Txt(["Método de pago: ", this.metodo_pago.name]).alignment("right").fontSize(8).margin([0, 0, 20, 5]).end
-    );
-
-    pdf.add(pdf.ln(1));
-    pdf.add({
-      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 190, y2: 0, lineWidth: 1 }],
-    });
-
-    pdf.add(
-      new Txt(["Efectivo: ", this.formatearMoneda("es-CO", "COP", 0, this.efectivo | 0)]).alignment("right").fontSize(8).margin([0, 5, 20, 5]).end
-    );
-    pdf.add(
-      new Txt(["Cambio: ", this.formatearMoneda("es-CO", "COP", 0, this.cambio | 0)]).alignment("right").fontSize(8).margin([0, 0, 20, 5]).end
-    );
-
-    pdf.add({
-      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 190, y2: 0, lineWidth: 1 }],
-    });
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Columns(["Cliente: ", this.item.nombre_cliente])
-        .fontSize(8)
-        .end
-    );
-    pdf.add(
-      new Columns(["Cédula: ", this.item.cedula_cliente])
-        .fontSize(8)
-        .margin([0, 3, 0, 3])
-        .end
-    );
-    pdf.add(
-      new Columns(["Teléfono: ", this.item.telefono_cliente])
-        .fontSize(8)
-        .end
-    );
-
-    pdf.add(
-      new Columns(["Items:", this.datosDB.length])
-        .fontSize(8)
-        .margin([0, 3, 0, 3])
-        .end
-    );
-    pdf.add(
-      new Columns(["Fecha :", new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" })])
-        .fontSize(8)
-        .end
-    );
-    pdf.add(
-      new Columns(["Hora:", this.hora])
-        .fontSize(8)
-        .margin([0, 3, 0, 3])
-        .end
-    );
-
-    pdf.add(
-      new Columns(["Vendedor:", this.user.user.name])
-        .fontSize(8)
-        .end
-    );
-
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Txt(["RECUERDA QUE SON 8 DIAS PARA CAMBIOS Y 30 PARA GARANTÍAS. SIN ESTE RECIBO NO SE ACEPTAN CAMBIOS NI GARANTÍAS GRACIAS."]).alignment("left").fontSize(8).end
-    );
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Txt(["Softing-pos creado por Softing-dev"]).alignment("left").fontSize(8).margin([0, 0, 0, 5]).end
-    );
-    pdf.add(pdf.ln(1));
-    // pdf.add(await new Img('assets/images/logo.png').fit([30, 30]).alignment("center").build());
-
-    pdf.add(
-      new Txt('No estoy obligado a facturar Art 1.6.1.4.3 del decreto 1625 del 2016.')
-        .alignment("center")
-        .fontSize(8).end
-    );
-
-    pdf.create().open();
-
-  }
-
-  generarTabla(): ITable {
-    [{}]
-    return new Table([
-      ['Código', ' Descripción ', 'Cant', 'valor'],
-
-      ...this.extraerData(this.datosDB)
-
-    ]).alignment('center')
-      .headerRows(1) // Indica que solo la primera fila es el encabezado
-      .layout({
-        hLineWidth: (i, node) => (i === 1 || i === node.table.body.length) ? 1 : 0,
-        vLineWidth: (i) => 0,
-        hLineColor: (i) => i === 1 ? 'black' : 'white', // Color de la línea del encabezado
-      })
-      .alignment('left')
-      .widths([40, 50, 20, 40])
-      .heights(rowIndex => { return rowIndex === 0 ? 15 : 10 })
-
-      .fontSize(8)
-      .end
-  } */
-
-
   getImageBase64(url: string): Observable<string> {
     return this.http.get(url, { responseType: 'blob' }).pipe(
       switchMap(blob => {
@@ -432,7 +269,7 @@ console.log(this.miFormulario.value);
   }
 
 
-  imagenBase64(){
+  imagenBase64() {
     return new Promise(resolve => {
       this.getImageBase64('assets/images/tienda.png').subscribe({
         next: (answer: any) => {
@@ -447,22 +284,22 @@ console.log(this.miFormulario.value);
 
 
   async pdf() {
-  
-  
+
+
     const image = await this.imagenBase64();
-    
+
     (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
-    const docDefinition:any = {
+    const docDefinition: any = {
       pageSize: {
         width: 220,  // Aproximadamente 8.27 pulgadas, para A4 es 210mm
         height: 650   // Aproximadamente 11.69 pulgadas, para A4 es 297mm
       },
       content: [
         {
-          image:image,  // Aquí va tu imagen en base64
+          image: image,  // Aquí va tu imagen en base64
           width: 25,
           height: 25,
-          alignment:'center',
+          alignment: 'center',
           margin: [0, 0, 0, 10]
         },
 
@@ -486,7 +323,7 @@ console.log(this.miFormulario.value);
           // margin: [0, 0, 0, 10],
         },
         {
-          text: "Fecha elaboración: "+ this.fecha,
+          text: "Fecha elaboración: " + this.fecha,
           fontSize: 8,
           alignment: 'center',
           margin: [0, 0, 0, 10],
@@ -504,30 +341,30 @@ console.log(this.miFormulario.value);
             widths: [40, 50, 20, 40],
             body: [
               [{ text: 'Código', style: 'header' }, { text: 'Descripción', style: 'header' }, { text: 'Cant', style: 'header' }, { text: 'Valor', style: 'header' }],
-               ...this.extraerData(this.datosDB)
+              ...this.extraerData(this.datosDB)
             ]
-            
+
           },
           layout: {
-            hLineWidth: function (i:any, node:any) {
+            hLineWidth: function (i: any, node: any) {
               return (i === 0 || i === node.table.body.length) ? 2 : 1;
             },
-            vLineWidth: function (i:any, node:any) {
+            vLineWidth: function (i: any, node: any) {
               return 0;
             },
-            hLineColor: function (i:any) {
+            hLineColor: function (i: any) {
               return i === 1 ? 'black' : '#FFFFFF';
             }
           }
         },
         {
-          text: "Total a pagar: "+ this.formatearMoneda("es-CO", "COP", 0, this.total),
+          text: "Total a pagar: " + this.formatearMoneda("es-CO", "COP", 0, this.total),
           fontSize: 8,
           alignment: 'right',
           margin: [0, 20, 0, 6],
         },
         {
-          text: "Forma de pago: "+ this.metodo_pago.name,
+          text: "Forma de pago: " + this.metodo_pago.name,
           fontSize: 8,
           alignment: 'right',
           margin: [0, 0, 0, 10],
@@ -543,13 +380,13 @@ console.log(this.miFormulario.value);
           ]
         },
         {
-          text: "Efectivo: "+ this.formatearMoneda("es-CO", "COP", 0, this.efectivo | 0) ,
+          text: "Efectivo: " + this.formatearMoneda("es-CO", "COP", 0, this.efectivo | 0),
           fontSize: 8,
           alignment: 'right',
           margin: [0, 10, 0, 5],
         },
         {
-          text: "Cambio: "+ this.formatearMoneda("es-CO", "COP", 0, this.cambio | 0),
+          text: "Cambio: " + this.formatearMoneda("es-CO", "COP", 0, this.cambio | 0),
           fontSize: 8,
           alignment: 'right',
           margin: [0, 0, 0, 10]
@@ -671,7 +508,7 @@ console.log(this.miFormulario.value);
             {
               // Columna derecha
               width: '*',
-              text:new Date().toLocaleTimeString(),
+              text: new Date().toLocaleTimeString(),
               fontSize: 8,
             }
           ],
@@ -715,7 +552,7 @@ console.log(this.miFormulario.value);
           margin: [0, 0, 0, 0],
           alignment: 'center'
         },
-        
+
       ],
       pageMargins: [15, 15, 15, 0],
       styles: {
@@ -738,12 +575,12 @@ console.log(this.miFormulario.value);
 
 
   extraerData(data: any) {
-    return data.map((row: any) => [ 
+    return data.map((row: any) => [
       { text: row.code, style: 'body' },
       { text: row.description.substring(0, 13), style: 'body' },
       { text: 1, style: 'body' },
       { text: this.formatearMoneda("es-CO", "COP", 0, row.price), style: 'body' },
-      ])
+    ])
   }
 
 

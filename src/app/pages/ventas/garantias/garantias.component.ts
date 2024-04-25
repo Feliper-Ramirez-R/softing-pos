@@ -3,7 +3,6 @@ import { GarantiasService } from './garantias.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 import { CalendarService } from 'src/app/services/calendar.service';
-// import { Columns, Img, ITable, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import { Observable, from, switchMap } from 'rxjs';
@@ -332,9 +331,6 @@ export class GarantiasComponent {
     this.garantia_dialog = false;
     pdfMake.createPdf(docDefinition).open();
   }
-
-
-
 
 
 }
