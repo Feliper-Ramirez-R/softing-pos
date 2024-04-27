@@ -205,7 +205,7 @@ export class VentasComponent {
 
   async enviarFactura() {
 
-    console.log(this.miFormulario.value);
+      // console.log(this.miFormulario.value.multiple?[0]);return
 
     this.submitted = true;
 
@@ -230,7 +230,7 @@ export class VentasComponent {
       change: this.cambio ? this.cambio : 0,
       cash: this.efectivo ? this.efectivo : 0,
       bonus_id: this.item.numero_bono,
-      observation: this.miFormulario.value
+      observation:  this.miFormulario.value
     }
 
     console.log(dataPost);
@@ -571,6 +571,7 @@ export class VentasComponent {
 
     // Para descargar el PDF generado
     pdfMake.createPdf(docDefinition).open();
+    setTimeout(() => (location.reload()), 2000)
   }
 
 

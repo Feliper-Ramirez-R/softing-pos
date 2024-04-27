@@ -23,6 +23,8 @@ export class HistoricoVentasComponent {
   datosDB: any[] = [];
   item: any = {};
 
+  pares_vendidos:number |undefined;
+
   ver_factura_dialog: boolean = false
 
   constructor(private historicoService: HistoricoVentasService,
@@ -74,7 +76,8 @@ export class HistoricoVentasComponent {
 
     if (!valid.error) {
 
-      this.datosDB = valid.data
+      this.datosDB = valid.data;
+      this.pares_vendidos = valid.sumPairs;
 
       if (valid.status == 200) {
 
