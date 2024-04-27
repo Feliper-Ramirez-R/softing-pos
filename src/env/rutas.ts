@@ -20,7 +20,7 @@ const rutas = {
 
 
     /* local */
-     ruta:  'http://192.168.0.30:3001/api/',
+    //  ruta:  'http://192.168.0.30:3001/api/',
 
 }
 
