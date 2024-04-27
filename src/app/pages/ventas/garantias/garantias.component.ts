@@ -3,8 +3,10 @@ import { GarantiasService } from './garantias.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 import { CalendarService } from 'src/app/services/calendar.service';
-import { Columns, Img, ITable, PdfMakeWrapper, Txt } from 'pdfmake-wrapper';
 import * as pdfFonts from "pdfmake/build/vfs_fonts";
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import { Observable, from, switchMap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-garantias',
@@ -27,7 +29,8 @@ export class GarantiasComponent {
   constructor(private garantiasService: GarantiasService,
     protected user: AuthService,
     private messageService: MessageService,
-    private calendarService: CalendarService
+    private calendarService: CalendarService,
+    private http: HttpClient
   ) { }
 
 
@@ -163,90 +166,171 @@ export class GarantiasComponent {
 
   // PDF
 
-  async imprimirComprobante() {
-
-    PdfMakeWrapper.setFonts(pdfFonts);
-
-    const pdf = new PdfMakeWrapper();
-
-    pdf.add(
-      new Columns(["Comprobante de garantia: " + this.garantia.factura])
-        .margin([0, 3, 0, 3])
-        .fontSize(10)
-        .end
+  getImageBase64(url: string): Observable<string> {
+    return this.http.get(url, { responseType: 'blob' }).pipe(
+      switchMap(blob => {
+        return from(new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = error => reject(error);
+        }));
+      })
     );
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(await new Img('assets/images/tienda.png').fit([25, 25]).alignment("center").build());
-
-    pdf.add(
-     new Txt(this.user.user.store_name)
-       .alignment("center")
-       .fontSize(10).end
-   );
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add({
-      canvas: [{ type: 'line', x1: 10, y1: 0, x2: 190, y2: 0, lineWidth: 1 }]
-    });
-
-
-    // pdf.add(await new Img('assets/images/logoAE.jpeg').fit([100, 100]).alignment("center").build());
-
-    pdf.pageMargins([10, 15, 10, 5]);
-    pdf.pageSize({
-      width: 220,
-      height: 290,
-    });
-
-    pdf.add(pdf.ln(1));
-
-   
-    pdf.add(
-      new Columns(["Fecha Entrega:", new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" })])
-        .fontSize(8)
-        .margin([0, 3, 0, 3])
-        .end
-    );
-
-
-    pdf.add(
-      new Columns(["Código:", this.garantia.codigo_entrada.toUpperCase()])
-        .fontSize(8)
-        .margin([0, 3, 0, 3])
-        .end
-    );
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add({
-      canvas: [{ type: 'line', x1: 10, y1: 0, x2: 190, y2: 0, lineWidth: 1 }]
-    });
-
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Columns(["Entregó:", this.user.user.name])
-        .margin([0, 3, 0, 3])
-        .fontSize(8)
-        .end
-    );
-
-    pdf.add(pdf.ln(1));
-
-    pdf.add(
-      new Txt(["ENTREGAR ESTE COMPROBANTE AL MOMENTO DE RECLAMAR SU GARANTÍA."]).alignment("left").fontSize(8).end
-    );
-    this.garantia_dialog = false;
-    pdf.create().open();
-
   }
 
 
+  imagenBase64(){
+    return new Promise(resolve => {
+      this.getImageBase64('assets/images/tienda.png').subscribe({
+        next: (answer: any) => {
+          resolve(answer);
+        },
+        error: error => {
+          resolve(error);
+        }
+      });
+    });
+  }
 
+  async imprimirComprobante() {
+
+    const image = await this.imagenBase64();
+
+    (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+    const docDefinition:any = {
+      pageSize: {
+        width: 220,  // Aproximadamente 8.27 pulgadas, para A4 es 210mm
+        height: 290   // Aproximadamente 11.69 pulgadas, para A4 es 297mm
+      },
+      content: [
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Comprobante de garantia:',
+              fontSize: 10,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.garantia.factura,
+              fontSize: 10,
+              alignment:'right',
+              bold: true
+            }
+          ],
+          margin: [0, 5, 0, 10],
+          columnGap: 10
+        },
+        {
+          image:image,  // Aquí va tu imagen en base64
+          width: 25,
+          height: 25,
+          alignment:'center',
+          margin: [0, 0, 0, 10]
+        },
+        {
+          text: this.user.user.store_name,
+          fontSize: 10,
+          alignment: 'center',
+          margin: [0, 0, 0, 10],
+          bold: true
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0, y1: 0,
+              x2: 190, y2: 0,  // Ajusta el ancho según el tamaño de la página o el diseño deseado
+              lineWidth: 1
+            }
+          ]
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Fecha Entrega:',
+              fontSize: 10,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: new Date().toLocaleString("es-ES", { day: "2-digit", month: "short", year: "numeric" }),
+              fontSize: 9,
+            }
+          ],
+          margin: [0, 5, 0, 3],
+          columnGap: 10
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Código:',
+              fontSize: 10,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.garantia.codigo_entrada.toUpperCase(),
+              fontSize: 9,
+            }
+          ],
+          margin: [0, 5, 0, 5],
+          columnGap: 10
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0, y1: 0,
+              x2: 190, y2: 0,  // Ajusta el ancho según el tamaño de la página o el diseño deseado
+              lineWidth: 1
+            }
+          ]
+        },
+        {
+          columns: [
+            {
+              // Columna izquierda
+              width: 'auto',
+              text: 'Entregó:',
+              fontSize: 10,
+              bold: true
+            },
+            {
+              // Columna derecha
+              width: '*',
+              text: this.user.user.name,
+              fontSize: 9,
+            }
+          ],
+          margin: [0, 5, 0, 3],
+          columnGap: 10
+        },
+        {
+          text: "ENTREGAR ESTE COMPROBANTE AL MOMENTO DE RECLAMAR SU GARANTÍA.",
+          fontSize: 9,
+          alignment: 'center',
+          margin: [0, 10, 0, 5],
+          bold: true
+        },
+      ],
+      pageMargins: [10, 15, 10, 5],
+
+    }  
+
+    this.garantia_dialog = false;
+    pdfMake.createPdf(docDefinition).open();
+  }
 
 
 }

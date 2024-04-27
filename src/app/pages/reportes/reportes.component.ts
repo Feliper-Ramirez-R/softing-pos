@@ -33,9 +33,37 @@ export class ReportesComponent {
   total: number = 0;
   exedentes: number = 0;
 
-
   submitted: boolean = false;
   cambio_dialog: boolean = false;
+
+  pares_vendidos:number | undefined;
+
+  columns_view = [
+    {
+        "header": "N° Factura",
+        "field": "numero_factura"
+    },
+    {
+        "header": "N° Items",
+        "field": "cant_items"
+    },
+    {
+        "header": "Total",
+        "field": "total"
+    },
+    {
+        "header": "Almacen",
+        "field": "store_name"
+    },
+    {
+        "header": "Fecha",
+        "field": "created_at"
+    },
+    {
+        "header": "Metodo de pago",
+        "field": "payment_way_name"
+    }
+];
 
   constructor(private reportesService: ReportesService,
     protected user: AuthService,
@@ -50,7 +78,7 @@ export class ReportesComponent {
   }
 
   limpiar() {
-    this.cols = [];
+    // this.cols = [];
     this.datosDB = [];
   }
 
@@ -81,6 +109,7 @@ export class ReportesComponent {
       this.datosDB = valid.data;
       this.total = valid.total;
       this.exedentes = valid.total_exendentes;
+      this.pares_vendidos = valid.total_cant;
 
 
       if (valid.status == 200) {
@@ -90,7 +119,7 @@ export class ReportesComponent {
           a.total = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(a.total)
         })
 
-        this.cols = valid.cols;
+         this.cols = valid.cols;
         this.datosDB = valid.data;
         this.excelData = valid.data;
 
@@ -142,7 +171,7 @@ export class ReportesComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Información');
     let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
     let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0]
-    XLSX.writeFile(wb, 'Reporte de ' + this.item.reporte.name + ' de ' + fecha1 + ' a ' + fecha2 + '.xlsx');
+    XLSX.writeFile(wb, 'Reporte de ' + 'ventas' + ' de ' + fecha1 + ' a ' + fecha2 + '.xlsx');
   }
 
 

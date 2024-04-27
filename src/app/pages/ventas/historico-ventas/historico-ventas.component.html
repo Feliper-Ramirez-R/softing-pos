@@ -28,12 +28,15 @@
                 currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
                 [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
-                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <span *ngIf="datosDB.length>0" class="block mt-2 md:mt-0 p-input-icon-left">
+                    <div *ngIf="datosDB.length>0" class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <span  class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
                                 class="w-full sm:w-auto" />
                         </span>
+                        <div>
+                            <p-tag value="{{pares_vendidos | number}} Pares"></p-tag>
+                        </div>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -52,7 +55,7 @@
                         <td>{{item.type }}</td>
                         <td>{{item.store_name }}</td>
                         <td>{{item.byUser_name }}</td>
-                        <td>{{item.fecha }}</td>
+                        <td>{{item.created_at | date: 'dd MMM yyyy - HH:mm' }}</td>
                         <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-eye" pTooltip="Ver detalle" tooltipPosition="top"
@@ -80,8 +83,8 @@
                             <h5>{{user.user.store_name}}</h5>
                         </div>
                         <div class="col-6 support-info">
-                            <p>📅 {{item.fecha}} <br>
-                                ⏰ {{item.hora}}</p>
+                            <p>📅 {{item.created_at | date: 'dd MMM yyyy'}} <br>
+                                ⏰ {{item.created_at | date: 'HH:mm'}}</p>
                             <span class="highlighted">Recibo N° {{item.id | number: '3.0-0'}}</span>
                         </div>
                     </div>

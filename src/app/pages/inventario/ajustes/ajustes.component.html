@@ -17,7 +17,7 @@
 
                 <ng-template pTemplate="right">
                     <p-dropdown [options]="almacenes" styleClass="mr-2"  [showClear]="true" (onClear)="getAjustes()"(onChange)="getAjustes()"
-                            [(ngModel)]="item.almacen_consultar" optionLabel="name" appendTo="body" placeholder="Almacén"
+                            [(ngModel)]="item.almacen_consultar" optionLabel="name" appendTo="body" placeholder="Almacén"[filter]="true" filterBy="name"
                             emptyMessage="No hay resultados">
                             <ng-template let-opcion pTemplate="item">
                                 <span>{{ opcion.name }}</span>
@@ -97,7 +97,7 @@
                         <div class="field col-12 md:col-12">
                             <label>Almacén</label>
                             <p-dropdown [options]="almacenes" [(ngModel)]="item.almacen" optionLabel="name" appendTo="body"
-                                placeholder="Seleccione" emptyMessage="No hay resultados"
+                                placeholder="Seleccione" emptyMessage="No hay resultados"[filter]="true" filterBy="name"
                                 [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.almacen }">
                             
                                 <ng-template let-almacen pTemplate="item">

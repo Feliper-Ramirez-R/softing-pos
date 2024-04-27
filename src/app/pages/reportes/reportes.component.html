@@ -59,7 +59,7 @@
                             </ng-template>
                         </p-dropdown> -->
 
-                        <p-dropdown [options]="almacenes" styleClass="ml-2" (onChange)="getReportes()" [showClear]="true"
+                        <p-dropdown [options]="almacenes" styleClass="ml-2" (onChange)="getReportes()" [showClear]="true"[filter]="true" filterBy="name"
                             [(ngModel)]="item.almacen" optionLabel="name" appendTo="body" placeholder="Almacen"(onClear)="getReportes()"
                             emptyMessage="No hay resultados">
                             <ng-template let-opcion pTemplate="item">
@@ -82,7 +82,7 @@
 
 
 
-            <p-table #dt [columns]="cols" [value]="datosDB" responsiveLayout="scroll" [rows]="10"
+            <p-table #dt [columns]="columns_view" [value]="datosDB" responsiveLayout="scroll" [rows]="10"
                 [globalFilterFields]="['code_in','code_out','product_name_in','product_name_out','billNumber','store_name','byUser_name']"
                 [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
                 currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
@@ -93,6 +93,9 @@
                             pTooltip="Descargar reporte" (click)="exportToExcel()" tooltipPosition="top">
                             <img src="assets/images/excel.jpg" style="width: 3.5rem" />
                         </p-button>
+                        <div>
+                            <p-tag value="{{pares_vendidos | number}} Pares"></p-tag>
+                        </div>
                         <span *ngIf="datosDB.length > 0" class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
@@ -102,7 +105,7 @@
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th *ngFor="let col of columns">
+                        <th *ngFor="let col of columns_view">
                             {{ col.header }}
                         </th>
                     </tr>

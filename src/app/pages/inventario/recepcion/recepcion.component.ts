@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { RecepcionService } from './recepcion.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
-import { Columns, Img, PdfMakeWrapper} from 'pdfmake-wrapper';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -12,7 +11,7 @@ import * as XLSX from 'xlsx';
 })
 export class RecepcionComponent {
 
-  elementType: any = 'img';
+/*   elementType: any = 'img';
   value = '';
   format: any = 'CODE128';
   lineColor = '#000000';
@@ -25,17 +24,17 @@ export class RecepcionComponent {
   textPosition = 'bottom';
   textMargin = 2;
   fontSize = 20;
-  background = '#ffffff';
+  background = '#ffffff'; */
   /*  margin = 10;
    marginTop = 10;
    marginBottom = 10;
    marginLeft = 10;
    marginRight = 10; */
-
+/* 
   get values(): string[] {
     return this.value.split('\n');
   }
-
+ */
 
   datosDB: any[] = [];
   item: any = {};

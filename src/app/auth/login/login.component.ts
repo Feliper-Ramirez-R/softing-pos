@@ -23,6 +23,8 @@ export class LoginComponent {
     password: ['', [Validators.minLength(6), Validators.required]],
   });
 
+ 
+
   constructor(
     private fb: FormBuilder,
     private user: AuthService,
@@ -32,14 +34,15 @@ export class LoginComponent {
 
 
   async login() {
+
     this.submitted = true;
     if (this.form.get('email')?.hasError('email')) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ingresa un email válido!', life: 5000 }); return }
     if (this.form.invalid) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Todos los campos son requeridos!', life: 5000 }); return }
    
 
     let dataPost = {
-      email: this.form.get('email')?.value,
-      password: this.form.get('password')?.value,
+      email: this.form.get('email')?.value?.trim(),
+      password: this.form.get('password')?.value?.trim(),
     };
     console.log(dataPost);
 
