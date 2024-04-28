@@ -16,12 +16,12 @@
 
                 <ng-template pTemplate="right">
 
-                    <!--  <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
+                     <!-- <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
                             placeholder="Selecciona un rango" [readonlyInput]="true"[showButtonBar]="true"
                             (onClose)="getEntradasRango()">
-                        </p-calendar>
-                    <button pButton pRipple label="Actualizar" icon="pi pi-refresh" class="p-button-primary ml-2"
-                        (click)="getSalidas()"></button> -->
+                        </p-calendar> -->
+                    <button *ngIf="datosDB.length>1" pButton pRipple label="Borrar datos" icon="pi pi-trash" class="p-button-danger"
+                        (click)="confirmBorrarDatos($event)"></button>
                 </ng-template>
             </p-toolbar>
         </div>
@@ -43,6 +43,10 @@
                                     </div>
                                     <div class="col-4">
                                         <i (click)="confirm($event,produc)" class="pi pi-trash"></i>
+                                    </div>
+                                    <div *ngIf="item.discount" class="col-4">
+                                        <p-tag styleClass="mr-2" icon="pi pi-minus" severity="success"
+                                            value="{{item.discount}}%"></p-tag>
                                     </div>
                                 </div>
                                 <!-- <div class="store-card-image">
@@ -83,13 +87,13 @@
                 <ul class="checkboxes">
                     <li class="checkbox-row">
                         <div class="grid">
-                            <div class="col-6 checkbox">
+                            <div class="col 12 md:col-6 checkbox">
                                 <p>Descripción</p>
                             </div>
-                            <div class="col-3 checkbox">
+                            <div class="col 12 md:col-3 checkbox">
                                 <span> Cantidad</span>
                             </div>
-                            <div class="col-3 checkbox-row-info">
+                            <div class="col 12 md:col-3 checkbox-row-info">
                                 <span>Precio</span>
                             </div>
                         </div>
@@ -97,15 +101,21 @@
                 </ul>
                 <ul *ngFor=" let produc of datosDB" class="checkboxes">
                     <li class="checkbox-row">
-                        <div class="grid">
-                            <div class="col-7 checkbox">
-                                <p>{{produc.description}}</p>
+                        <div class="grid ">
+                            <div class="col 12 md:col-5 checkbox">
+                                <p>{{produc.description.substring(0, 15)}}</p>
                             </div>
-                            <div class="col-2 checkbox">
-                                <span>1</span>
+                            <div class="col 12 md:col-4 checkbox ">
+                                <p-inputNumber [(ngModel)]="produc.cantidad" [showButtons]="true" buttonLayout="horizontal"
+                                    inputId="horizontal" spinnerMode="horizontal" [step]="1"[min]="1" [max]="100"
+                                    decrementButtonClass="p-button-primary" incrementButtonClass="p-button-primary"
+                                    incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                                    (onInput)="editarCantidad(produc)"></p-inputNumber>
+
                             </div>
-                            <div class="col-3 checkbox-row-info">
-                                <span class="time">${{produc.price | number}}</span>
+                    
+                            <div class="col12 md:col-3 checkbox-row-info">
+                                <span class="time">${{produc.price * produc.cantidad | number}}</span>
                             </div>
                         </div>
                     </li>
@@ -218,11 +228,12 @@
                             <label class="field col-5 m-0">Método</label>
                             <label class="field col-5 m-0">Valor</label>
                         </div>
-                        <div class="p-fluid p-formgrid grid" *ngFor="let fila of multipleFormArray.controls; let i=index"
-                            [formGroupName]="i">
+                        <div class="p-fluid p-formgrid grid"
+                            *ngFor="let fila of multipleFormArray.controls; let i=index" [formGroupName]="i">
                             <div class="field col-5">
-                                <p-dropdown [options]="metodos_pago_multiple" formControlName="metodo" optionLabel="name"
-                                    appendTo="body" placeholder="Seleccione" emptyMessage="No hay resultados"
+                                <p-dropdown [options]="metodos_pago_multiple" formControlName="metodo"
+                                    optionLabel="name" appendTo="body" placeholder="Seleccione"
+                                    emptyMessage="No hay resultados"
                                     [ngClass]="{ 'ng-invalid ng-dirty': submitted && miFormulario.invalid }">
 
                                     <ng-template let-metodo pTemplate="item">

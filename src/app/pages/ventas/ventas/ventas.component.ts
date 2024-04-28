@@ -8,6 +8,7 @@ import { CalendarService } from 'src/app/services/calendar.service';
 import { FormBuilder, FormArray, FormGroup } from '@angular/forms';
 import { Observable, from, switchMap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { DbPwaService } from 'src/app/services/db-pwa.service';
 
 @Component({
   selector: 'app-ventas',
@@ -69,13 +70,17 @@ export class VentasComponent {
     private confirmationService: ConfirmationService,
     private calendarService: CalendarService,
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private db_pwa: DbPwaService
   ) { }
 
 
-  ngOnInit() {
+  async ngOnInit() {
     this.agregarFila();
     this.calendarService.calendarioEnEspanol();
+    const items = await this.db_pwa.getNotes();
+    this.datosDB = items;
+    this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.subtotal, 0);
   }
 
   // Adicionar multiple para otros metodos de pagos
@@ -135,8 +140,13 @@ export class VentasComponent {
       this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Precio de venta no permitido!', life: 5000 });
       return
     }
+    producto.subtotal = producto.cantidad * producto.price
+    console.log(producto);
+    
     producto.descuento = false;
-    this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.price, 0);
+    await this.db_pwa.updateNote(producto.id, producto);
+    this.datosDB = await this.db_pwa.getNotes();
+    this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.subtotal, 0);
   }
 
   confirm(event: Event, producto: any) {
@@ -156,10 +166,55 @@ export class VentasComponent {
     });
   }
 
-  async eliminar(producto: any) {
-    this.datosDB = this.datosDB.filter((val: any) => val.prod !== producto.prod);
-    this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.price, 0);
+  confirmBorrarDatos(event: Event) {
+
+    this.confirmationService.confirm({
+      target: event.target!,
+      message: 'Desea eliminar todos los items?',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Si',
+
+      accept: () => {
+        this.eliminarTodo();
+      },
+      reject: () => {
+
+      }
+    });
   }
+
+  async eliminar(producto: any) {
+    await this.db_pwa.deleteNote(producto.id);
+    this.datosDB = await this.db_pwa.getNotes();
+    // this.datosDB = this.datosDB.filter((val: any) => val.prod !== producto.prod);
+    this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.subtotal, 0);
+  }
+
+  async eliminarTodo() {
+    await this.db_pwa.deleteAlls();
+    this.datosDB = await this.db_pwa.getNotes();
+    // this.datosDB = this.datosDB.filter((val: any) => val.prod !== producto.prod);
+    this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.subtotal, 0);
+  }
+
+
+  async editarCantidad(producto: any) {
+
+    producto.subtotal = producto.cantidad * producto.price
+
+    if (producto.cantidad > producto.stock) {
+      this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'El item ' + producto.codigo + ' no cuenta con inventario!, puedes facturar ' + producto.stock + ' pares', life: 5000 });
+      return
+    }
+    await this.db_pwa.updateNote(producto.id, producto);
+    this.datosDB = await this.db_pwa.getNotes();
+    producto.descuento = false;
+    console.log(this.datosDB);
+
+    this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.subtotal, 0);
+
+  }
+
 
   async leerProducto() {
 
@@ -184,15 +239,28 @@ export class VentasComponent {
           this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'El item ' + this.item.codigo + ' no cuenta con inventario!', life: 5000 });
           return
         }
+        valid.data[0].cantidad = 1;
+        valid.data[0].subtotal = valid.data[0].price * valid.data[0].cantidad;
         valid.data[0].prod = this.contadorId;
-        this.datosDB.push(valid.data[0]);
-        this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.price, 0);
-        // this.producto_actual = valid.data[0];
         this.item = {};
 
         await valid.data.forEach((elem: any) => {
           elem.descuento = false
         });
+        // si ya existe el item le va sumando la cantidad
+        let itemRepetido = this.datosDB.filter((val: any) => val.id == valid.data[0].id);
+        if (itemRepetido.length == 1) {
+          itemRepetido[0].cantidad += 1;
+          this.editarCantidad(itemRepetido[0])
+          //  await this.db_pwa.updateNote(itemRepetido[0].id, itemRepetido)
+        } else {
+          this.db_pwa.addNote(valid.data[0]);
+        }
+        console.log(itemRepetido);
+
+        const items = await this.db_pwa.getNotes();
+        this.datosDB = items;
+        this.total = await this.datosDB.reduce((acumulador, actual) => acumulador + actual.subtotal, 0);
         console.log(this.datosDB);
 
       } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
@@ -205,7 +273,7 @@ export class VentasComponent {
 
   async enviarFactura() {
 
-      // console.log(this.miFormulario.value.multiple?[0]);return
+    // console.log(this.miFormulario.value.multiple?[0]);return
 
     this.submitted = true;
 
@@ -230,7 +298,7 @@ export class VentasComponent {
       change: this.cambio ? this.cambio : 0,
       cash: this.efectivo ? this.efectivo : 0,
       bonus_id: this.item.numero_bono,
-      observation:  this.miFormulario.value
+      observation: this.miFormulario.value
     }
 
     console.log(dataPost);
@@ -571,6 +639,7 @@ export class VentasComponent {
 
     // Para descargar el PDF generado
     pdfMake.createPdf(docDefinition).open();
+    this.eliminarTodo();
     setTimeout(() => (location.reload()), 2000)
   }
 
