@@ -76,7 +76,7 @@ export class InventarioComponent {
     if (!valid.error) {
       this.inventario = valid.total_stock
       this.datosDB = valid.data;
-      // this.bodegas = valid.stores;
+       this.bodegas = valid.stores;
 
       if (valid.status == 200) {
 
