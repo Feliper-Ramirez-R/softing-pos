@@ -12,7 +12,7 @@ const rutas = {
 
 
     /* QA */
-    //  ruta:  'https://server-softing-pos.onrender.com/api/',
+    //  ruta:  'https://server-sonfting-pos-qa.up.railway.app/api/',
 
 
     /* desarrollo */
