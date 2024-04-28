@@ -16,7 +16,7 @@ const rutas = {
 
 
     /* desarrollo */
-    ruta: 'https://server-sonfting-pos-development.up.railway.app/api/',
+    // ruta: 'https://server-sonfting-pos-development.up.railway.app/api/',
 
 
     /* local */
