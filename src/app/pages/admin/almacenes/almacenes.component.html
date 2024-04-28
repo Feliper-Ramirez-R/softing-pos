@@ -52,7 +52,8 @@
                         <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success mr-2"
-                                    (click)="ingresarUsuarioAlert(item,1)" [disabled]="item.users_store.length == 0"></button>
+                                    (click)="ingresarUsuarioAlert(item,1)"
+                                    [disabled]="item.users_store.length == 0"></button>
                             </div>
                         </td>
                         <td>{{item.code }}</td>
@@ -60,7 +61,10 @@
                         <td>
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil" pTooltip="Actualizar" tooltipPosition="top"
-                                    class="p-button-rounded p-button-success" (click)="openEdit(item)"></button>
+                                    class="p-button-rounded p-button-success mr-2" (click)="openEdit(item)"></button>
+                                <button pButton pRipple icon="pi pi-percentage" pTooltip="Descuento"
+                                    tooltipPosition="top" class="p-button-rounded p-button-help"
+                                    (click)="openDescuento(item)"></button>
                                 <button pButton pRipple icon="pi pi-check-square"
                                     class="p-button-rounded p-button-primary mx-2" pTooltip="Asignar usuarios"
                                     tooltipPosition="top" (click)="ingresarUsuarioAlert(item,2)"></button>
@@ -130,13 +134,13 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="ingresar_usuario_Dialog"
-            header="{{vista_modal_ingresar_usuarios == 1 ? 'Usuarios pertenecientes al almacén '+item.name :vista_modal_ingresar_usuarios == 2 ?
-            'Ingresar usuarios al almacén '+item.name : 'Eliminar usuarios del almacén '+item.name}}"
-            [modal]="true" [style]="{ width: '450px' }">
+        <p-dialog [(visible)]="ingresar_usuario_Dialog" header="{{vista_modal_ingresar_usuarios == 1 ? 'Usuarios pertenecientes al almacén '+item.name :vista_modal_ingresar_usuarios == 2 ?
+            'Ingresar usuarios al almacén '+item.name : 'Eliminar usuarios del almacén '+item.name}}" [modal]="true"
+            [style]="{ width: '450px' }">
 
 
-            <p-table #dt2 [value]="vista_modal_ingresar_usuarios ==1 || vista_modal_ingresar_usuarios ==3 ? usuarios_almacen : admins"
+            <p-table #dt2
+                [value]="vista_modal_ingresar_usuarios ==1 || vista_modal_ingresar_usuarios ==3 ? usuarios_almacen : admins"
                 responsiveLayout="scroll" [globalFilterFields]="['name']" [showCurrentPageReport]="true"
                 selectionMode="multiple" [(selection)]="selectedItems" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
@@ -173,7 +177,8 @@
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancelar"
                     (click)="ingresar_usuario_Dialog = false"></button>
-                <button *ngIf="vista_modal_ingresar_usuarios ==2 || vista_modal_ingresar_usuarios ==3" pButton pRipple icon="pi pi-check" class="p-button-text" label="Enviar"
+                <button *ngIf="vista_modal_ingresar_usuarios ==2 || vista_modal_ingresar_usuarios ==3" pButton pRipple
+                    icon="pi pi-check" class="p-button-text" label="Enviar"
                     (click)="vista_modal_ingresar_usuarios ==2 ? ingresarUsuarios():eliminarUsuarios()"></button>
             </ng-template>
         </p-dialog>
@@ -192,3 +197,41 @@
         </p-dialog> -->
     </div>
 </div>
+
+
+
+
+<!-- % de  Descuentos -->
+
+<p-dialog [(visible)]="descuento_Dialog" [style]="{ width: '450px' }" header="Descuento para {{item.name}}"
+    [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+
+        <div class="p-fluid p-formgrid grid">
+
+            <div class="field col-12">
+                <label>Descuento</label>
+                <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon">
+                        <i class="pi pi-percentage"></i>
+                    </span>
+                    <input pInputText type="number"
+                        placeholder="Porcentaje actual {{item.discount_percent == null ? 0 : item.discount_percent }}%"
+                        [(ngModel)]="item.descuento"
+                        [ngClass]="{'ng-invalid ng-dirty' : submitted &&  item.descuento == null}" />
+                </div>
+                <small class="ng-invalid ng-dirty text-red-500" *ngIf="submitted && item.descuento == null">El campo es
+                    requerido.</small>
+            </div>
+        </div>
+        <p-confirmPopup></p-confirmPopup>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+            (click)="descuento_Dialog = false"></button>
+        <button pButton pRipple label="Enviar" icon="pi pi-check" class="p-button-text"
+            (click)="item.descuento >40? confirm($event,item) : aplicarDescuentos()"></button>
+    </ng-template>
+</p-dialog>

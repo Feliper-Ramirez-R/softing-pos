@@ -20,4 +20,18 @@
     .p-selectbutton {
       height: 28px;
     }
+
+   
+  
   }
+
+  ::ng-deep .widget-support-request .p-inputtext{
+    margin-bottom: 0px!important;
+  }
+
+  ::ng-deep .p-inputnumber .p-inputnumber-button {
+   
+    height: 35px;
+    min-width: 20px;
+    // min-height: 30px;
+}

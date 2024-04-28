@@ -16,11 +16,11 @@ const rutas = {
 
 
     /* desarrollo */
-    // ruta: 'https://server-sonfting-pos-development.up.railway.app/api/',
+    ruta: 'https://server-sonfting-pos-development.up.railway.app/api/',
 
 
     /* local */
-     ruta:  'http://192.168.0.30:3001/api/',
+    //  ruta:  'http://192.168.0.30:3001/api/',
 
 }
 

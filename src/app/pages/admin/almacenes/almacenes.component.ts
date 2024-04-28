@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AlmacenesService } from './almacenes.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 
 @Component({
@@ -26,6 +26,7 @@ export class AlmacenesComponent {
 
   itemEditDialog: boolean = false;
   ingresar_usuario_Dialog: boolean = false;
+  descuento_Dialog: boolean = false;
   // itemDeleteDialog: boolean = false;
   submitted: boolean = false;
   crear: boolean = false;
@@ -37,7 +38,8 @@ export class AlmacenesComponent {
 
   constructor(private almacenService: AlmacenesService,
     private user: AuthService,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService) { }
 
 
     ngOnInit() {
@@ -88,6 +90,12 @@ export class AlmacenesComponent {
       this.submitted = false;
       this.itemEditDialog = true;
     }
+
+    openDescuento(item:any) {
+      this.item = { ...item };
+      this.submitted = false;
+      this.descuento_Dialog = true;
+    }
   
   
 /*     async deleteItem() {
@@ -111,8 +119,55 @@ export class AlmacenesComponent {
       }
     } */
   
+    confirm(event: Event, item: any) {
+
+      this.confirmationService.confirm({
+        target: event.target!,
+        message: 'El descuento supera el 40%, desea aplicarlo?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Si',
+  
+        accept: () => {
+          this.aplicarDescuentos();
+        },
+        reject: () => {
+  
+        }
+      });
+    }
   
   
+    async aplicarDescuentos() {
+
+      this.submitted = true;
+  
+      if (this.item.descuento ==null) {  return }
+  
+    
+      let dataPost = {
+        store_id: this.item.id,
+        percent:this.item.descuento,
+        byUser:this.user.user.id
+      }
+      console.log(dataPost);
+      const valid: any = await this.almacenService.aplicarDescuentos(dataPost);
+      console.log(valid);
+  
+      if (!valid.error) {
+  
+        if (valid.status == 201) {
+          this.item = {};
+          this.descuento_Dialog = false;
+          this.getAlmacenes();
+          this.messageService.add({ severity: 'success', summary: 'Bien!', detail: valid.message, life: 5000 });
+        } else { return this.messageService.add({ severity: 'info', summary: 'Info!', detail: valid.message, life: 5000 }); }
+      } else {
+        if (valid.status != 500) { return this.messageService.add({ severity: 'info', summary: 'Ups!', detail: valid.error.message, life: 5000 }); }
+        else { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Ocurrió un error!', life: 5000 }); }
+      }
+    }
+
+
     async ingresarUsuarios() {
   
       if (this.selectedItems.length == 0 ) { this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Selecciona por lo menos un usuario', life: 5000 }); return }
