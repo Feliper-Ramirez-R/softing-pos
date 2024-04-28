@@ -44,7 +44,7 @@
                                     <div class="col-4">
                                         <i (click)="confirm($event,produc)" class="pi pi-trash"></i>
                                     </div>
-                                    <div *ngIf="produc.discount != null || produc.discount != 0" class="col-4">
+                                    <div *ngIf="produc.discount != null && produc.discount != 0" class="col-4">
                                         <p-tag styleClass="mr-2" icon="pi pi-minus" severity="success"
                                             value="{{produc.discount}}%"></p-tag>
                                     </div>
