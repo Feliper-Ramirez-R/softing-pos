@@ -112,7 +112,8 @@ export class HistoricoVentasComponent {
 
     if (!valid.error) {
 
-      this.datosDB = valid.data
+      this.datosDB = valid.data;
+      this.pares_vendidos = valid.sumPairs;
 
       if (valid.status == 200) {
 
@@ -458,8 +459,8 @@ export class HistoricoVentasComponent {
     return data.map((row: any) => [
       { text: row.code, style: 'body' },
       { text: row.product_name.substring(0, 13), style: 'body' },
-      { text: 1, style: 'body' },
-      { text: this.formatearMoneda("es-CO", "COP", 0, row.subtotal), style: 'body' },
+      { text: row.quantity, style: 'body' },
+      { text: this.formatearMoneda("es-CO", "COP", 0, row.subtotal * row.quantity), style: 'body' },
     ])
   }
 
