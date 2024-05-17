@@ -16,12 +16,12 @@
 
                 <ng-template pTemplate="right">
 
-                     <!-- <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
+                    <!-- <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"
                             placeholder="Selecciona un rango" [readonlyInput]="true"[showButtonBar]="true"
                             (onClose)="getEntradasRango()">
                         </p-calendar> -->
-                    <button *ngIf="datosDB.length>1" pButton pRipple label="Borrar datos" icon="pi pi-trash" class="p-button-danger"
-                        (click)="confirmBorrarDatos($event)"></button>
+                    <button *ngIf="datosDB.length>1" pButton pRipple label="Borrar datos" icon="pi pi-trash"
+                        class="p-button-danger" (click)="confirmBorrarDatos($event)"></button>
                 </ng-template>
             </p-toolbar>
         </div>
@@ -30,11 +30,11 @@
 
 
 
-    <div *ngIf="datosDB.length>0" class="col-12 lg:col-6 md:col-6">
+    <!--     <div *ngIf="datosDB.length>0" class="col-12 lg:col-3 ">
         <div class="card widget-store-items">
             <div class="store-cards-container">
                 <div class="grid store-cards">
-                    <div *ngFor=" let produc of datosDB" class="col-6 ">
+                    <div *ngFor=" let produc of datosDB" class="col-12 ">
                         <div class="store-card">
                             <div class="store-card-icons">
                                 <div class="grid grid-nogutter">
@@ -49,9 +49,6 @@
                                             value="{{produc.discount}}%"></p-tag>
                                     </div>
                                 </div>
-                                <!-- <div class="store-card-image">
-                                    <img src="assets/layout/images/dashboard/asset-image-seed.jpg" alt="mirage-layout" />
-                                </div> -->
                             </div>
                             <div class="store-card-content">
                                 <h5>{{produc.code}}</h5>
@@ -68,67 +65,71 @@
             </div>
             <div class="list-effect"></div>
         </div>
-    </div>
+    </div> -->
     <p-confirmPopup></p-confirmPopup>
 
-    <div *ngIf="datosDB.length>0" class="col-12 lg:col-6 md:col-6">
+    <div *ngIf="datosDB.length>0" class="col-12">
         <div class="card widget-support-request">
             <div class="grid grid-nogutter">
                 <div class="col-6 title">
-                    <h5>{{user.user.store_name}}</h5>
+                    <button type="button" (click)="openFacturar()" label="Facturar" icon="pi pi-star" pButton></button>
+                    <button type="button" label="${{total | number}}" pButton
+                        class="p-button-secondary p-button-text ml-3 mr-3"></button>
                 </div>
-                <div class="col-6 support-info">
+                <div class="col-6 support-info mb-3">
                     <p>📅 {{fecha}} <br>
                         ⏰ {{hora}}</p>
-                    <!-- <span class="highlighted">Recibo N° {{facNumero | number: '3.0-0'}}</span> -->
                 </div>
             </div>
-            <div class="card widget-tasks">
-                <ul class="checkboxes">
-                    <li class="checkbox-row">
-                        <div class="grid">
-                            <div class="col 12 md:col-6 checkbox">
-                                <p>Descripción</p>
-                            </div>
-                            <div class="col 12 md:col-3 checkbox">
-                                <span> Cantidad</span>
-                            </div>
-                            <div class="col 12 md:col-3 checkbox-row-info">
-                                <span>Precio</span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul *ngFor=" let produc of datosDB" class="checkboxes">
-                    <li class="checkbox-row">
-                        <div class="grid ">
-                            <div class="col 12 md:col-5 checkbox">
-                                <p>{{produc.description.substring(0, 15)}}</p>
-                            </div>
-                            <div class="col 12 md:col-4 checkbox ">
-                                <p-inputNumber [(ngModel)]="produc.cantidad" [showButtons]="true" buttonLayout="horizontal"
-                                    inputId="horizontal" spinnerMode="horizontal" [step]="1"[min]="1" [max]="100"
-                                    decrementButtonClass="p-button-primary" incrementButtonClass="p-button-primary"
-                                    incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
-                                    (onInput)="editarCantidad(produc)"></p-inputNumber>
-
-                            </div>
-                    
-                            <div class="col12 md:col-3 checkbox-row-info">
-                                <span class="time">${{produc.price * produc.cantidad | number}}</span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div class="resolution-button-bar">
-                <button type="button" (click)="openFacturar()" label="Facturar" icon="pi pi-star" pButton></button>
-                <button type="button" label="${{total | number}}" pButton
-                    class="p-button-secondary p-button-text"></button>
-            </div>
+           
         </div>
     </div>
 </div>
+
+
+<p-table *ngIf="datosDB.length>0" [value]="datosDB" styleClass="p-datatable-customers">
+    <ng-template pTemplate="header">
+        <tr>
+            <th pSortableColumn="id">Código</th>
+            <th pSortableColumn="id">Descripción</th>
+            <th pSortableColumn="category">Cantidad</th>
+            <th pSortableColumn="price">Precio</th>
+            <th pSortableColumn="inventoryStatus">Subtotal</th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+        <tr>
+            <td>
+                {{product.code}}
+            </td>
+            <td>
+                <p-tag *ngIf="product.discount != null && product.discount != 0" styleClass="mr-2"
+                    icon="pi pi-minus" severity="success" value="{{product.discount}}%"></p-tag>
+                {{product.description}}
+            </td>
+            <td style="width:70x;" >
+                <p-inputNumber [(ngModel)]="product.cantidad" [showButtons]="true" buttonLayout="horizontal"
+                    inputId="horizontal" spinnerMode="horizontal" [min]="1" [max]="product.stock" pTooltip="No cuentas con mas inventario de este item! " tooltipEvent="focus"
+                    [tooltipDisabled]="product.cantidad != product.stock"
+                    decrementButtonClass="p-button-primary" incrementButtonClass="p-button-primary"
+                    incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
+                    (onInput)="editarCantidad(product)"></p-inputNumber>
+            </td>
+            <td  *ngIf="!product.descuento" >${{product.price | number}}</td>
+            <td *ngIf="product.descuento"><input pInputText type="number" (keydown.enter)="editar2(product)"
+                    [(ngModel)]="product.price" class=" sm:w-30px" /></td>
+            <td>
+                <span>${{product.subtotal | number}}</span>
+            </td>
+            <td class="flex text-center">
+                <button (click)="editar(product)" pButton type="button" icon="pi pi-pencil"></button>
+                <button (click)="confirm($event,product)" pButton type="button" icon="pi pi-trash"
+                    class="p-button-danger ml-2"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
 
 
 

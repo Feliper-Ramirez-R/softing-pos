@@ -14,8 +14,9 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true"[showButtonBar]="true"appendTo="body"
-                        placeholder="Selecciona un rango" [readonlyInput]="true" (onClose)="getHistoricoFecha()"(onClearClick)="limpiar()">
+                    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [showIcon]="true" [showButtonBar]="true"
+                        appendTo="body" placeholder="Selecciona un rango" [readonlyInput]="true"
+                        (onClose)="getHistoricoFecha()" (onClearClick)="limpiar()">
                     </p-calendar>
                 </ng-template>
             </p-toolbar>
@@ -28,8 +29,9 @@
                 currentPageReportTemplate=" {first} - {last} de {totalRecords} registros" selectionMode="multiple"
                 [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
-                    <div *ngIf="datosDB.length>0" class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <span  class="block mt-2 md:mt-0 p-input-icon-left">
+                    <div *ngIf="datosDB.length>0"
+                        class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Buscar..."
                                 class="w-full sm:w-auto" />
@@ -72,68 +74,58 @@
 </div>
 
 
-<p-dialog [(visible)]="ver_factura_dialog" [style]="{ width: '650px' }" [modal]="true" class="p-fluid">
+<p-dialog [(visible)]="ver_factura_dialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '70vw' }"
+    [modal]="true" class="p-fluid">
     <ng-template pTemplate="content">
-       
-        <div class="grid">
             <div class="col-12">
                 <div class="card widget-support-request">
                     <div class="grid grid-nogutter">
-                        <div class="col-6 title">
-                            <h5>{{user.user.store_name}}</h5>
+                        <div class="col-6 lg:col-3 title">
+                            <button type="button" (click)="pdf()" label="Imprimir" icon="pi pi-star" pButton></button>
                         </div>
-                        <div class="col-6 support-info">
+                        <div class="col-6 lg:col-3 title">
+                            <button type="button" label="${{item.total | number}}" pButton
+                            class="p-button-secondary p-button-text"></button>
+                        </div>
+                        <div class="col-12 lg:col-6 support-info">
                             <p>📅 {{item.created_at | date: 'dd MMM yyyy'}} <br>
                                 ⏰ {{item.created_at | date: 'HH:mm'}}</p>
                             <span class="highlighted">Recibo N° {{item.id | number: '3.0-0'}}</span>
                         </div>
                     </div>
-                    <div class="card widget-tasks">
-                        <ul class="checkboxes">
-                            <li class="checkbox-row">
-                                <div class="grid">
-                                    <div class="col-4 md:col-2 checkbox">
-                                        <p>Código</p>
-                                    </div>
-                                    <div class="col-4 md:col-6 checkbox">
-                                        <p>Descripción</p>
-                                    </div>
-                                    <div class="col-2 checkbox">
-                                        <span > Cantidad</span>
-                                    </div>
-                                    <div class="col-2 checkbox">
-                                        <span class="mr-5">Precio</span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                        <ul *ngFor=" let produc of item.details" class="checkboxes">
-                            <li class="checkbox-row">
-                                <div class="grid">
-                                    <div class="col-4 md:col-2 checkbox">
-                                        <p>{{produc.code}}</p>
-                                    </div>
-                                    <div class="col-4 md:col-6 checkbox">
-                                        <p>{{produc.product_name}}</p>
-                                    </div>
-                                    <div class="col-2 checkbox">
-                                        <span>1</span>
-                                    </div>
-                                    <div class="col-2 checkbox-row-info">
-                                        <span class="time">${{produc.subtotal | number}}</span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="resolution-button-bar">
-                        <button type="button" (click)="pdf()" label="Imprimir" icon="pi pi-star" pButton></button>
-                        <button type="button" label="${{item.total | number}}" pButton
-                            class="p-button-secondary p-button-text"></button>
-                    </div>
                 </div>
             </div>
-        </div>
+
+
+
+
+
+            <p-table [value]="item.details" styleClass="p-datatable-customers">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="id">Código</th>
+                        <th pSortableColumn="id">Descripción</th>
+                        <th pSortableColumn="category">Cantidad</th>
+                        <th pSortableColumn="price">Precio</th>
+                        <th pSortableColumn="inventoryStatus">Subtotal</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr>
+                        <td>{{product.code}}</td>
+                        <td>{{product.product_name}}</td>
+                        <td>{{product.quantity}}</td>
+                        <td>${{product.subtotal | number}}</td>
+                        <td>${{product.subtotal * product.quantity | number}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+
+
+
+
 
     </ng-template>
 

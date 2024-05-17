@@ -31,7 +31,17 @@
 
   ::ng-deep .p-inputnumber .p-inputnumber-button {
    
-    height: 35px;
-    min-width: 20px;
+    height: 20px;
+    // min-width: 10px;
+    width: 20px;
     // min-height: 30px;
 }
+
+::ng-deep #horizontal{
+  height: 20px;
+}
+
+::ng-deep .p-inputnumber .p-inputnumber-input{
+  width: 60px;
+}
+

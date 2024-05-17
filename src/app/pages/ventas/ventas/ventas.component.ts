@@ -142,7 +142,7 @@ export class VentasComponent {
     }
     producto.subtotal = producto.cantidad * producto.price
     console.log(producto);
-    
+
     producto.descuento = false;
     await this.db_pwa.updateNote(producto.id, producto);
     this.datosDB = await this.db_pwa.getNotes();
@@ -199,13 +199,11 @@ export class VentasComponent {
 
 
   async editarCantidad(producto: any) {
-
+ 
+   /*  if (producto.cantidad > producto.stock) {
+      this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'El item ' + producto.code + ' no cuenta con inventario!, puedes facturar ' + producto.stock + ' pares', life: 5000 }); return
+    } */
     producto.subtotal = producto.cantidad * producto.price
-
-    if (producto.cantidad > producto.stock) {
-      this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'El item ' + producto.codigo + ' no cuenta con inventario!, puedes facturar ' + producto.stock + ' pares', life: 5000 });
-      return
-    }
     await this.db_pwa.updateNote(producto.id, producto);
     this.datosDB = await this.db_pwa.getNotes();
     producto.descuento = false;
@@ -550,7 +548,7 @@ export class VentasComponent {
             {
               // Columna izquierda
               width: 'auto',
-              text: 'Fecha reimpresión:',
+              text: 'Fecha Facturación:',
               fontSize: 9,
               bold: true
             },
@@ -640,16 +638,16 @@ export class VentasComponent {
     // Para descargar el PDF generado
     pdfMake.createPdf(docDefinition).open();
     this.eliminarTodo();
-    setTimeout(() => (location.reload()), 2000)
+    // setTimeout(() => (location.reload()), 2000)
   }
 
 
   extraerData(data: any) {
     return data.map((row: any) => [
       { text: row.code, style: 'body' },
-      { text: row.description.substring(0, 13), style: 'body' },
-      { text: 1, style: 'body' },
-      { text: this.formatearMoneda("es-CO", "COP", 0, row.price), style: 'body' },
+      { text: row.description.substring(0, 12), style: 'body' },
+      { text: row.cantidad, style: 'body' },
+      { text: this.formatearMoneda("es-CO", "COP", 0, row.subtotal), style: 'body' },
     ])
   }
 
