@@ -28,44 +28,6 @@
     </div>
 
 
-
-
-    <!--     <div *ngIf="datosDB.length>0" class="col-12 lg:col-3 ">
-        <div class="card widget-store-items">
-            <div class="store-cards-container">
-                <div class="grid store-cards">
-                    <div *ngFor=" let produc of datosDB" class="col-12 ">
-                        <div class="store-card">
-                            <div class="store-card-icons">
-                                <div class="grid grid-nogutter">
-                                    <div class="col-4">
-                                        <i (click)="editar(produc)" class="pi pi-pencil"></i>
-                                    </div>
-                                    <div class="col-4">
-                                        <i (click)="confirm($event,produc)" class="pi pi-trash"></i>
-                                    </div>
-                                    <div *ngIf="produc.discount != null && produc.discount != 0" class="col-4">
-                                        <p-tag styleClass="mr-2" icon="pi pi-minus" severity="success"
-                                            value="{{produc.discount}}%"></p-tag>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="store-card-content">
-                                <h5>{{produc.code}}</h5>
-                                <span>{{produc.description}}</span><br>
-                                <span>{{produc.product_name}}</span><br>
-                                <span *ngIf="!produc.descuento">{{produc.price | number}}</span><br>
-                                <span *ngIf="produc.descuento"><input pInputText type="number"
-                                        (keydown.enter)="editar2(produc)" [(ngModel)]="produc.price"
-                                        class="w-full sm:w-auto" /></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="list-effect"></div>
-        </div>
-    </div> -->
     <p-confirmPopup></p-confirmPopup>
 
     <div *ngIf="datosDB.length>0" class="col-12">
