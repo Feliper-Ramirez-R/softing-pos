@@ -4,7 +4,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary mr-2"
+                        <button *ngIf="user.user.role_id !== 2 && user.user.role_id !== 5 " pButton pRipple label="Nuevo" icon="pi pi-plus" class="p-button-primary mr-2"
                             (click)="openNew()"></button>
                         <!-- <button pButton pRipple label=" Borrar" icon="pi pi-trash" class="p-button-danger"
                             (click)="alertSelectedItems()"

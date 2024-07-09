@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import * as XLSX from 'xlsx';
 // import * as FileSaver from 'file-saver';
 import { CalendarService } from 'src/app/services/calendar.service';
+import * as FileSaver from 'file-saver';
 
 
 // const EXCEL_TYPE =
@@ -40,7 +41,7 @@ export class ReportesComponent {
 
   columns_view = [
     {
-        "header": "N° Factura",
+        "header": "N° Recibo",
         "field": "numero_factura"
     },
     {
@@ -52,7 +53,7 @@ export class ReportesComponent {
         "field": "total"
     },
     {
-        "header": "Almacen",
+        "header": "Almacén",
         "field": "store_name"
     },
     {
@@ -60,7 +61,7 @@ export class ReportesComponent {
         "field": "created_at"
     },
     {
-        "header": "Metodo de pago",
+        "header": "Método de pago",
         "field": "payment_way_name"
     }
 ];
@@ -75,6 +76,7 @@ export class ReportesComponent {
   ngOnInit() {
     this.calendarService.calendarioEnEspanol();
     this.getAlmacenes();
+    this.getReportes();
   }
 
   limpiar() {
@@ -87,6 +89,13 @@ export class ReportesComponent {
   }
 
   async getReportes() {
+
+    if(!this.rangeDates){
+      const fechaActual = new Date();
+      const fechaInicio = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+      const fechaFin = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), fechaActual.getDate());
+      this.rangeDates =  [fechaInicio,fechaFin]
+     }
 
     if (!this.rangeDates || !this.rangeDates[1]) { return }
 
@@ -153,10 +162,10 @@ export class ReportesComponent {
 
   exportToExcel() {
 
-    let Heading: any[] = [];
-    this.cols.forEach(element => {
+    let Heading: any[] = ['Recibo','N° Items','Total','Almacén','Fecha','Método de pago','Efectivo','Bono','Transferencia','Crédito','Otros'];
+   /*  this.cols.forEach(element => {
       Heading.push(element.header)
-    });
+    }); */
 
     console.log([Heading]);
 
@@ -172,6 +181,32 @@ export class ReportesComponent {
     let fecha1 = new Date(this.rangeDates[0]).toISOString().split('T')[0];
     let fecha2 = new Date(this.rangeDates[1]).toISOString().split('T')[0]
     XLSX.writeFile(wb, 'Reporte de ' + 'ventas' + ' de ' + fecha1 + ' a ' + fecha2 + '.xlsx');
+  }
+
+    /* async exportToExcel(): Promise<void> {
+  
+      this.exportAsExcelFile(this.excelData, 'Exportable');
+    } */
+  
+  public exportAsExcelFile(json: any[], excelFileName: string): void {
+    json = this.excelData
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { data: worksheet },
+      SheetNames: ['data'],
+    };
+    const excelBuffer: any = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+    });
+    this.saveAsExcelFile(excelBuffer, excelFileName);
+  }
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+    FileSaver.saveAs(
+      data,
+      fileName + 'Tiempos de operación' + 'xlsx'
+    );
   }
 
 

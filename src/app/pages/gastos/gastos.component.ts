@@ -21,7 +21,7 @@ export class GastosComponent {
 
 
   constructor(private gastosService: GastosService,
-    private user: AuthService,
+    protected user: AuthService,
     private messageService: MessageService,
     private calendarService: CalendarService) { }
 

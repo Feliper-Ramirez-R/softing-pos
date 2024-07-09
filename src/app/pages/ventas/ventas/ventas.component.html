@@ -78,9 +78,9 @@
                     incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus"
                     (onInput)="editarCantidad(product)"></p-inputNumber>
             </td>
-            <td  *ngIf="!product.descuento" >${{product.price | number}}</td>
+            <td  *ngIf="!product.descuento" >${{product.new_price ? product.new_price : product.price | number}}</td>
             <td *ngIf="product.descuento"><input pInputText type="number" (keydown.enter)="editar2(product)"
-                    [(ngModel)]="product.price" class=" sm:w-30px" /></td>
+                    [(ngModel)]="product.new_price" class=" sm:w-30px" /></td>
             <td>
                 <span>${{product.subtotal | number}}</span>
             </td>
@@ -227,7 +227,7 @@
 
 
                 <div class="field col-12 md:col-6">
-                    <label>Desea imprimir factura?</label>
+                    <label>Desea imprimir recibo?</label>
                     <p-selectButton [options]="stateOptions" [(ngModel)]="value_impri_fac" optionLabel="label"
                         [ngClass]="{ 'ng-invalid ng-dirty': submitted && !value_impri_fac }"
                         optionValue="value"></p-selectButton>

@@ -46,7 +46,7 @@
                         <th>Código salida</th>
                         <th>Producto salida</th>
                         <th>Fecha</th>
-                        <th>Factura</th>
+                        <th>Recibo</th>
                         <th>Almacén</th>
                         <th>Usuario</th>
                         <th></th>
@@ -108,7 +108,7 @@
             </div>
 
             <div class="field col-12 ">
-                <label>N° factura</label>
+                <label>N° recibo</label>
                 <input type="text" pInputText [(ngModel)]="item.factura"
                     [ngClass]="{ 'ng-invalid ng-dirty': submitted && !item.factura }">
                 <small class="ng-dirty ng-invalid" *ngIf="submitted && !item.factura">El campo es obligatorio.</small>

@@ -42,7 +42,7 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Factura</th>
+                        <th>Recibo</th>
                         <th>Código</th>
                         <th>Producto</th>
                         <th>Cantidad</th>
@@ -62,7 +62,7 @@
                         <td >{{item.product_quantity}}</td>
                         <td >{{item.created_at | date: 'dd MMM yyyy - HH:mm'}}</td>
                         <td >{{item.bonus_id}}</td>
-                        <td >{{item.amount}}</td>
+                        <td >${{item.amount | number}}</td>
                         <td>
                             <p-tag severity="{{
                                 item.redeemed == 0?'warning':
@@ -104,7 +104,7 @@
 
             
                 <div class="field col-12 ">
-                    <label>N° factura</label>
+                    <label>N° recibo</label>
                     <input type="text" pInputText [(ngModel)]="devolucion.factura"
                         [ngClass]="{ 'ng-invalid ng-dirty': submitted && !devolucion.factura }">
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !devolucion.factura">El campo es

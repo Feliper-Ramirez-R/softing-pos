@@ -136,11 +136,14 @@ export class VentasComponent {
   }
 
   async editar2(producto: any) {
-    if (producto.price < producto.price_min) {
+    if (producto.new_price < producto.price_min) {
       this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'Precio de venta no permitido!', life: 5000 });
+      producto.new_price =  producto.price;
+      producto.subtotal = producto.cantidad * producto.price
+      producto.descuento = false;
       return
     }
-    producto.subtotal = producto.cantidad * producto.price
+    producto.subtotal = producto.cantidad * producto.new_price
     console.log(producto);
 
     producto.descuento = false;
@@ -200,10 +203,7 @@ export class VentasComponent {
 
   async editarCantidad(producto: any) {
  
-   /*  if (producto.cantidad > producto.stock) {
-      this.messageService.add({ severity: 'error', summary: 'Ups!', detail: 'El item ' + producto.code + ' no cuenta con inventario!, puedes facturar ' + producto.stock + ' pares', life: 5000 }); return
-    } */
-    producto.subtotal = producto.cantidad * producto.price
+    producto.subtotal = producto.new_price ?  producto.cantidad * producto.new_price : producto.cantidad * producto.price
     await this.db_pwa.updateNote(producto.id, producto);
     this.datosDB = await this.db_pwa.getNotes();
     producto.descuento = false;
@@ -430,7 +430,7 @@ export class VentasComponent {
           margin: [0, 20, 0, 6],
         },
         {
-          text: "Forma de pago: " + this.metodo_pago.name,
+          text: "Método de pago: " + this.metodo_pago.name,
           fontSize: 8,
           alignment: 'right',
           margin: [0, 0, 0, 10],
@@ -638,7 +638,7 @@ export class VentasComponent {
     // Para descargar el PDF generado
     pdfMake.createPdf(docDefinition).open();
     this.eliminarTodo();
-    // setTimeout(() => (location.reload()), 2000)
+     setTimeout(() => (location.reload()), 1000)
   }
 
 

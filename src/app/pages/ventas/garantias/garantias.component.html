@@ -47,7 +47,7 @@
                         <th>Tipo garantía</th>
                         <th>Código</th>
                         <th>Descripción</th>
-                        <th>Factura</th>
+                        <th>Recibo</th>
                         <th>Cantidad</th>
                         <th>Fecha</th>
                         <th>Usuario</th>
@@ -92,7 +92,7 @@
                     obligatorio.</small>
             </div>
             <div class="field col-12 ">
-                <label>N° factura</label>
+                <label>N° Recibo</label>
                 <input type="text" pInputText [(ngModel)]="garantia.factura"
                     [ngClass]="{ 'ng-invalid ng-dirty': submitted && !garantia.factura }">
                 <small class="ng-dirty ng-invalid" *ngIf="submitted && !garantia.factura">El campo es

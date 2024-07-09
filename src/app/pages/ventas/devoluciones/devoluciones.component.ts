@@ -102,9 +102,10 @@ export class DevolucionesComponent {
       store_id: this.user.user.store_id,
       byUser: this.user.user.id,
       code: this.devolucion.codigo_entrada,
-      amount: this.devolucion.cantidad,
+      amount: this.devolucion.bono,
       due_date: fechaVencimiento,
-      type: this.devolucion.tipo_devolucion
+      type: this.devolucion.tipo_devolucion,
+      quantity:this.devolucion.cantidad
     }
 
     console.log(dataPost);
@@ -186,7 +187,7 @@ export class DevolucionesComponent {
             {
               // Columna derecha
               width: '*',
-              text:'Fac: '+ this.devolucion.factura,
+              text:'Rec: '+ this.devolucion.factura,
               fontSize: 10,
               alignment:'right',
               bold: true
