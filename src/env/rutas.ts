@@ -2,8 +2,8 @@
 
 const rutas = {
 
-    /* demo */
-    ruta:  'https://server-sonfting-pos-demo.up.railway.app/api/',
+    /* QA */
+    ruta:  'https://server-sonfting-pos-qa.up.railway.app/api/',
 
 }
 
