@@ -104,7 +104,7 @@
                     <div class="field col-12 md:col-12">
                         <label>Administrador</label>
                         <p-dropdown [options]="admins" [(ngModel)]="admin" optionLabel="name" appendTo="body"
-                            placeholder="Seleccione" emptyMessage="No hay resultados" [showClear]="true">
+                        [filter]="true" filterBy="name"  placeholder="Seleccione" emptyMessage="No hay resultados" [showClear]="true">
                             <ng-template pTemplate="selectedItem">
                                 <span *ngIf="admin">{{ admin.name }}</span>
                             </ng-template>
