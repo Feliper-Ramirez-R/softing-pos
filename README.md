@@ -1,3 +1,5 @@
+Este sistema fue desarrollado para la gestión de operaciones comerciales en puntos de venta físicos. Permite manejar inventarios de productos, registrar ventas, crear y editar productos, generar facturas, y gestionar pagos. Además, ofrece funcionalidades adicionales como control de stock, generación de informes de ventas, manejo de descuentos, administración de usuarios y permisos. 
+
 # SoftingPosApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.0.
